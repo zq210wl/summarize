@@ -1,0 +1,153 @@
+/************************** 基础计算题 ******************************/
+
+/*  【函数柯里化】=============================================== 
+    实现： add(1,2,3).sumof(), add(1)(2)(3).sumof(), add(1,2)(3).sumof()
+*/
+function add(...rest) {
+    var allNumsArr = [...rest];
+    var fn = (...innerRest) => {
+        allNumsArr.push(...innerRest);
+        return fn;
+    }
+    fn.sumof = () => {
+        return allNumsArr.reduce((total, num) => {
+            return total + num;
+        }, 0);
+    }
+    return fn;
+}
+// console.log(add()(4)(5)(6).sumof());
+
+/*  【驼峰转换】=============================================== 
+    实现： get_element_by_id => getElementById
+*/
+let str = 'get_element_by_id'.replace(/_(.)/g, function($0, $1) {
+    return $1.toUpperCase();
+});
+//console.log(str);
+
+let str = 'get_element_by_id'.split('_').reduce((all, item, index) => {
+    return all + item.substr(0,1).toUpperCase() + item.substr(1);
+});
+//console.log(str);
+
+/*  【深度拷贝】=============================================== 
+    实现： https://www.jianshu.com/p/f4329eb1bace
+*/
+
+/*  【二进制和十进制转换】=============================================== 
+    实现： 
+*/
+
+/*  【sort排序】=============================================== 
+    用法：需要传递一个排序函数作为参数
+    有以下几种情况案例：
+    1、根据数字来排序：
+       1）[1,3,2]
+       2）[{x:1}, {x:3}, {x:2}] 
+    2、根据字母来排序：
+       1）['a', 'c', 'b']
+       2）[{x:'a'}, {x:'c'}, {x:'b'}]
+    解答：
+    1、以上两种情况都可以用：
+        function(a, b){
+            return a < b ? -1 : 1;  // 升序
+            //return a > b ? -1 : 1;  // 降序
+        }
+    2、数字还可以用：
+        function(a, b){
+            return a - b;  // 升序
+            //return b - a;  // 降序
+        }
+    
+*/
+let arr1 = ['a','c', 'b']; // 或 arr = [1,3,2]
+arr1.sort(function(a, b){
+    return a < b ? -1 : 1;  // 升序
+    //return a > b ? -1 : 1;  // 降序
+});
+
+let arr2 = [{x:1}, {x:3}, {x:2}]; // 根据对象x属性来排序
+arr2.sort(function(a, b){
+    return a.x < b.x ? -1 : 1;  // 升序
+    //return a.x > b.x ? -1 : 1;  // 降序
+});
+
+let arr3 = [1, 3, 2];
+arr3.sort(function(a, b){
+    return a - b;  // 升序
+    //return b - a;  // 降序
+});
+
+/*  【交换数组中的两个元素的位置】=============================================== 
+    实现：ES6语法 
+*/
+let arr = [1,2];
+[arr[0], arr[1]] = [arr[1], arr[0]];
+
+/*  【随机获取10到20之间的一个整数（包括10和20）】=============================================== 
+*/
+Math.round(10 + (20 - 10) * Math.random())
+
+/*  【数组去冲，Set】=============================================== 
+*/
+[...new Set([1, 2, 2, 3, 3, 4])]
+
+
+/*  【金额千分位格式化处理】=============================================== 
+*/
+String(str).replace(/(\d{1,3})(?=(\d{3})+($|\.))/g, "$1,")
+
+/*  【debounce(防抖)和throttle(节流)】=============================================== 
+
+    function debounce (fn, delay) {
+        let timer = null;
+        return function () {
+            let context = this;
+            let args = arguments;
+            if (timer) {
+                clearTimeout(time);
+                timer = null;
+            }
+            timer = setTimeout(function() {
+                fn.apply(context, args);
+            }, delay);
+        }
+    }
+
+    function throttle (fn, delay) {
+        let timer = null;
+        let lastTime = Date.now();
+        return function() {
+            let context = this;
+            let args = arguments;
+            let remainDelay = delay - (Date.now() - lastTime);
+            clearTimeout(timer);
+            if (remainDelay <= 0) {
+                fn.apply(context, args);
+                lastTime = Date.now();
+            } else {
+                timer = setTimeout(function(){
+                    fn.apply(context, args);
+                    lastTime = Date.now();
+                }, remainDelay);
+            }
+        }
+    }
+*/
+
+
+/*  【用 requestAnimationFrame 实现一秒执行一次动画】=============================================== 
+        
+        function loop(delay, last) {
+            requestAnimationFrame((now) => {
+                if (now - last >= delay) {
+                    console.log(`${delay}秒执行一次`);
+                    loop(delay, now);
+                } else {
+                    loop(delay, last);
+                }
+            });
+        }
+        loop(1000, 0); // 初始化循环
+*/

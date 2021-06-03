@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        {{ message }}
+        <span :title="message">xx</span>
+        <span v-if="isShow">isShow</span>
+        <todo-item todo="todooooooooooo"></todo-item>
+        <div ref="ref1">reffffffff</div>
+        <div>{{ rawHtml }}</div>
+        <div v-html="rawHtml"></div>
+        <div v-for="item in ages">
+            {{ item }}
+        </div>
+        <div>
+            <input v-model="message" placeholder="edit me">
+            <p>Message is: {{ message }}</p>
+        </div>
+        <custom-input v-model="cValueData"></custom-input>
+    </div>
+    <script>
+        Vue.component('todo-item', {
+            props: ['todo'],
+            template: '<li>yyyy{{ todo }}</li>'
+        });
+        Vue.component('custom-input', {
+            model: {
+                prop: 'cValue',
+                event: 'cInput'
+            },
+            props: {
+                cValue: String
+            },
+            template: `<div v-on:input="$emit('cInput', $event.target.textContent)" contenteditable="true" style="width:100px;height: 50px;border: 1px solid gray;">{{cValue}}</div>`
+        });
+        var data = {
+            message: 'xxxxxx!',
+            isShow: true,
+            rawHtml: '<span style="color:red">This should be red.</span>',
+            ages: [1,2],
+            cValueData: 'cValueData11'
+        }
+        var app = new Vue({
+            el: '#app',
+            data: data,
+            computed: {
+                cccccc: function () {
+                    console.log(66666);
+                    return this.message + '123';
+                }
+            },
+            mounted: function () {
+                console.log('xxx=');
+                console.log(this.cccccc);
+                setTimeout(() => {
+                    data.message = 'ppppppppp';
+                }, 3000);
+            },
+            watch: {
+                isShow: function(newV) {
+                    console.log('isShow', newV);
+                }
+            },
+            beforeCreate: function() {
+                //this.isShow = false;
+                console.log('-=-=-=:', this.isShow);
+            },
+            created: function() {
+                this.isShow = true;
+                console.log(this.$refs.ref1);
+            },
+            methods: {
+                
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <div id="app">
+            <input type="text" v-model="text" />
+            {{text}}
+            <div>{{text}}</div>
+        </div>
+    </body>
+    <script type="text/javascript">
+        /*  https://www.cnblogs.com/libin-1/p/6893712.html
+
+            Watcher: 订阅者，多个订阅者，收到属性的变化通知并执行相应的函数，从而更新视图。
+            Dep: 消息订阅器，收集订阅者，然后再属性变化的时候执行对应订阅者的更新函数。针对每个属性都会创建一个Dep
+            Observer: 监听器，通过defineProperty劫持并监听所有属性，如果有变动的，就通知订阅者Watcher
+            Compile：指令解析器，遍历每个节点进行解析，把指令初始化成一个订阅者Watcher，并替换模版数据或绑定相应函数
+        */
+        
+        /* 
+          Watcher 订阅者 
+        */
+        function Watcher (vm, exp, cb) {
+            this.vm = vm;
+            this.exp = exp;
+            this.cb = cb;
+            this.value = undefined;
+        }
+        Watcher.prototype = {
+            update: function() {
+                let newValue = vm.data[this.exp];
+                let oldValue = this.value;
+                if (newValue !== oldValue) {
+                    this.cb.call(vm, newValue, oldValue);
+                    this.value = newValue;
+                }
+            },
+            get: function() {
+                Dep.target = this;
+                let value = vm.data[this.exp];
+                Dep.target = null;
+                return value; 
+            }
+        };
+
+        /* 
+          Observer 监听器 
+        */
+        function Observer(obj, key) {
+            if (Object.prototype.toString.call(obj[key]) === '[object Object]') {
+                observe(obj[key]);
+            }
+            let dep = new Dep();
+            Object.defineProperty(obj, key, {
+                get: function () {
+                    if (Dep.target) {
+                        dep.addWatcher(Dep.target);
+                    }
+                    return obj[key];
+                },
+                set: function (val) {
+                    obj[key] = val;
+                    setTimeout(function(){
+                        dep.notify();
+                    }, 0);
+                }
+            });
+
+        }
+        function observe(obj) {
+            if (Object.prototype.toString.call(obj[key]) !== '[object Object]') {
+                return;
+            }
+            for (let key in obj) {
+                Observer(obj, key)
+            }
+        }
+
+        /* 
+          Dep 消息订阅器 
+        */
+       function Dep () {
+           this.subs = [];
+       }
+       Dep.prototype = {
+           addWatcher: function(watcher) {
+              this.subs.push(watcher);
+           },
+           notify: function() {
+              this.subs.forEach(function(watcher){
+                  watcher.update();
+              });
+           }
+       };
+       Dep.target = null;
+
+       function compile () {
+
+       }
+       
+
+    </script>
+</html>

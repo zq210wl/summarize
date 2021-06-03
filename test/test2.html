@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <style>
+     
+    </style>
+</head>
+<body>
+    <div>
+
+    </div>
+    <script>
+      var dom = document.getElementsByTagName("div")[0];
+      dom.innerHTML = 'hello world';
+
+      console.log(1);
+
+      var promise = Promise.resolve();
+      promise.then(() => {
+        console.log('promise1');
+        Promise.resolve().then(() => {
+          console.log('promise2');
+          Promise.resolve().then(() => {
+            console.log('promise3');
+          });
+        });
+        alert('promise1');
+      });
+
+      setTimeout(() => {
+        console.log('settimeout');
+        alert('settimeout');
+      }, 0);
+
+      // setTimeout(() => {
+      //   console.log('settimeout');
+      //   alert('settimeout');
+      // }, 0);
+
+      // promise.then(() => {
+      //   console.log('promise2');
+      //   alert('promise2');
+      // });
+
+      console.log(2);
+
+   </script>
+</body>
+</html>
