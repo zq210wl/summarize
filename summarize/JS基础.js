@@ -243,7 +243,39 @@ Object.create(null)
       * 比如：新的Promise执行结果为【rejected】，那么就会往下找到最近一个指定了【fail】的then，然后执行它的【fail】，
       * 如果找到最后都没有找到一个指定了【fail】的then，那么就会抛出异常，所以一般会在最后设置一个catch来兜底处理没有捕获的异常。
       * catch其实就是一个没有指定success的then，等同于 then(null, failCallback)，所以catch不只是放在最后来兜底的，它也可以放在then的前面。
+       
+   【Promise异常】
+      * Promise 会自动捕获代码异常，并执行reject(异常信息)
+      * 如果没有指定fail来捕获异常，Promsie就会往外抛【Uncaught】异常
+      * Promise没法捕获【异步执行】的异常：
+          new Promise(function(resolve, reject) {
+            setTimeout(() => {
+              throw new Error("Whoops!");
+            }, 1000);
+          }).catch(alert);
 */
+
+
+/* 【JS异常处理 ？？？？？？？？？？？？？？】=============================================== 
+    * 捕获未处理的异常捕获，所以未捕获的异常都会被抛到window对象上的【unhandledrejection】事件中：????????????????
+        window.addEventListener('unhandledrejection', function(event) {
+          // 这个事件对象有两个特殊的属性：
+          console(event.promise); // [object Promise] - 生成该全局 error 的 promise
+          console(event.reason); // Error: Whoops! - 未处理的 error 对象
+          // 防止默认处理（例如将错误输出到控制台）
+          event.preventDefault()
+        });
+    
+    * try catch 没法捕获【异步执行】的异常
+        try {
+          setTimeout(() => {
+            throw new Error("Whoops!");
+          }, 1000);
+        } catch(err) {
+          console.log('this is error', err)
+        }
+*/
+
 
 /*
   每日一题：
