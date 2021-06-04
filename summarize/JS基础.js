@@ -291,16 +291,19 @@ Object.create(null)
      let p1 = new Promise((resolve, reject) => {});
      let p2 = new Promise((resolve, reject) => {});
      async function zz() {  
-       let result1 = await p1.catch(err => {});
+       let result1 = await p1;
        console.log(result1);
-       let result2 = await p2.catch(err => {});
+       let result2 = await p2;
        console.log(result2);
        // 最后可以return任何值，最后都会被包装成Promise返回，以供后面继续异步操作
      }
     * async await 是 Promise 的一种简化写法，可以解决连续then回调的不优雅的写法问题
     * await 后面跟随的是一个Promise对象
     * async 函数返回的是一个Promise对象，所以可以在 async函数 里面继续 await 一个async函数
-    * await 返回的是Promise【Fullfilled】后的结果，reject的结果需要在catch中来捕获处理，这时候await返回的就是【undefined】
+    * await 返回的是Promise【Fullfilled】后的结果，
+    * await 后面的Promise reject 后，会直接抛出异常，阻断后面js执行，
+      * 可以在catch中来捕获处理，这时候await的就是catch返回的结果了，catch返回的也是Promsie对象
+      * 一般根据具体情况看要不要这么用，还是不处理异常，直接让程序报错就行了
 */
 
 

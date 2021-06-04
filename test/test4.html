@@ -185,7 +185,10 @@
         }
 
         async function yy () {
-            let bb = await xx().catch(err => {});
+            let bb = await xx().catch(err => {
+                console.log(err);
+                return '888'
+            });
             console.log('999');
             console.log(bb);
         }
