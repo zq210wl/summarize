@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+        .wrap {
+            width: 500px;
+            height: 500px;
+        }
+        .clock-circle {
+            margin: 100px 0 0 100px;
+            position: relative;
+            width: 300px;
+            height: 300px;
+            border: 1px solid #000;
+            border-radius: 50%;
+        }
+        .pointer {
+            position: absolute;
+            left: 50%;
+            transform-origin: center bottom;
+            width: 4px;
+        }
+        .hour-pointer {
+            top: 20%;
+            height: 30%;
+            background: red;
+            transform: translate(-50%) rotate(10deg);
+        }
+        .minutes-pointer {
+            top: 12%;
+            height: 38%;
+            background: blue;
+            transform: translate(-50%) rotate(20deg);
+        }
+        .second-pointer {
+            top: 8%;
+            height: 42%;
+            background: green;
+            transform: translate(-50%) rotate(30deg);
+        }
+        .num {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 24px;
+            transform: translate(-50%);
+            color: #000;
+            font-size: 12px;
+            height: 50%;
+            text-align: center;
+            vertical-align: top;
+            transform-origin: center bottom;
+        }
+        .num-1 {
+            transform: translate(-50%) rotate(30deg)
+        }
+        .num-1 span{
+            display: inline-block;
+            transform: rotate(-30deg)
+        }
+        .num-2 {
+            transform: translate(-50%) rotate(60deg)
+        }
+        .num-2 span{
+            display: inline-block;
+            transform: rotate(-60deg)
+        }
+        .num-3 {
+            transform: translate(-50%) rotate(90deg)
+        }
+        .num-3 span{
+            display: inline-block;
+            transform: rotate(-90deg)
+        }
+        .num-4 {
+            transform: translate(-50%) rotate(120deg)
+        }
+        .num-4 span{
+            display: inline-block;
+            transform: rotate(-120deg)
+        }
+        .num-5 {
+            transform: translate(-50%) rotate(150deg)
+        }
+        .num-5 span{
+            display: inline-block;
+            transform: rotate(-150deg)
+        }
+        .num-6 {
+            transform: translate(-50%) rotate(180deg)
+        }
+        .num-6 span{
+            display: inline-block;
+            transform: rotate(-180deg)
+        }
+        .num-7 {
+            transform: translate(-50%) rotate(210deg)
+        }
+        .num-7 span{
+            display: inline-block;
+            transform: rotate(-210deg)
+        }
+        .num-8 {
+            transform: translate(-50%) rotate(240deg)
+        }
+        .num-8 span{
+            display: inline-block;
+            transform: rotate(-240deg)
+        }
+        .num-9 {
+            transform: translate(-50%) rotate(270deg)
+        }
+        .num-9 span{
+            display: inline-block;
+            transform: rotate(-270deg)
+        }
+        .num-10 {
+            transform: translate(-50%) rotate(300deg)
+        }
+        .num-10 span{
+            display: inline-block;
+            transform: rotate(-300deg)
+        }
+        .num-11 {
+            transform: translate(-50%) rotate(330deg)
+        }
+        .num-11 span{
+            display: inline-block;
+            transform: rotate(-330deg)
+        }
+        .num-12 {
+            transform: translate(-50%) rotate(360deg)
+        }
+        .num-12 span{
+            display: inline-block;
+            transform: rotate(-360deg)
+        }
+    </style>
+    <script id="xxx"></script>
+</head>
+<body>
+    <div class="wrap">
+
+    </div>
+    <script>
+        window.onerror = function (message, url, lineNo, columnNo, error) {
+            console.log(message, url, lineNo, columnNo, error);
+        }
+        window.addEventListener('unhandledrejection', function(event) {
+          // 这个事件对象有两个特殊的属性：
+          console.log('报错的promise对象：', event.promise); // [object Promise] - 生成该全局 error 的 promise
+          console.log('报错的原因：', event.reason); // Error: Whoops! - 未处理的 error 对象
+          // 防止默认处理（例如将错误输出到控制台）
+          event.preventDefault();
+        });
+
+        // setTimeout(() => {
+        //     // Promise.resolve().then(() => {
+        //     //     throw new Error('ffff')
+        //     // })
+        //     var img = new Image();
+        //     img.src = 'xxxxxx';
+        //     img.onerror = function(event) {
+        //         console.log('xxx', event);
+        //     }
+
+        //     var script = document.createElement('script');
+        //     script.type = 'text/javascript';
+        //     script.src = 'yyyy.js';
+        //     document.head.appendChild(script);
+        //     script.onerror = function(event) {
+        //         console.log('ggggg', event);
+        //     }
+        // }, 3000);
+        // console.log(document.getElementById('xxx'));
+
+        async function xx () {
+            return Promise.reject('xxxxxxx');
+        }
+
+        async function yy () {
+            let bb = await xx().catch(err => {});
+            console.log('999');
+            console.log(bb);
+        }
+        yy();
+        
+    </script>
+</body>
+</html>

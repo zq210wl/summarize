@@ -104,9 +104,9 @@ Object.create(null)
     * dom解析、dom渲染（这是两个不同的概念）
     * link （是不会阻塞Dom解析的，因为css是不会改变dom结构的，但是会阻塞dom渲染，因为render Tree需要依赖css）
     * defer 延迟执行（DOMContentLoaded之前执行）（不阻塞继续解析，并行去加载js）
-    * async (异步)（加载完后立马执行，但是会在load之前执行）
-    * DOMContentLoaded事件 （当初始的 HTML 文档被完全加载和解析完成之后被触发）
-    * load事件
+    * async (异步)（加载完后立马执行，但是会在window.load之前执行）
+    * document.addEventListener("DOMContentLoaded")事件 （当初始的 HTML 文档被完全加载和解析完成之后被触发，此事件是绑定在document对象上的，并不是window上）
+    * window.onload事件
 */
 
 
@@ -234,6 +234,7 @@ Object.create(null)
 
    【重磅总结：】
       * Promise 和 回调地狱 都是在用【异步编程】的方法去解决有关联的【同步任务】，
+      * Promsie 解决的是回调地狱的问题，
       * 每个then都接受两个callback：success 和 fail，
       * Promise的每一个then的callback(success或fail)都会返回一个新的Promise，
       * 如果then的callback没有显示地返回一个promise对象，那么JS程序内部会自动执行【Promise.resolve(当前callback返回值)】来生成一个新的promise，
@@ -246,7 +247,15 @@ Object.create(null)
        
    【Promise异常】
       * Promise 会自动捕获代码异常，并执行reject(异常信息)
-      * 如果没有指定fail来捕获异常，Promsie就会往外抛【Uncaught】异常
+      * 如果没有指定fail来捕获异常，Promsie就会往外抛【unhandledrejection】异常，
+      * 当Promise 被 reject 且没有 reject 处理器的时候，会触发 unhandledrejection 事件；
+          window.addEventListener('unhandledrejection', function(event) {
+            // 这个事件对象有两个特殊的属性：
+            console.log('报错的promise对象：', event.promise); // [object Promise] - 生成该全局 error 的 promise
+            console.log('报错的原因：', event.reason); // Error: Whoops! - 未处理的 error 对象
+            // 防止默认处理（例如将错误输出到控制台）
+            event.preventDefault();
+          });
       * Promise没法捕获【异步执行】的异常：
           new Promise(function(resolve, reject) {
             setTimeout(() => {
@@ -256,17 +265,47 @@ Object.create(null)
 */
 
 
-/* 【JS异常处理 ？？？？？？？？？？？？？？】=============================================== 
-    * 捕获未处理的异常捕获，所以未捕获的异常都会被抛到window对象上的【unhandledrejection】事件中：????????????????
-        window.addEventListener('unhandledrejection', function(event) {
-          // 这个事件对象有两个特殊的属性：
-          console(event.promise); // [object Promise] - 生成该全局 error 的 promise
-          console(event.reason); // Error: Whoops! - 未处理的 error 对象
-          // 防止默认处理（例如将错误输出到控制台）
-          event.preventDefault()
-        });
-    
-    * try catch 没法捕获【异步执行】的异常
+/* 【彻底弄懂async await原理】=============================================== 
+     // 一般不只是下面这么用，这么用没有什么意义，写出来只是为了更好的理解原理
+     async function yy() {  
+      return 'yy';
+     }
+     async function zz() {
+       return Promise.resolve('zz');
+     }
+     async function xx() {
+       let promise1 = yy();
+       let result1 = await promise;
+       console.log(result);
+
+       let promise2 = zz();
+       let result2 = await promise2;
+       console.log(result2);
+
+       let promise3 = Promise.resolve('zz');
+       let result3 = await promise3;
+       console.log(result3);
+     }
+
+     // 一般是下面这么用的
+     let p1 = new Promise((resolve, reject) => {});
+     let p2 = new Promise((resolve, reject) => {});
+     async function zz() {  
+       let result1 = await p1.catch(err => {});
+       console.log(result1);
+       let result2 = await p2.catch(err => {});
+       console.log(result2);
+       // 最后可以return任何值，最后都会被包装成Promise返回，以供后面继续异步操作
+     }
+    * async await 是 Promise 的一种简化写法，可以解决连续then回调的不优雅的写法问题
+    * await 后面跟随的是一个Promise对象
+    * async 函数返回的是一个Promise对象，所以可以在 async函数 里面继续 await 一个async函数
+    * await 返回的是Promise【Fullfilled】后的结果，reject的结果需要在catch中来捕获处理，这时候await返回的就是【undefined】
+*/
+
+
+/* 【JS全局异常捕获】=============================================== 
+    * try catch 没法捕获【异步执行】的异常，这个异常会被冒泡到window对象上
         try {
           setTimeout(() => {
             throw new Error("Whoops!");
@@ -274,8 +313,34 @@ Object.create(null)
         } catch(err) {
           console.log('this is error', err)
         }
+    * 可以通过 window.onerror 来捕获下面两种异常：
+      * JS脚本里边存着语法错误
+      * JS脚本在运行时发生错误
+    * window.onerror 捕获异常的方法：
+        window.onerror = function (message, url, lineNo, columnNo, error) {
+            console.log(message, url, lineNo, columnNo, error);
+        }
+    * window.onerror 不能捕获到资源加载失败的异常，比如： <img> <script> ，可以用以下方法：
+        document.getElementById('#img').onerror = function(event) {
+          console.log('图片加载异常', event);
+        }
+        document.getElementById('#script').onerror = function(event) {
+          console.log('脚本加载异常', event);
+        }
+    * window.onerror 不能捕获 Promise.reject 异常，可以用专门捕获此异常的事件：
+        * window.addEventListener('unhandledrejection', function(event) { console.log(event) })
 */
 
+
+/* 【异步加载JS的方法】=============================================== 
+    * <script src="a.js" defer></script> （阻塞document的DomContentLoaded事件）
+    * <script src="a.js" async></script> （阻塞window的onload事件）
+    * 动态创建script标签：（等同于ascync，此方法加载的js会阻塞window.onlaod事件，所以可以在window.onload事件里面动态创建script）
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'a.js';
+        document.head.appendChild(script);
+*/
 
 /*
   每日一题：
