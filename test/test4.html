@@ -149,50 +149,37 @@
 
     </div>
     <script>
-        window.onerror = function (message, url, lineNo, columnNo, error) {
-            console.log(message, url, lineNo, columnNo, error);
-        }
-        window.addEventListener('unhandledrejection', function(event) {
-          // 这个事件对象有两个特殊的属性：
-          console.log('报错的promise对象：', event.promise); // [object Promise] - 生成该全局 error 的 promise
-          console.log('报错的原因：', event.reason); // Error: Whoops! - 未处理的 error 对象
-          // 防止默认处理（例如将错误输出到控制台）
-          event.preventDefault();
-        });
+        // "use strict";
+        // function A() {
+        //     this.name = 'AA';
+        // }
+        // A.prototype.getName = function() {
+        //     return this.name;
+        // }
 
-        // setTimeout(() => {
-        //     // Promise.resolve().then(() => {
-        //     //     throw new Error('ffff')
-        //     // })
-        //     var img = new Image();
-        //     img.src = 'xxxxxx';
-        //     img.onerror = function(event) {
-        //         console.log('xxx', event);
-        //     }
+        // function B() {
+        //     A.apply(this, arguments);
+        //     this.age = 20;
+        // }
+        // B.prototype = new A();
+        // B.prototype.getAge = function() {
+        //     return this.age;
+        // }
+        // B.prototype.constructor = B;
 
-        //     var script = document.createElement('script');
-        //     script.type = 'text/javascript';
-        //     script.src = 'yyyy.js';
-        //     document.head.appendChild(script);
-        //     script.onerror = function(event) {
-        //         console.log('ggggg', event);
-        //     }
-        // }, 3000);
-        // console.log(document.getElementById('xxx'));
+        // var b = new B();
+        // console.log(b instanceof B);
+        // console.log(b instanceof A);
+        // console.log(b.constructor);
 
-        async function xx () {
-            return Promise.reject('xxxxxxx');
-        }
-
-        async function yy () {
-            let bb = await xx().catch(err => {
-                console.log(err);
-                return '888'
-            });
-            console.log('999');
-            console.log(bb);
-        }
-        yy();
+        let aaa = '11';
+        var bbb = '22';
+        function A() {
+            console.log(this);
+        };
+        A();
+        console.log(this);
+        console.log(this.aaa, this.bbb);
         
     </script>
 </body>

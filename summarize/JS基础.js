@@ -1,4 +1,31 @@
 
+/* 【全局作用域中的var和let、 window对象、 全局上下文对象this】===============================================  
+    * 在全局作用域中：
+        * this === window
+        * var 定义的全局变量【会】被定义到window对象上
+            var a = 1；
+            window.a === a; // true
+            this.a === a; // true
+        * let 定义的全局变量【不会】定义到widow对象上
+            let b = 1；
+            window.b === b; // false
+            this.b === b;  // false
+    * 在函数作用域中：（即：在全局中执行function）
+        * 非严格模式下：this === window
+            function f1(){
+              return this;
+            }
+            f1() === window;
+        * 严格模式下：this === undefined
+            function f2(){
+              "use strict"; // 严格模式
+              return this;
+            }
+            f2() === undefined; // true
+    * 严格模式 和 let 并没有什么关系，两者不会互相产生影响
+*/
+
+
 // defineproperty与proxy对比，哪个好，为什么？
 
 /* 【typeof 输出类型】===============================================  
@@ -14,6 +41,39 @@ typeof undefined    // 'undefined'
 typeof true      // 'boolean'
 typeof Symbol()  // 'symbol'
 
+
+/* 【JavaScript 隐式类型转换】===============================================  
+*/
+  拆箱操作
+  https://juejin.cn/post/6844903859765133320
+  https://juejin.cn/post/6844903838575493127
+
+  隐式类型转换
+  https://chinese.freecodecamp.org/news/javascript-implicit-type-conversion/
+  https://juejin.cn/post/6844903934876745735
+
+  instanceof
+  https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/instanceof
+
+  原始数据
+  https://developer.mozilla.org/zh-CN/docs/Glossary/Primitive
+
+  JavaScript 深入了解基本类型和引用类型的值
+  https://segmentfault.com/a/1190000006752076
+
+  对象字面量语法
+  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#object_literals
+
+  对象属性的描述，defineProperty， Value、Writable、Enumerable、Configurable
+  https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
+
+  null
+  https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/null
+
+  typeof 
+  到底是用来干嘛的
+
+  instanceof 和 constructor 判断实例类型的区别？？
 
 /* 【array的哪些方法会改变原数组】===============================================  
    注意：以下方法并不会改变原数组
@@ -119,6 +179,7 @@ Object.create(null)
 
 
 /* 【闭包、作用域、作用域链】===============================================  
+    https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Closures
     * 闭包就是一个可以访问其它函数内部变量的函数。
     * 作用域：？？？？？？？？？？？？？？
     * 作用域链：？？？？？？？？？？？？？？
