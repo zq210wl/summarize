@@ -172,15 +172,16 @@
         // console.log(b instanceof A);
         // console.log(b.constructor);
 
-        let aaa = '11';
-        var bbb = '22';
-        function A() {
-            console.log(this);
-        };
-        A();
-        console.log(this);
-        console.log(this.aaa, this.bbb);
-        
+        function A(){
+
+        }
+        A.prototype.getName = function() {
+            console.log(222);
+        }
+        let xx = new A().getName();
+        console.log(xx);
+        let yy = new new A().getName();
+        console.log(yy);
     </script>
 </body>
 </html>

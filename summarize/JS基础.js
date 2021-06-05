@@ -1,4 +1,72 @@
 
+
+/* 【数据类型】===============================================  
+    * 基本数据类型（原始值）（栈内存）（变量不可修改）
+    * 引用数据类型（引用值）（堆内存）（变量可修改）
+*/
+
+
+/* 【显示式类型转换】===============================================  
+    * 字符串类型 跟 任何任何类型相加，其实就是字符串的拼接，需要先把别的类型转换为它对应的字符串类型[xx.toString()]，然后再拼接字符串
+    * 数字类型 跟 任何类型 比较大小，其实就是两个数字做比较，需要先把别的类型转换为它对应的数字类型[Number(xx)]，然后在比较
+      * Number('') === Number('  ') === Number(null) === Number(false) === Number('0') === 0
+      * Number(undefined), Number('XXXX'), Number('111XXXX'), Number({}) result： NaN
+        * (999 > NaN), (999 < NaN), (999 === NaN), (NaN === NaN) result：false
+      * Number('9'), Number('  9  ') result：9
+    * parseInt (把【字符串】转换为整数)
+      * 只有字符串中的第一个数字会被返回:
+        * parseInt('9xx') result：9
+        * parseInt('9.3') result：9
+      * 开头和结尾的空格是允许的:
+        * parseInt('  9   ') result：9 
+      * 如果字符串的第一个字符不能被转换为数字，那么 parseFloat() 会返回 NaN:
+        * parseInt('xx9') result：NaN
+        * parseInt('xxx') result：NaN
+      * 因为参数必须是字符串，所以如果不是字符串，则直接返回 NaN:
+        * parseInt(false), parseInt(true), parseInt(null), parseInt(undefined), parseInt({}) result：NaN
+    * Boolean
+      * 以下都是返回：false
+        * Boolean(), Boolean(''), Boolean(0), Boolean(false), Boolean(null), Boolean(undefined), Boolean(NaN)
+      * 除了上面的以外，都返回：true
+        * Boolean('xxx'), Boolean(' '),  Boolean('0'), Boolean('false'), Boolean('null'), Boolean('undefined')
+        * Boolean({}), Boolean(1), Boolean(-1), Boolean(9), 
+*/
+
+
+/* 【隐式类型转换】===============================================  
+    * 字符串类型 跟 任何任何类型相加，其实就是字符串的拼接，需要先把别的类型转换为它对应的字符串类型[xx.toString()]，然后再拼接字符串
+    * 数字类型 跟 任何类型 比较大小，其实就是两个数字做比较，需要先把别的类型转换为它对应的数字类型[Number(xx)]，然后在比较
+      * Number('') === Number('  ') === Number(null) === Number(false) === Number('0') === 0
+      * Number(undefined), Number('XXXX'), Number('111XXXX'), Number({}) result： NaN
+        * (999 > NaN), (999 < NaN), (999 === NaN), (NaN === NaN) result：false
+      * Number('9'), Number('  9  ') result：9
+    * parseInt (把【字符串】转换为整数)
+      * 只有字符串中的第一个数字会被返回:
+        * parseInt('9xx') result：9
+        * parseInt('9.3') result：9
+      * 开头和结尾的空格是允许的:
+        * parseInt('  9   ') result：9 
+      * 如果字符串的第一个字符不能被转换为数字，那么 parseFloat() 会返回 NaN:
+        * parseInt('xx9') result：NaN
+        * parseInt('xxx') result：NaN
+      * 因为参数必须是字符串，所以如果不是字符串，则直接返回 NaN:
+        * parseInt(false), parseInt(true), parseInt(null), parseInt(undefined), parseInt({}) result：NaN
+        * 
+    * 特殊：
+      * null == undefined  result: true
+      * null == 0  result: false
+      * undefined == 0  result: false
+*/
+
+
+/* 【 typeof() 】===============================================  
+    * typeof() 返回的是一个string字符串
+      * typeof( typeof(9) ) === 'string'
+    * typeof(x) x未定义，则返回：'undefined' 
+      * 直接访问一个未声名的变量会报错 
+*/
+
+
 /* 【全局作用域中的var和let、 window对象、 全局上下文对象this】===============================================  
     * 在全局作用域中：
         * this === window
@@ -393,6 +461,10 @@ Object.create(null)
         }
     * window.onerror 不能捕获 Promise.reject 异常，可以用专门捕获此异常的事件：
         * window.addEventListener('unhandledrejection', function(event) { console.log(event) })
+    * 开启script跨越请求，这样如果服务器设置了允许跨域，那么就可以获取详细错误信息
+      * <script src="" crossorigin="anonymous"></script>
+      * crossorigin="anonymous"：请求时不带cookie等认证信息
+      * crossorigin="use-credentials"：请求时带上cookie等认证信息
 */
 
 
