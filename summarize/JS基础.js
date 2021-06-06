@@ -27,66 +27,48 @@
 
 /* 【数据类型】===============================================  
     * 基本数据类型（原始值）（栈内存）（变量不可修改）
-    * 引用数据类型（引用值）（堆内存）（变量可修改）
+      * string、number、boolean、null，undefined、symbol
+    * 引用数据类型（引用值）（堆内存）（变量可修改）(JS中用object来代表引用类型)
+      * Object、Function、Array、String、Boolean、Number、RegExp、.....
 */
 
 
 /* 【显示式类型转换】===============================================  
-    * 字符串类型 跟 任何任何类型相加，其实就是字符串的拼接，需要先把别的类型转换为它对应的字符串类型[xx.toString()]，然后再拼接字符串
-    * 数字类型 跟 任何类型 比较大小，其实就是两个数字做比较，需要先把别的类型转换为它对应的数字类型[Number(xx)]，然后在比较
-      * Number('') === Number('  ') === Number(null) === Number(false) === Number('0') === 0
-      * Number(undefined), Number('XXXX'), Number('111XXXX'), Number({}) result： NaN
-        * (999 > NaN), (999 < NaN), (999 === NaN), (NaN === NaN) result：false
-      * Number('9'), Number('  9  ') result：9
-    * parseInt (把【字符串】转换为整数)
+    * String()
+    * Number()
+      * Number(''), Number('  '), Number(null), Number(false), Number('0') 【【reult: 0 】】
+      * Number(undefined), Number('XXXX'), Number('111XXXX'), Number({}) 【【result: NaN】】
+      * Number('9'), Number('  9  ') 【【result: 9】】
+    * parseInt()
       * 只有字符串中的第一个数字会被返回:
-        * parseInt('9xx') result：9
-        * parseInt('9.3') result：9
-      * 开头和结尾的空格是允许的:
-        * parseInt('  9   ') result：9 
+        * parseInt('9xx') 【【result: 9】】
+        * parseInt('9.3') 【【result: 9】】
       * 如果字符串的第一个字符不能被转换为数字，那么 parseFloat() 会返回 NaN:
-        * parseInt('xx9') result：NaN
-        * parseInt('xxx') result：NaN
+        * parseInt('xx9') 【【result: NaN】】
+        * parseInt('xxx') 【【result: NaN】】
+      * 开头和结尾的空格是允许的:
+        * parseInt('9'), parseInt('  9  ') 【【result: 9】】
       * 因为参数必须是字符串，所以如果不是字符串，则直接返回 NaN:
         * parseInt(false), parseInt(true), parseInt(null), parseInt(undefined), parseInt({}) result：NaN
-    * Boolean
+    * Boolean()
       * 以下都是返回：false
         * Boolean(), Boolean(''), Boolean(0), Boolean(false), Boolean(null), Boolean(undefined), Boolean(NaN)
       * 除了上面的以外，都返回：true
         * Boolean('xxx'), Boolean(' '),  Boolean('0'), Boolean('false'), Boolean('null'), Boolean('undefined')
         * Boolean({}), Boolean(1), Boolean(-1), Boolean(9), 
+    * typeof()
+      * 返回值的类型为 【【字符串string】】
 */
 
 
 /* 【隐式类型转换】===============================================  
-    * 字符串类型 跟 任何任何类型相加，其实就是字符串的拼接，需要先把别的类型转换为它对应的字符串类型[xx.toString()]，然后再拼接字符串
-    * 数字类型 跟 任何类型 比较大小，其实就是两个数字做比较，需要先把别的类型转换为它对应的数字类型[Number(xx)]，然后在比较
-      * Number('') === Number('  ') === Number(null) === Number(false) === Number('0') === 0
-      * Number(undefined), Number('XXXX'), Number('111XXXX'), Number({}) result： NaN
-        * (999 > NaN), (999 < NaN), (999 === NaN), (NaN === NaN) result：false
-      * Number('9'), Number('  9  ') result：9
-    * parseInt (把【字符串】转换为整数)
-      * 只有字符串中的第一个数字会被返回:
-        * parseInt('9xx') result：9
-        * parseInt('9.3') result：9
-      * 开头和结尾的空格是允许的:
-        * parseInt('  9   ') result：9 
-      * 如果字符串的第一个字符不能被转换为数字，那么 parseFloat() 会返回 NaN:
-        * parseInt('xx9') result：NaN
-        * parseInt('xxx') result：NaN
-      * 因为参数必须是字符串，所以如果不是字符串，则直接返回 NaN:
-        * parseInt(false), parseInt(true), parseInt(null), parseInt(undefined), parseInt({}) result：NaN
-        * 
-    * 特殊：
-      * null == undefined  result: true
-      * null == 0  result: false
-      * undefined == 0  result: false
+    [带你撸一遍JS隐式转换细则: https://juejin.cn/post/6844903934876745735]
 */
 
 
 /* 【 typeof() 】===============================================  
     * typeof() 返回的是一个string字符串
-      * typeof( typeof(9) ) === 'string'
+      * typeof(typeof(9)) === 'string'
     * typeof(x) x未定义，则返回：'undefined' 
       * 直接访问一个未声名的变量会报错 
 */
@@ -119,8 +101,6 @@
 */
 
 
-// defineproperty与proxy对比，哪个好，为什么？
-
 /* 【typeof 输出类型】===============================================  
 */
 typeof {}     // 'object'
@@ -134,39 +114,6 @@ typeof undefined    // 'undefined'
 typeof true      // 'boolean'
 typeof Symbol()  // 'symbol'
 
-
-/* 【JavaScript 隐式类型转换】===============================================  
-*/
-  拆箱操作
-  https://juejin.cn/post/6844903859765133320
-  https://juejin.cn/post/6844903838575493127
-
-  隐式类型转换
-  https://chinese.freecodecamp.org/news/javascript-implicit-type-conversion/
-  https://juejin.cn/post/6844903934876745735
-
-  instanceof
-  https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/instanceof
-
-  原始数据
-  https://developer.mozilla.org/zh-CN/docs/Glossary/Primitive
-
-  JavaScript 深入了解基本类型和引用类型的值
-  https://segmentfault.com/a/1190000006752076
-
-  对象字面量语法
-  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#object_literals
-
-  对象属性的描述，defineProperty， Value、Writable、Enumerable、Configurable
-  https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
-
-  null
-  https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/null
-
-  typeof 
-  到底是用来干嘛的
-
-  instanceof 和 constructor 判断实例类型的区别？？
 
 /* 【array的哪些方法会改变原数组】===============================================  
    注意：以下方法并不会改变原数组
@@ -502,6 +449,9 @@ Object.create(null)
         script.src = 'a.js';
         document.head.appendChild(script);
 */
+
+// defineproperty与proxy对比，哪个好，为什么？
+// instanceof 和 constructor 判断实例类型的区别？？
 
 /*
   每日一题：
