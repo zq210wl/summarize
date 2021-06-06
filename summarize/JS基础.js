@@ -74,6 +74,23 @@
 */
 
 
+/* 【彻底搞懂 prototype 】===============================================  
+    * prototype是【构造函数】【也就是function】的一个属性，它的值是一个对象；
+    * 【构造函数】分为【自定义构造函数】、【内置构造函数】、【Object构造函数】
+      * 内置构造函数：String、Number、Date、...等等 
+      * 自定义构造函数: function XX(){}
+    * 【构造函数】的【prototype对象】上默认有两个属性：【constructor】和【__proto__】
+      *【constructor】【默认指向构造函数本身】，这个constructor的值是【可以修改】的，例如：Fn.prototype.constructor = xxFn;
+        prototype也是可以被整个重新赋值的，例如：Fn.prototype = {}, 这个时候prototype就变成了一个空的对象{}; 
+      *【自定义构造函数】、【内置构造函数】的【prototype对象】上的【__proto__】默认指向的是【Object的prototype】，
+       【Object的prototype】的【__proto__】=== null，所以说__proto__原型链终止于【Object的prototype】。
+    * 通过构造函数创建出来的【实例对象】上会有一个【__proto__】属性，它就是我们通常所说的【原型】，
+      也就是说原型是【存在实例】对象上的，【__proto__】指向的就是构造函数的【prototype对象】，
+     【__proto__】的值是可以修改的（如果想改的话，不建议修改它）；
+    * 通过构造函数创建出来的【实例对象】【无法更改】【构造函数】的prototype上的属性；
+*/
+
+
 /* 【全局作用域中的var和let、 window对象、 全局上下文对象this】===============================================  
     * 在全局作用域中：
         * this === window
