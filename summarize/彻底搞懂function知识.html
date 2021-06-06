@@ -6,6 +6,26 @@
 </head>
 <body>
 <script>
+
+    /*
+        主要考点：（https://www.cnblogs.com/ycherry/p/11638041.html）
+        * 代码编译过程：
+            1.检查通篇的语法错误，若有错误则不编译执行
+            2.预编译
+            3.解释一行，执行一行
+        * 寻找GO（global object 即 全局上下文）
+            1. 找【变量声明】，并赋值为【undefined】
+            2. 找【函数声明】，并【赋值】
+            3. 执行
+        * 寻找AO（activation object 活跃对象，函数上下文,在函数执行之前进行的一个步骤）
+            1、寻找【形参】和【变量声明】，如果存在同名会进行【同名合并】，然后赋值为【undefined】
+            2、把实参【赋值】给形参
+            3、寻找【函数声明】，并【赋值】
+            4、执行
+        * 暗示全局变量
+           * 未显示声明的变量就是全局变量 
+    */
+
     function Foo() {
         getName = function() {
             console.log(1);
@@ -33,24 +53,117 @@
     new Foo().getName();  // 3
     new new Foo().getName();  // 3
 
+</script>
+
+<script>
+
     /*
-        主要考点：（https://www.cnblogs.com/ycherry/p/11638041.html）
-        * 代码编译过程：
-            1.检查通篇的语法错误，若有错误则不编译执行
-            2.预编译
-            3.解释一行，执行一行
-        * 寻找GO（global object 即 全局上下文）
-            1. 找【变量声明】，并赋值为【undefined】
-            2. 找【函数声明】，并【赋值】
-            3. 执行
-        * 寻找AO（activation object 活跃对象，函数上下文,在函数执行之前进行的一个步骤）
-            1、寻找【形参】和【变量声明】，如果存在同名会进行【同名合并】，然后赋值为【undefined】
-            2、把实参【赋值】给形参
-            3、寻找【函数声明】，并【赋值】
-            4、执行
-        * 暗示全局变量
-           * 未显示声明的变量就是全局变量 
+        主要考点：
+        * 函数参数和对应的arguments的关系：
+            * 参数【没有设置】默认值的情况下：
+                * 如果调用函数的时候【显示地】【传入了】对应位置的【实参】（任何类型的值都可以，哪怕是undefined），那么：
+                    * 它俩就形成了映射关系，都指向同一个值，不管修改哪一个，另一个也会跟着修改。
+                * 如果调用函数的时候【没有显示地】传入对应位置的【实参】，那么：
+                    * 它俩就没有任何关系，因此修改也不会互相影响。 
+            * 参数【设置了】默认值的情况下：
+                * 不管是在任何情况下，它俩都没有任何关系
+                * arguments跟默认值【没有关系】，【只跟实参有关系】，实参【显示地】传入几个，arguments就对应有几个值
     */
+
+    function fn1(a) {
+        console.log(a);
+        console.log(arguments[0]);
+    }
+    fn1(1);
+
+    function fn2(a) {
+        a = 2;
+        console.log(a);
+        console.log(arguments[0]);
+    }
+    fn2(1);
+
+    function fn3(a) {
+        arguments[0] = 2;
+        console.log(a);
+        console.log(arguments[0]);
+    }
+    fn3(1);
+
+    function fn4(a) {
+        a = 2;
+        arguments[0] = 3;
+        console.log(a);
+        console.log(arguments[0]);
+    }
+    fn4(1);
+
+    function fn5(a) {
+        console.log(a);
+        console.log(arguments[0]);
+    }
+    fn5();
+
+    function fn6(a) {
+        a = 2;
+        console.log(a);
+        console.log(arguments[0]);
+    }
+    fn6();
+
+    function fn7(a) {
+        arguments[0] = 2;
+        console.log(a);
+        console.log(arguments[0]);
+    }
+    fn7();
+
+    function fn7(a) {
+        a = 2;
+        arguments[0] = 3;
+        console.log(a);
+        console.log(arguments[0]);
+    }
+    fn7();
+
+    function fn8(a = 1) {
+        console.log(a);
+        console.log(arguments[0]);
+    }
+    fn8();
+
+    function fn9(a = 1) {
+        console.log(a);
+        console.log(arguments[0]);
+    }
+    fn9(2);
+
+    function fn10(a = 1) {
+        arguments[0] = 2;
+        console.log(a);
+        console.log(arguments[0]);
+    }
+    fn10(2);
+
+    function fn11(a = 1, b) {
+        console.log(b);
+        console.log(arguments[1]);
+    }
+    fn11(2, 3);
+
+    function fn12(a = 1, b) {
+        b = 4;
+        console.log(b);
+        console.log(arguments[1]);
+    }
+    fn12(2, 3);
+
+    function fn12(a = 1, b) {
+        arguments[1] = 4;
+        console.log(b);
+        console.log(arguments[1]);
+    }
+    fn12(2, 3);
 </script>
 </body>
 </html>

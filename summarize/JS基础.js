@@ -452,6 +452,13 @@ Object.create(null)
 
 // defineproperty与proxy对比，哪个好，为什么？
 // instanceof 和 constructor 判断实例类型的区别？？
+// 5大主流浏览器内核
+// 浏览器两大引擎: js引擎 和 渲染引擎
+// 浏览器有哪些进程和线程，都是用来干嘛的
+// 渐进式webapp是什么，vue为什么是渐进式框架
+// 有哪些实用的BOM对象
+// Object.create()  Object.assign() Object.defineProperty()  Object.keys() Object.getOwnPropertyDescriptor()  obj.hasOwnProperty() 
+// Object.prototype.constructor   Object    
 
 /*
   每日一题：
