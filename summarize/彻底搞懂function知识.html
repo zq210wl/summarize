@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>彻底搞懂function知识</title>
+</head>
+<body>
+<script>
+    function Foo() {
+        getName = function() {
+            console.log(1);
+        };
+        return this;
+    }
+    Foo.getName = function() {
+        console.log(2);
+    }
+    Foo.prototype.getName = function() {
+        console.log(3);
+    }
+    var getName = function() {
+        console.log(4);
+    }
+    function getName() {
+        console.log(5);
+    }
+
+    Foo.getName();  // 2
+    getName();  // 4
+    Foo().getName();  // 1
+    getName();  // 1
+    new Foo.getName();  // 2
+    new Foo().getName();  // 3
+    new new Foo().getName();  // 3
+
+    /*
+        主要考点：（https://www.cnblogs.com/ycherry/p/11638041.html）
+        * 代码编译过程：
+            1.检查通篇的语法错误，若有错误则不编译执行
+            2.预编译
+            3.解释一行，执行一行
+        * 寻找GO（global object 即 全局上下文）
+            1. 找【变量声明】，并赋值为【undefined】
+            2. 找【函数声明】，并【赋值】
+            3. 执行
+        * 寻找AO（activation object 活跃对象，函数上下文,在函数执行之前进行的一个步骤）
+            1、寻找【形参】和【变量声明】，如果存在同名会进行【同名合并】，然后赋值为【undefined】
+            2、把实参【赋值】给形参
+            3、寻找【函数声明】，并【赋值】
+            4、执行
+        * 暗示全局变量
+           * 未显示声明的变量就是全局变量 
+    */
+</script>
+</body>
+</html>
