@@ -28,8 +28,18 @@
 /* 【数据类型】===============================================  
     * 基本数据类型（原始值）（栈内存）（变量不可修改）
       * string、number、boolean、null，undefined、symbol
-    * 引用数据类型（引用值）（堆内存）（变量可修改）(JS中用object来代表引用类型)
+    * 引用数据类型（引用值）（堆内存）（变量可修改）(JS中用object来代表引用类型，中文就叫做对象)：
       * Object、Function、Array、String、Boolean、Number、RegExp、.....
+    * 类型检测：
+      * 【内置类型】检测：Object.prototype.toString.call()  
+        * Object.prototype.toString.call(1)           // [object Number], 表示返回结果为类型为Number的一个object
+        * Object.prototype.toString.call('a')         // [object String], 表示返回结果为类型为String的一个object
+        * Object.prototype.toString.call(false)       // [object Boolean], 表示返回结果为类型为Boolean的一个object
+        * Object.prototype.toString.call(/\d.+/)      // [object RegExp], 表示返回结果为类型为RegExp的一个object
+        * Object.prototype.toString.call(undefined)   // [object Undefined], 表示返回结果为类型为Undefined的一个object
+        * Object.prototype.toString.call(null)        // [object Null], 表示返回结果为类型为Null的一个object
+      * 【自定义类型】检测：instanceof
+        * personX instanceof Person
 */
 
 
@@ -75,7 +85,7 @@
 
 
 /* 【彻底搞懂 prototype 】===============================================  
-    * prototype是【构造函数】【也就是function】的一个属性，它的值是一个对象；
+    * prototype是【构造函数】【也就是function】【独有的】一个属性，它的值是一个对象；
     * 【构造函数】分为【自定义构造函数】、【内置构造函数】、【Object构造函数】
       * 内置构造函数：String、Number、Date、...等等 
       * 自定义构造函数: function XX(){}
@@ -83,11 +93,48 @@
       *【constructor】【默认指向构造函数本身】，这个constructor的值是【可以修改】的，例如：Fn.prototype.constructor = xxFn;
         prototype也是可以被整个重新赋值的，例如：Fn.prototype = {}, 这个时候prototype就变成了一个空的对象{}; 
       *【自定义构造函数】、【内置构造函数】的【prototype对象】上的【__proto__】默认指向的是【Object的prototype】，
-       【Object的prototype】的【__proto__】=== null，所以说__proto__原型链终止于【Object的prototype】。
+       【Object的prototype】的【__proto__】=== null，所以说__proto__原型链终止于【Object的prototype】,
+        也就是：【 Object.prototype.__proto__ === null 】
     * 通过构造函数创建出来的【实例对象】上会有一个【__proto__】属性，它就是我们通常所说的【原型】，
       也就是说原型是【存在实例】对象上的，【__proto__】指向的就是构造函数的【prototype对象】，
      【__proto__】的值是可以修改的（如果想改的话，不建议修改它）；
     * 通过构造函数创建出来的【实例对象】【无法更改】【构造函数】的prototype上的属性；
+    * 实例原型链接：obj.__proto__.__proto__.__proto__  最终会指向null
+*/
+
+
+/* 【彻底搞懂 Object.create() ？？？？？？？？？？？？？】===============================================  
+    * 下面这两种写法，达到的效果是一样的：
+      // 不需要构造函数
+      Object.create(
+        {
+          a: 1,
+          aFn: function() {}
+        }, 
+        { 
+          b: { 
+            get() { return 2; } 
+          } 
+        }
+      );
+      // 此方法必须要有一个构造函数
+      function A() {
+        this.a = 1;
+        this.aFn = function() {};
+      }
+      A.prototype.b = 2;
+      new A();
+
+    * Object.create(null) 返回一个没有__proto__属性的对象
+      * 手动强制给它添加一个__proto__属性的话，那此__proto__就只是一个单纯的属性，它【不会成为原型】，没法实现原型链继承的功能
+*/
+
+
+/* 【彻底搞懂 Map, Set, Array, {}，迭代器，枚举 ？？？？？？？？？？？？？？】===============================================  
+    * Map 是一个【对象】
+    * {key1, value1, key2, value2, next:() => {}}
+    * Set 是一个【数组】 
+      * [ {key1, value1}, {key2, value2} ] 或 [ 1, 2, 'a', 'b', {a: 'x'} ]
 */
 
 
