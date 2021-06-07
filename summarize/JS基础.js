@@ -43,7 +43,7 @@
 */
 
 
-/* 【显示式类型转换】===============================================  
+/* 【显示式类型转换，也可以说包装类，以下等于 new 操作】===============================================  
     * String()
     * Number()
       * Number(''), Number('  '), Number(null), Number(false), Number('0') 【【reult: 0 】】
@@ -65,7 +65,17 @@
         * Boolean(), Boolean(''), Boolean(0), Boolean(false), Boolean(null), Boolean(undefined), Boolean(NaN)
       * 除了上面的以外，都返回：true
         * Boolean('xxx'), Boolean(' '),  Boolean('0'), Boolean('false'), Boolean('null'), Boolean('undefined')
-        * Boolean({}), Boolean(1), Boolean(-1), Boolean(9), 
+        * Boolean({}), Boolean(1), Boolean(-1), Boolean(9)
+    * Object()
+      * 根据传入值得类型返回相应基本包装类型的实例对象
+        var obj1 = Object("some text");
+        console.log(obj1 instanceof String);  // true  
+        var obj2 = Object(true);
+        console.log(obj2 instanceof Boolean);  // true 
+
+        var obj3 = {};
+        var obj4 = Object(obj3); // 因为obj3本来就是一个引用对象，所以根本不需要包装，直接返回原对象
+        console.log(obj3 === obj4);  // true
     * typeof()
       * 返回值的类型为 【【字符串string】】
 */

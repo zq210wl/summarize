@@ -24,7 +24,7 @@
          * http1.0 不需要对 Pragma 做设置，设置了也没用
          * http1.1 不需要对 Cache-control 做设置，因为默认值就是no-cache
       * ETag/If-None-Match （http2.0版本）
-         * 解决了 Last-Modified 时间只能精确到秒的缺陷
+         * 解决了 Last-Modified 时间只能精确到一秒的缺陷
         
   【【缓存生效顺序：】】
      * http1.0
