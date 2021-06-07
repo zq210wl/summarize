@@ -6,25 +6,40 @@
 
 
 /*
- 【http缓存】
-  1、强制缓存
-     * expired (http1.0版本)
-        * 设置一个绝对的过期时间，缺陷：客户端和服务器端时间不同
-        * 作为一种向下兼容方案，仍然在用
-     * catch-control (http2.0版本)
-        * max-age (设置一个过期时长，单位是秒，比如10000秒，如果时间没过就强制走本地缓存)
-  2、协商缓存
-     * catch-control: no-catch (走协商缓存)
-        * last-modified: 2022.5.10.11 (设置最后更新时间，绝对时间)
-           * 浏览器请求的时候会携带这个时间，服务器会拿到这个时间去对比文件的最后更新时间，
-           * 如果没有更新就返回304，走缓存
-           * 如果已经更新了就返回200，不走缓存
-        * Etag: xxxx (设置一个文件的标签，比如用hash等算出来的一个字符串)
-           * 浏览器请求会携带这个etag，服务器会拿etag来对比计算，
-           * 如果没有更新就返回304，走缓存
-           * 如果已经更新了就返回200，不走缓存
-  3、不缓存
-     * catch-control: no-store (不缓存)
-        * 不设置的话，默认也是走协商缓存
+ 【http缓存，注意：缓存都是针对get请求的】
+  1、不使用缓存
+      * Pragma: no-cache（http1.0）(只有这一个值)
+         * 这样设置以后是【不走强缓存】，还是回去检验协商缓存的expired字段，可以设置Expired来达到不缓存的目的。
+         * 所以【http1.0没有设置不走缓存的设置，只能设置不走强缓存】
+      * Cache-control: no-store （http1.1）
+         * 这样设置就不走缓存了 
+  2、强制缓存
+      * Expired: [过期时间] （http1.0）
+         * 这里设置的是绝对时间，缺陷：客户端和服务器端时间不同
+         * 作为一种向下兼容方案，仍然在用
+      * Cache-control: max-age=10000 （http2.0）（解决http1.0的Expired为绝对时间的问题）
+         * max-age （一个过期时长，单位是秒，比如10000秒）
+  2、走协商缓存
+      * Last-Modified/If-Modified-Since （http1.0和http1.1都采用的这种方式）
+         * http1.0 不需要对 Pragma 做设置，设置了也没用
+         * http1.1 不需要对 Cache-control 做设置，因为默认值就是no-cache
+      * ETag/If-None-Match （http2.0版本）
+         * 解决了 Last-Modified 时间只能精确到秒的缺陷
+        
+  【【缓存生效顺序：】】
+     * http1.0
+         * 先看是否设置了 Pragma: no-cache 不走强缓存，
+            * 如果没设置，就去检查 Expired 来走强缓存
+               * 如果 Expired 没设置，那么再去检查 Last-Modified 来走协商缓存
+            * 如果设置了，就会去检查 Last-Modified 来走协商缓存
+      * http2.0
+         * 先看是否设置了 Cache-control: no-store 不走缓存
+            * 如果没设置，就先检查 max-age 来走强制缓存，如果没设置，就去走协商缓存，先检查 ETag ，如果没设置，就再去检查 Last-Modified
+            * 如果设置了就不走缓存了
 */
 
+
+/*
+  【TCP、UDP、三次握手 ？？？？？？？？？】
+
+*/
