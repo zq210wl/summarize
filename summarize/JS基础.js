@@ -39,7 +39,7 @@
         * Object.prototype.toString.call(undefined)   // [object Undefined], 表示返回结果为类型为Undefined的一个object
         * Object.prototype.toString.call(null)        // [object Null], 表示返回结果为类型为Null的一个object
       * 【自定义类型】检测：instanceof
-        * personX instanceof Person
+        * personX instanceof Person   // 判断的原理：看personX的原型链上是否能找到constructor为Person
 */
 
 
@@ -103,7 +103,7 @@
 */
 
 
-/* 【彻底搞懂 Object.create() ？？？？？？？？？？？？？】===============================================  
+/* 【彻底搞懂 Object.create()】===============================================  
     * 下面这两种写法，达到的效果是一样的：
       // 不需要构造函数
       Object.create(
