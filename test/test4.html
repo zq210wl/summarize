@@ -4,184 +4,38 @@
     <meta charset="UTF-8">
     <title>test</title>
     <style>
-        html, body {
-            width: 100%;
-            height: 100%;
+        .out {
+            border: 1px solid red;
         }
-        .wrap {
-            width: 500px;
-            height: 500px;
-        }
-        .clock-circle {
-            margin: 100px 0 0 100px;
-            position: relative;
-            width: 300px;
-            height: 300px;
-            border: 1px solid #000;
-            border-radius: 50%;
-        }
-        .pointer {
-            position: absolute;
-            left: 50%;
-            transform-origin: center bottom;
-            width: 4px;
-        }
-        .hour-pointer {
-            top: 20%;
-            height: 30%;
-            background: red;
-            transform: translate(-50%) rotate(10deg);
-        }
-        .minutes-pointer {
-            top: 12%;
-            height: 38%;
-            background: blue;
-            transform: translate(-50%) rotate(20deg);
-        }
-        .second-pointer {
-            top: 8%;
-            height: 42%;
-            background: green;
-            transform: translate(-50%) rotate(30deg);
-        }
-        .num {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            width: 24px;
-            transform: translate(-50%);
-            color: #000;
-            font-size: 12px;
-            height: 50%;
-            text-align: center;
-            vertical-align: top;
-            transform-origin: center bottom;
-        }
-        .num-1 {
-            transform: translate(-50%) rotate(30deg)
-        }
-        .num-1 span{
-            display: inline-block;
-            transform: rotate(-30deg)
-        }
-        .num-2 {
-            transform: translate(-50%) rotate(60deg)
-        }
-        .num-2 span{
-            display: inline-block;
-            transform: rotate(-60deg)
-        }
-        .num-3 {
-            transform: translate(-50%) rotate(90deg)
-        }
-        .num-3 span{
-            display: inline-block;
-            transform: rotate(-90deg)
-        }
-        .num-4 {
-            transform: translate(-50%) rotate(120deg)
-        }
-        .num-4 span{
-            display: inline-block;
-            transform: rotate(-120deg)
-        }
-        .num-5 {
-            transform: translate(-50%) rotate(150deg)
-        }
-        .num-5 span{
-            display: inline-block;
-            transform: rotate(-150deg)
-        }
-        .num-6 {
-            transform: translate(-50%) rotate(180deg)
-        }
-        .num-6 span{
-            display: inline-block;
-            transform: rotate(-180deg)
-        }
-        .num-7 {
-            transform: translate(-50%) rotate(210deg)
-        }
-        .num-7 span{
-            display: inline-block;
-            transform: rotate(-210deg)
-        }
-        .num-8 {
-            transform: translate(-50%) rotate(240deg)
-        }
-        .num-8 span{
-            display: inline-block;
-            transform: rotate(-240deg)
-        }
-        .num-9 {
-            transform: translate(-50%) rotate(270deg)
-        }
-        .num-9 span{
-            display: inline-block;
-            transform: rotate(-270deg)
-        }
-        .num-10 {
-            transform: translate(-50%) rotate(300deg)
-        }
-        .num-10 span{
-            display: inline-block;
-            transform: rotate(-300deg)
-        }
-        .num-11 {
-            transform: translate(-50%) rotate(330deg)
-        }
-        .num-11 span{
-            display: inline-block;
-            transform: rotate(-330deg)
-        }
-        .num-12 {
-            transform: translate(-50%) rotate(360deg)
-        }
-        .num-12 span{
-            display: inline-block;
-            transform: rotate(-360deg)
+        .inner {
+            background: #ff00ff;
+            border: 1px solid red;
+            float: left;
+            width: 200px;
+            height: 200px;
         }
     </style>
-    <script id="xxx"></script>
 </head>
 <body>
-    <div class="wrap">
+    <div class="out"> 
+        <div class="inner"></div>
+        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
+        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
+        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
+        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
+        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
+        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
+        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
+        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
+        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
+        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
+        <span style="clear:right;">fdsfdsfdsffdsfdsfdsfdsfdsfdsfsfdsfdsfd</span>
+        <div class="inner"></div>
 
+        <div style="clear:left;">
+            <span style="display: block;">警方快速的减肥可使肌肤快速反击的身份</span>
+        </div>
     </div>
-    <script>
-        // "use strict";
-        // function A() {
-        //     this.name = 'AA';
-        // }
-        // A.prototype.getName = function() {
-        //     return this.name;
-        // }
-
-        // function B() {
-        //     A.apply(this, arguments);
-        //     this.age = 20;
-        // }
-        // B.prototype = new A();
-        // B.prototype.getAge = function() {
-        //     return this.age;
-        // }
-        // B.prototype.constructor = B;
-
-        // var b = new B();
-        // console.log(b instanceof B);
-        // console.log(b instanceof A);
-        // console.log(b.constructor);
-
-        function A(){
-
-        }
-        A.prototype.getName = function() {
-            console.log(222);
-        }
-        let xx = new A().getName();
-        console.log(xx);
-        let yy = new new A().getName();
-        console.log(yy);
-    </script>
+    
 </body>
 </html>
