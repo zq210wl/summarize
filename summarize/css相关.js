@@ -62,8 +62,55 @@
 
 
 /*
+ 【0.5px边框实现方案】
+  * 方法一（只适用于给四个边框都设置值的场景）:
+      .box {
+          width: 100px;
+          height: 50px;
+          box-shadow: 0px 0px 0px 0.5px #000;
+      }
+  * 方法二（比较通用）:
+
+      // 四个边框都设置值
+      .box {
+          position: relative;
+          width: 100px;
+          height: 50px;
+      }
+      .box::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          border: 1px solid #000;
+          width: 200%;
+          height: 200%;
+          transform: scale(0.5);
+      }
+      
+      // 只设置一条线
+      .box {
+          position: relative;
+          width: 100px;
+          height: 1px;
+      }
+      .box::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          background: #000;
+          width: 200%;
+          height: 100%;
+          transform: scale(0.5);
+      }
+*/
+
+
+/*
  【各种基础】
   * box-sizing: border-box
+  * box-shadow: X轴偏移量 Y轴偏移量 [阴影模糊半径] [阴影扩展] [阴影颜色]
 */
 
 /*

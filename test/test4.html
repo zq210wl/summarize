@@ -5,37 +5,27 @@
     <meta name="viewport" content="width=device-width"></meta>
     <title>test</title>
     <style>
-        .out {
-            border: 1px solid red;
-        }
         .inner {
-            background: #ff00ff;
-            border: 1px solid red;
-            float: left;
-            width: 200px;
-            height: 200px;
+            position: relative;
+            width: 100px;
+            height: 1px;
+        }
+        .inner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #000;
+            width: 200%;
+            height: 100%;
+            transform: scale(0.5);
         }
     </style>
 </head>
 <body>
     <div class="out"> 
         <div class="inner"></div>
-        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
-        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
-        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
-        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
-        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
-        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
-        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
-        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
-        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
-        <span style="clear:right;">警方快速的减肥可使肌肤快速反击的身份</span>
-        <span style="clear:right;">fdsfdsfdsffdsfdsfdsfdsfdsfdsfsfdsfdsfd</span>
-        <div class="inner"></div>
-
-        <div style="clear:left;">
-            <span style="display: block;">警方快速的减肥可使肌肤快速反击的身份</span>
-        </div>
+        
     </div>
     
 </body>
