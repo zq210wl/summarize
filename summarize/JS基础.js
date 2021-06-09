@@ -65,9 +65,9 @@
         * Boolean(), Boolean(''), Boolean(0), Boolean(false), Boolean(null), Boolean(undefined), Boolean(NaN)
       * 除了上面的以外，都返回：true
         * Boolean('xxx'), Boolean(' '),  Boolean('0'), Boolean('false'), Boolean('null'), Boolean('undefined')
-        * Boolean({}), Boolean(1), Boolean(-1), Boolean(9)
+        * Boolean({}), Boolean([]), Boolean(1), Boolean(-1), Boolean(9)
     * Object()
-      * 根据传入值得类型返回相应基本包装类型的实例【对象】
+      * 根据传入值得类型返回相应包装后的实例【对象】
         var obj1 = Object("some text");
         console.log(obj1 instanceof String);  // true  
         var obj2 = Object(true);
@@ -94,7 +94,7 @@
 
 
 /* 【隐式类型转换】===============================================  
-    [最全的JS隐式转换细则: https://juejin.cn/post/6844903934876745735]
+    [最全的JS隐式转换细则: https://juejin.cn/post/6844903934876745735
 */
 
 

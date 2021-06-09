@@ -37,6 +37,15 @@
 
     typeof 'Workd' === 'undefined' // false, typeof 优先级高于 ===
 
+    -9 % 2 === -1; // true
+
+    Array.isArray( Array.prototype ); // true
+
+    1 === true // false，  === 不会做类型转化
+
+    1 + - + + + - + 1 // 2，是在求正正得负还是正负得负的问题
+    1 + - + - + - + 1 // 0，是在求正正得负还是正负得负的问题
+
 </script>
 
 <script>
@@ -45,7 +54,7 @@
        // * [1,,,,2,,,3,,,4,,,6]
        // * var ary = [1,2]; ary[5] = 10; 则；ary = [1,2,,,,10]
        // * var ary = [1,2]; ary.length = 5; 则；ary = [1,2,,,] 
-    // 在对零散数组执行：filter、forEach、every、some操作的时候，是会直接忽略空值的。【但是find却不会忽略】。
+    // 在对零散数组执行：filter、forEach、every、some操作的时候，是会直接忽略空值的。【但是find和map却不会忽略】。
     // undefined跟空值是不一样的，是不会被忽略的。【但是直接去用下标获取一个空值得到的是undefined】。  
 </script>
 
@@ -73,5 +82,62 @@
     }
     showCase(new String('A')); // Do not know!
 </script>
+
+<script>
+    /***** Infinity 相关知识 *****/
+    Infinity % 2 === NaN;
+    Infinity % 1 === NaN;
+    Infinity % 3 === NaN;
+    Infinity % 0  === NaN;
+
+    Infinity / 1 === Infinity;
+    Infinity - 1 === Infinity;
+    Infinity + 1 === Infinity;
+</script>
+
+<script>
+    /***** parseInt(string, radix) 相关知识 *****/
+    // radix 默认为2-36之间的一个数
+    parseInt(3, 8) // 3
+    parseInt(3, 2) // NaN
+    parseInt(3), parseInt(3, 0); parseInt(3, undefined) // 3  默认会按照10进制来转换：parseInt(3, 10)
+
+    Number.parseInt === parseInt
+
+    // 十六进制数：1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F
+</script>
+
+<script>
+    /***** 对象转Boolean值 、对象与Boolean值比较 *****/
+    if([]) {
+        console.log('通过了');  // done
+    } else {
+        console.log('没通过');
+    }
+
+    if([] == true) {
+        console.log('通过了');
+    } else {
+        console.log('没通过');  // done
+    }
+
+    if(!![]) {
+        console.log('通过了');  // done
+    } else {
+        console.log('没通过');
+    }
+
+    [] ? '通过了' : '没通过';           // '通过了'
+    [] == true ? '通过了' : '没通过';   // '没通过'
+    !![] ? '通过了' : '没通过';         // '通过了'
+
+    var a = [0];
+    if ([0]) {
+        console.log(a == true);
+    } else {
+        console.log("wut");
+    }
+</script>
+
 </body>
 </html>
