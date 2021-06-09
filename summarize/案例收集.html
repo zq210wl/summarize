@@ -28,5 +28,50 @@
     console.log({} == {}); // false
     console.log({} == []); // false
 </script>
+
+<script>
+    /***** 其它 *****/
+    [].reduce(Math.pow) // 报错，在没有初始值的空数组上调用 reduce 将报错
+
+    console.log('Value is ' + ('smtg' === 'smtg') ? 'Something' : 'Nothing');  // Something, + 运算符的优先级高于 三元运算符
+
+    typeof 'Workd' === 'undefined' // false, typeof 优先级高于 ===
+
+</script>
+
+<script>
+    /***** 零散数组的遍历 *****/
+    // 存在空值的数组就叫做零散数组，如：
+       // * [1,,,,2,,,3,,,4,,,6]
+       // * var ary = [1,2]; ary[5] = 10; 则；ary = [1,2,,,,10]
+       // * var ary = [1,2]; ary.length = 5; 则；ary = [1,2,,,] 
+    // 在对零散数组执行：filter、forEach、every、some操作的时候，是会直接忽略空值的。【但是find却不会忽略】。
+    // undefined跟空值是不一样的，是不会被忽略的。【但是直接去用下标获取一个空值得到的是undefined】。  
+</script>
+
+<script>
+    /***** js最大的安全整数 *****/
+    // Math.pow(2, 53) - 1 = 9007199254740991
+</script>
+
+<script>
+    /***** switch case 循环使用的是 === *****/
+    function showCase(value) {
+        switch(value) {
+        case 'A':
+            console.log('Case A');
+            break;
+        case 'B':
+            console.log('Case B');
+            break;
+        case undefined:
+            console.log('undefined');
+            break;
+        default:
+            console.log('Do not know!');
+        }
+    }
+    showCase(new String('A')); // Do not know!
+</script>
 </body>
 </html>

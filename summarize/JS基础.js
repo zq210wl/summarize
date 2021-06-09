@@ -43,7 +43,7 @@
 */
 
 
-/* 【显示式类型转换，也可以说包装类，以下等于 new 操作，注意：并不是所有的构造函数都可以这样显示包装，比如Array()，它的参数含义不一样】===============================================  
+/* 【显示式类型转换，注意：并不是所有的构造函数都可以这样转换，比如Array()，它的参数含义不一样】===============================================  
     * String()
     * Number()
       * Number(''), Number('  '), Number(null), Number(false), Number('0') 【【reult: 0 】】
@@ -67,7 +67,7 @@
         * Boolean('xxx'), Boolean(' '),  Boolean('0'), Boolean('false'), Boolean('null'), Boolean('undefined')
         * Boolean({}), Boolean(1), Boolean(-1), Boolean(9)
     * Object()
-      * 根据传入值得类型返回相应基本包装类型的实例对象
+      * 根据传入值得类型返回相应基本包装类型的实例【对象】
         var obj1 = Object("some text");
         console.log(obj1 instanceof String);  // true  
         var obj2 = Object(true);
@@ -78,6 +78,18 @@
         console.log(obj3 === obj4);  // true
     * typeof()
       * 返回值的类型为 【【字符串string】】
+*/
+
+
+/* 【三个基本类型的包装类】===============================================  
+    * String()
+    * Number()
+    * Boolean()
+    
+   【注意：】
+    * 基本类型经过包装以后返回的值仍然还是基本类型
+    * new String(); new Number(); new Boolean(); 返回的是一个【对象】
+    * String('abc') !== new String('abc');  Number(1) !== new Number(1); Boolean(true) !== new Boolean(true) 
 */
 
 
