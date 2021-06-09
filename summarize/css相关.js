@@ -4,6 +4,7 @@
   * 什么是浮动元素？
     * 设置了float的元素就会变成浮动元素
     * 它是一种特殊的inline-block元素
+    * MDN参考：https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Floats
   * 浮动元素会对其它元素造成什么影响？
     * 对父容器的影响：
       * 会导致其脱离了父容器的包裹，也就是浮动元素无法把父元素的高度撑开，进而导致父容器高度塌陷
@@ -26,8 +27,17 @@
 
 
 /*
- 【BFC相关知识？？？？？？？】
-  * 
+ 【BFC相关知识】
+  * 翻译：块格式化上下文，它是指一个环境，在这个环境里面的元素遵循一定的规律。
+  * 为什么要有这个概念？也就是要解决什么问题？
+    * 没设置BFC的块级元素，无法包裹内部浮动元素，导致高度塌陷（BFC可以清除内部元素浮动造成的问题）
+    * 没设置BFC的两个块级元素，存在margin重合，也就是margin塌陷问题 （BFC解决margin塌陷问题）
+  * 那么如何把一个元素设置为BFC ？
+    * 查看：https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context
+    * 常用：
+      * overflow: auto/hidden
+      * dispaly: inline-block/table
+      * position: absolute/fixed
 */
 
 
@@ -87,7 +97,7 @@
           height: 200%;
           transform: scale(0.5);
       }
-      
+
       // 只设置一条线
       .box {
           position: relative;
