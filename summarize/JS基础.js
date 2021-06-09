@@ -126,29 +126,38 @@
 
 
 /* 【彻底搞懂 Object.create()】===============================================  
-    * 下面这两种写法，达到的效果是一样的：
-      // 不需要构造函数
-      Object.create(
-        {
-          a: 1,
-          aFn: function() {}
-        }, 
-        { 
-          b: { 
-            get() { return 2; } 
-          } 
-        }
-      );
-      // 此方法必须要有一个构造函数
-      function A() {
-        this.a = 1;
-        this.aFn = function() {};
-      }
-      A.prototype.b = 2;
-      new A();
-
+    * 创建一个__proto__为指定第一个参数的对象
+        Object.create(
+          {
+            a: 1,
+            aFn: function() {}
+          }, 
+          { 
+            b: { 
+              get() { return 2; } 
+            } 
+          }
+        );
     * Object.create(null) 返回一个没有__proto__属性的对象
       * 手动强制给它添加一个__proto__属性的话，那此__proto__就只是一个单纯的属性，它【不会成为原型】，没法实现原型链继承的功能
+*/
+
+
+
+/* 【彻底搞懂 Object.getPrototypeOf()】===============================================  
+    * 返回指定对象的__proto__对象
+        const prototype1 = {};
+        const object1 = Object.create(prototype1);
+        console.log(Object.getPrototypeOf(object1) === prototype1); // true
+*/
+
+
+/* 【彻底搞懂 String.prototype.replace()】===============================================  
+      "(1) (2) (3)".replace(/\d/g, function(match, p1, p2, p3, offset, string){
+        
+      });
+      如果没有"()", 那么就没有 p1, p2, p3
+      参考：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/replace
 */
 
 

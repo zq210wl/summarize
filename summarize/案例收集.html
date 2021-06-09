@@ -6,6 +6,12 @@
 </head>
 <body>
 <script>
+    /***** 基础知识测试，很经典 *****/
+    // 在线做题：http://javascript-puzzlers.herokuapp.com/
+    // 对应解析：https://juejin.cn/post/6844903619758669831
+</script>
+
+<script>
     /***** 直接执行一下代码可能会报语法错，这是因为代码在语法层面有歧义（但是一些浏览器对其中的一些情况做了优化，所以不会报错）*****/
        // {} == {}  {} == []  {} == 1   这是因为{}有可能会被解析成语句块，用({})转成表达式就好了
        // (function(){})() (function(){})()  两个自执行函数被合并到一起，缺少分号会报错，优化：;(function(){})() ;(function(){})()
@@ -27,25 +33,6 @@
     /***** 各种比较操作 *****/
     console.log({} == {}); // false
     console.log({} == []); // false
-</script>
-
-<script>
-    /***** 其它 *****/
-    [].reduce(Math.pow) // 报错，在没有初始值的空数组上调用 reduce 将报错
-
-    console.log('Value is ' + ('smtg' === 'smtg') ? 'Something' : 'Nothing');  // Something, + 运算符的优先级高于 三元运算符
-
-    typeof 'Workd' === 'undefined' // false, typeof 优先级高于 ===
-
-    -9 % 2 === -1; // true
-
-    Array.isArray( Array.prototype ); // true
-
-    1 === true // false，  === 不会做类型转化
-
-    1 + - + + + - + 1 // 2，是在求正正得负还是正负得负的问题
-    1 + - + - + - + 1 // 0，是在求正正得负还是正负得负的问题
-
 </script>
 
 <script>
@@ -137,6 +124,31 @@
     } else {
         console.log("wut");
     }
+</script>
+
+<script>
+    /***** 其它 *****/
+    [].reduce(Math.pow) // 报错，在没有初始值的空数组上调用 reduce 将报错
+
+    console.log('Value is ' + ('smtg' === 'smtg') ? 'Something' : 'Nothing');  // Something, + 运算符的优先级高于 三元运算符
+
+    typeof 'Workd' === 'undefined' // false, typeof 优先级高于 ===
+
+    -9 % 2 === -1; // true
+
+    Array.isArray( Array.prototype ); // true
+
+    1 === true // false，  === 不会做类型转化
+
+    1 + - + + + - + 1 // 2，是在求正正得负还是正负得负的问题
+    1 + - + - + - + 1 // 0，是在求正正得负还是正负得负的问题
+
+    1 < 2 < 3  // 其实就是：(1 < 2) < 3
+
+    2 == [[[2]]] // true
+
+    var a = [1, 2, 3]; var b = [1, 2, 4];  a < b; // 引用类型间比较大小是按照字典序比较，就是先比第一项谁大，相同再去比第二项。
+
 </script>
 
 </body>
