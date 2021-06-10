@@ -127,6 +127,14 @@
 </script>
 
 <script>
+    /***** 全局函数isNaN() 和 Number.isNaN() 是两个不同的*****/
+     // 具体查看：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN
+     // 全局函数isNaN()：【会】进行隐式类型转换【用Numer()构造函数来转换】
+     // 全局函数isNaN()：【不会】进行隐式类型转换，只有参数里的表达式明确返回的类型就是NaN的时候才会返回true，其它结果都是false
+
+</script>
+
+<script>
     /***** 其它 *****/
     [].reduce(Math.pow) // 报错，在没有初始值的空数组上调用 reduce 将报错
 
