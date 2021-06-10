@@ -5,28 +5,26 @@
     <meta name="viewport" content="width=device-width"></meta>
     <title>test</title>
     <style>
-        .inner {
-            position: relative;
-            width: 100px;
-            height: 1px;
+        .out {
+            background: red;
         }
-        .inner::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            background: #000;
-            width: 200%;
-            height: 100%;
-            transform: scale(0.5);
+        .inner {
+        
+        }
+        .out::after {
+            content: "       ";
+        }
+        .out::before { 
+            content: "      ";
         }
     </style>
 </head>
 <body>
     <div class="out"> 
-        <div class="inner"></div>
-        
+        <div class="inner">99999999999</div>
+        <div>理科生的肌肤快速减肥看电视</div>
     </div>
+    <div>fdsfdsfdsfdsfdsfdsf</div>
     
 </body>
 </html>

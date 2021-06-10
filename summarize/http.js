@@ -43,3 +43,26 @@
   【TCP、UDP、三次握手 ？？？？？？？？？】
 
 */
+
+
+
+
+/*
+  等待整理？？？？？
+  1、 等待获取CSS不会阻塞HTML的解析或者下载，但是它的确阻塞JavaScript，因为JavaScript经常用于查询元素的CSS属性。
+  2、浏览器中的一些概念以及他们之间的关系：https://blog.csdn.net/BonJean/article/details/78453547
+  3、渲染引擎和js引擎直接是怎么配合的？ https://blog.csdn.net/qiwoo_weekly/article/details/116772674
+      * 渲染是会阻塞主线程的，也就是会阻塞js执行  
+  4、渐进式 Web 应用介绍：https://developer.mozilla.org/zh-CN/docs/Web/Progressive_web_apps/Introduction
+  5、window.requestAnimationFrame
+       * event loop的机制会导致 动画延迟执行 或者 丢帧
+       * requestAnimationFrame 可以解决丢帧问题，但是也解决不了延迟问题，它可以保证只要有机会执行渲染了，就一定会把requestAnimationFrame中的动画给执行了？？？？
+      【
+         1、用setTimeOut或setInterval为什么会导致动画延迟或丢帧？
+             * 在setTimeOut或setInterval的回调执行完以后，会把渲染任何放到渲染任务列表中，
+             * 如果还没到下一帧渲染的时侯，就会接着先去执行其它js任何，这个时候这个js任务可能很长，
+             * 就会阻塞下一次渲染，从而导致错过下一次渲染时机，只能继续等待下一帧。
+       】
+   6、为什么用display:table来清楚浮动，而不用block？
+       display:table不只是用来清除浮动的，还用来防止第一个元素或者最后一个元素在设置了margin以后，导致的margin塌陷的。
+*/

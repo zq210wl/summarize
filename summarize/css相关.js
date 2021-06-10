@@ -40,6 +40,20 @@
       * position: absolute/fixed
 */
 
+/*
+ 【为什么有些框架要在元素的before和after上面设置display:table来清楚浮动，而不用block？】
+   [代码如下：]
+    .parent::before, .parent::after {
+      content: ' ',
+      display: table;
+    }
+    .parent::after {
+      clear: both;
+    }
+   [解释：]
+     * display:table 不只是用来清除浮动的，
+     * 还用来防止父容器中第一个元素或者最后一个元素在设置了margin以后，导致的margin塌陷问题。
+*/
 
 /*
  【移动端适配相关知识】
@@ -68,6 +82,29 @@
       * 媒体查询
       * <img src='aa.jpg' srcset="aa1.jpg 1x, aa2.jpg 2x, aa3.png 3x" /> 
       * <img src='aa.jpg' srcset="aa1.jpg 370w, aa2.jpg 800w, aa3.png 960w" /> 
+*/
+
+
+/*
+  【行内元素之间的空白间隙问题】
+   * 现象：html 元素在书写的时候会进行换行来写，这样在两个元素之间就会有一个英文字符的空白，如下：
+        <div id="container">
+            <span id="span1"></span>
+            <span id="span2"></span>
+        </div>
+    * 为什么会这样？
+        * 因为只要换行就会产生空白，所有的空白会被合并为一个英文单词长度的空白字符
+    * 解决方案：
+        * 元素在书写的时候不要换行（不友好）
+        * 在父容器上设置属性：font-size:0, 这样就可以设置空白字符的长度为0了，也就不会占据空间了（建议使用）
+   * inline-block 和 inline 都属于行内元素，都会产生上看的空白间隙问题
+*/
+
+
+/*
+  【负margin】
+   * margin-left: -50px , 从自身开始整体往左边移动50px，如果到达最左边会超出边界
+   * margin-right: -50px , 从后面元素开始整体往左边移动50px，后边会覆盖前边元素
 */
 
 
