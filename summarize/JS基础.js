@@ -558,6 +558,13 @@ Object.create(null)
         document.head.appendChild(script);
 */
 
+/* 【js语法是不支持字符串换行的，除非用反引号 】
+    var str = 'aa
+               bb'; // 报错
+    var str = 'aa\
+               bb'; // 不报错
+*/
+
 // defineproperty与proxy对比，哪个好，为什么？
 // instanceof 和 constructor 判断实例类型的区别？？
 // 5大主流浏览器内核
