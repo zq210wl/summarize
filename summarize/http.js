@@ -55,6 +55,7 @@
       * 渲染是会阻塞主线程的，也就是会阻塞js执行  
   4、渐进式 Web 应用介绍：https://developer.mozilla.org/zh-CN/docs/Web/Progressive_web_apps/Introduction
   5、window.requestAnimationFrame
+       https://www.infoq.cn/article/javascript-high-performance-animation-and-page-rendering/
        * event loop的机制会导致 动画延迟执行 或者 丢帧
        * requestAnimationFrame 可以解决丢帧问题，但是也解决不了延迟问题，它可以保证只要有机会执行渲染了，就一定会把requestAnimationFrame中的动画给执行了？？？？
       【

@@ -5,26 +5,102 @@
     <meta name="viewport" content="width=device-width"></meta>
     <title>test</title>
     <style>
-        .out {
+        /* .div-1 {
+            position: relative;
+            z-index: 100;
+            width: 50px;
+            height: 40px;
+            background: green;
+            transform: rotate(0deg);
+            animation: div1 3s;
+        }
+
+        @keyframes div1 {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .div-2 {
+            position: relative;
+            z-index: 1000;
+            width: 50px;
+            height: 40px;
             background: red;
+            transform: rotate(0deg);
+            animation: div1 3s;
         }
-        .inner {
-        
+
+        @keyframes div2 {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
-        .out::after {
-            content: "       ";
-        }
-        .out::before { 
-            content: "      ";
+*/
+        .div-3 {
+            display: inline-block;
+            width: 50px;
+            height: 40px;
+            background: blue;
+            opacity: 0.5;
+            transform: translateZ(0);
+        } 
+        .div-4 {
+            display: block;
+            width: 150px;
+            height: 140px;
+            background: red;
+            transition: 5s 0s;
+            opacity: 0.5;
+            transform: translateZ(0);
         }
     </style>
 </head>
 <body>
-    <div class="out"> 
-        <div class="inner">99999999999</div>
-        <div>理科生的肌肤快速减肥看电视</div>
+    <!-- <div class="div-1">
+
     </div>
-    <div>fdsfdsfdsfdsfdsfdsf</div>
+    <div>
+        fdsfdsfdsfsd<br>
+        fdsfdsfdsfsd<br>
+        fdsfdsfdsfsd<br>
+    </div>
+    <div class="div-2">
+
+    </div>
+    <div>
+        fdsfdsfdsfsd<br>
+        fdsfdsfdsfsd<br>
+        fdsfdsfdsfsd<br>
+    </div>
+    -->
     
+    <div class="div-4">
+        <div class="div-3">
+
+        </div> 
+    </div> 
+    <!-- <div class="div-4">fsdfdsfdsfdsf</div>
+    <div style="height: 9999px;">房价疯狂开发的</div> -->
+    <script>
+        
+        document.querySelector('.div-3').addEventListener('click', function(){
+            document.querySelector('.div-3').style.width = '100px';
+            //document.querySelector('.div-4').style.width = '100px';
+            // let a = new Date().getTime();
+            // let b = a + 300;
+            // while (a < b) {
+            //     a = new Date().getTime();
+            //     console.log(1);
+            // }
+
+        });
+    </script>
 </body>
 </html>
