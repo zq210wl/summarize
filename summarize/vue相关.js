@@ -68,6 +68,19 @@
 
 
 /*
+ 【 采用虚拟dom进行diff更新的优缺点 】
+  [参考：https://www.zhihu.com/question/31809713]
+   * 采用虚拟dom进行diff更新是在【开发代价】、【可维护性】、【性能开销】三者平衡之下的一种策略。
+      * 人工控制细节更新：开发成本大；
+      * 人工或者框架每次进行innerHTML全量更新：性能开销跟页面元素的数量成正比，页面元素多的情况下，性能开销太大；
+      * diff更新：性能开销跟执行diff的JS计算量和每次变化的元素数量成正比，diff的每次patch都会引起页面reflow或repaint，
+                 但是它保证了每次性能开销的上线，最多就是全量更新，部分情况下是只是repaint，部分情况下局部reflow，
+                 部分情况下整个reflow（最差情况）。如果每次都进行全量更新的话，那每次开销就都是在最大上线。
+      * dom更新是难免的，reflow很多情况下都是会引起大量dom的layout，所以diff算法的核心并不是性能优化，想要减少性能开销还是需要好的页面布局。
+*/
+
+
+/*
  【 观察者模式 VS 发布订阅模式 】
    [参考：https://segmentfault.com/a/1190000021091008]
 
@@ -146,6 +159,15 @@
 /*
  【 Vue2.0 为什么要用虚拟 DOM(Virtual DOM) 】
   参考：https://learnku.com/articles/50487
+  * 是在【性能开销】、【跨平台】、【更多其它的能力】三者中平衡的结果
+    * 性能开销
+      * 保证了性能开销的最大上线
+    * 跨平台
+      * weex利用虚拟dom实现了vue一统天下的效果，用js来编程，通过不同的render引擎来生成三端的代码
+        * 虚拟dom实现跨平台：https://blog.csdn.net/singwhatiwanna/article/details/97340007 
+    * 更多其它的能力
+      * 合并dom操作
+    
 */
 
 
@@ -155,10 +177,12 @@
        https://www.jianshu.com/p/6d02c1639b03
   * vue1.x的原理：
     * 采用（defineProperty数据劫持 + watcher添加依赖监听）的观察者模式进行数据响应的
-    * 小粒度更新，精确追踪到数据变化所影响的dom变化，精确更新变化的dom     
+    * 小粒度更新，精确追踪到数据变化所影响的dom变化，精确更新变化的dom
+    * 更新策略是：维护一个watch队列来完成异步dom更新（浏览器自身的dom更新策略会进行dom操作合并）
   * vue2.x的原理：
     * 采用（defineProperty数据劫持 + watcher添加依赖监听）的观察者模式进行数据响应的
-    * 以组件粒度为范围，组件内diff式更新，每次state变化都会执行组件的render函数 
+    * 以组件粒度为范围，组件内全量diff式更新，每次state变化都会执行组件的render函数 
+    * 更新策略是：维护一个watch队列来完成异步dom更新（浏览器自身的dom更新策略会进行dom操作合并）
 */
 
 
@@ -212,15 +236,7 @@
   1、在vm.data发生变化的时候，vue是异步来更新dom的
   2、$nextTick的callback会在dom更新之后执行，所以在操作dom的时候，需要放$nextTick中来执行，可以保证拿到正确的dom数据
   3、$nextTick() 属于微任务（不支持promise浏览器会用setTimeout来做），会在执行完dom渲染操作后添加一个微任务，类似于 node的process.nextTick()
-*/
-
-
-/*
- 【 Vue.js异步更新DOM策略及nextTick  ？？？？ 到到底是如何控制执行和渲染顺序的 】
-  参考：https://juejin.cn/post/6844904071606845447
-       https://segmentfault.com/a/1190000015632392（解释的很透彻）
-
-  待解决 ？？？？？
+  4、可以用this.$forceUpdate()进行强制更新dom
 */
 
 
@@ -241,8 +257,6 @@
       * 在首次初始化的时候是不会执行的，可以设置 immediate:true 来设置初始化执行 
       * watch属性的引用对象没有发生变化，是不会触发的，可以设置 deep:true 来设置
 */
-
-
 
 
 
@@ -358,6 +372,30 @@
 */
 
 
+/*
+ 【 插件开发 、组件库开发 】
+    import { myComponent1, myComponent2, myComponent3 } from '@/myComponents/index.js'
+    MyPlugin.install = function (Vue, options) {
+      // 1. 添加全局方法或 property
+      Vue.myGlobalMethod = function () {
+        // 逻辑...
+      }
+
+      // 2. 注入全局组件
+      Vue.mixin({
+        compoments: [myComponent1, myComponent2, myComponent3]
+        ...
+      })
+
+      // 3. 添加实例方法
+      Vue.prototype.$myMethod = function (methodOptions) {
+        // 逻辑...
+      }
+    }
+    // 使用插件
+    Vue.use(MyPlugin, { someOption: true })
+*/
+
 
 /*
  【 hash、history 】
@@ -374,7 +412,7 @@
 /*
  【 vue 开发中需要注意的问题 】
   * methods 中不能用箭头函数，不然 this 的指针就不对
-  * 时间传参数可以直接这么写： <input type="button" value='add' @click="addItem(index)"/>
+  * 事件传参数可以直接这么写： <input type="button" value='add' @click="addItem(index)"/>
 */
 
 

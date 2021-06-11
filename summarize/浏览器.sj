@@ -62,4 +62,13 @@
 
 /*
 浏览器会维护一个队列，把所有引起回流和重绘的操作放入队列中，如果队列中的任务数量或者时间间隔达到一个阈值的，浏览器就会将队列清空，进行一次批处理，这样可以把多次回流和重绘变成一次
+
+虚拟dom diff的性能分析、：https://www.zhihu.com/question/31809713
+    * 手动自己控制细节更新和框架diff更新的性能对比：
+
+    * 整个innerHTML='xx'更新和diff更新的性能对比，比较性能的影响因素；
+        如果innerHTML变化量比较大，比如整个应用都要更新，他的性能开销可能就很大
+
+核心diff算法：http://hcysun.me/vue-design/zh/renderer-diff.html
+双端比较的原理：http://hcysun.me/vue-design/zh/renderer-diff.html#%E5%8F%A6%E4%B8%80%E4%B8%AA%E6%80%9D%E8%B7%AF-%E5%8F%8C%E7%AB%AF%E6%AF%94%E8%BE%83
 */

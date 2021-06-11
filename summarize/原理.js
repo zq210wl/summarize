@@ -107,11 +107,18 @@
 
 /*
   【 从宏观上分析 VUE 模版编译成VNode的流程 】
-    * template > HTML AST > parse AST > 解析过中进行 optimize > 生成 render 函数 > 执行 render 函数 > VNode
-    * 解释：这里的render函数其实就是 createElement，createElement 用来创建VNode的
-         render: function (createElement) {
-            return createElement('h1', this.blogTitle)
-         }
+    * template > HTML AST > parse AST > optimize > generate 生成render函数 > 执行render函数 > VNode
+      * optimize: 用来给AST递归添加各种static属性，配合VNode和patch使用，避免不必要的re-render，提高性能。
+      * render函数：这里的render函数其实就是 createElement，createElement 用来创建VNode的，【依赖收集】也是在执行render的时候完成的。
+              render: function (createElement) {
+                  return createElement('h1', this.blogTitle)
+              }
+              // 生成的render函数的代码示例：【执行它就会进行依赖收集】
+              function anonymous() {
+                with(this){return _c('div',[_m(0),(message)?_c('p',[_v(_s(message))]):_c('p',[_v("No message.")])])}
+              }
+    * 参考详细的模版编译流程：
+      * https://juejin.cn/post/6844903942178996238
 */
 
 
