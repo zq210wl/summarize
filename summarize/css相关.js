@@ -155,6 +155,18 @@
 
 
 /*
+ 【opacity:0.1, visibility:hidden, display:none 的区别】
+  * opacity:0.1
+    * 会渲染到页面，可以交互，【自己单独一个层】，值变化后只会进行composite，不会layouat和paint
+  * visibility:hidden
+    * 不会渲染到页面，【不可以交互】，但是会参与layout 
+  * display:none
+    * 不会渲染到页面，不可以交互
+*/
+
+
+
+/*
  【各种基础】
   * box-sizing: border-box
   * box-shadow: X轴偏移量 Y轴偏移量 [阴影模糊半径] [阴影扩展] [阴影颜色]
@@ -181,4 +193,24 @@
 /*
  【各种元素居中的实现方式】
   目标：考虑各种情况
+*/
+
+/*
+  margin: topAndBottom leftAndRight;
+  transform: translate(x, y)
+*/
+
+
+/* 【实现一个三角形】
+
+*/
+
+
+/* 【实现一个渐变的背景】
+
+*/
+
+
+/* 【实现一个带阴影的边框】
+
 */
