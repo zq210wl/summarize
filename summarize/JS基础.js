@@ -1,3 +1,47 @@
+/* 【JavaScript作用域链】===============================================  
+  [概念：]
+  * Global作用域
+    * 内部全局变量：window、document、location、alert、navigator、history、...
+    * 通过var定义的全局变量
+  * Script作用域
+    * 通过let、const定义的全局变量
+  * 顶级对象（或全局对象）
+    * globalThis 提供了一个标准的方式来获取不同环境下的全局this对象，也就是全局对象自身
+      * 浏览器中指向：window
+      * Node环境中指向：global 
+    * Global作用域中的所有变量都可以通过顶级对象来访问
+  * 作用域
+    * 作用域并不是对象，它只是一个保存了变量的上下文环境 
+  ----------------
+  [函数作用域链：]
+    * [[Scopes]] - 内部作用域属性，保存了当前函数的作用域链，从上往下访问
+      * .......
+      * Closure1 - 父作用域
+      * Closure2 - 父父作用域
+      * Script - Script作用域
+      * Global - Global作用域
+  [父作用域Closure：]
+    * 只有被引用的变量才会出现在Closure作用域中
+  [实例：----------]
+    var a = 1;
+    let b = 2;
+    let c = function(){}
+    function outer () {
+        var a = 3;
+        let b = 4;
+        let x = 5;
+        function inner () {
+            var m = 6;
+            let n = 7;
+            return function innerInner () {
+                console.log(a, b, x, m, n); // 引用父作用域中的变量
+            }
+        }
+        return inner();
+    }
+    var innerInnerFn = outer(); // 查看innerInnerFn的[[Scopes]]
+*/
+
 
 
 /* 【JavaScript语法基础—语句和表达式，必看，必会！！！】===============================================  
@@ -182,9 +226,17 @@
 */
 
 
-/* 【全局作用域中的var和let、 window对象、 全局上下文对象this】===============================================  
-    * 在全局作用域中：
-        * this === window
+/* 【全局链中的var和let、 window对象、 全局上下文对象this】===============================================  
+    * 在全[概念：]
+* 全局作用
+  * 域
+* 全局对象
+函数作用域链局链中：
+        * this[概念：]
+        * * 全局作用
+        *   * 域
+        * * 全局对象
+        * 函数作用域链 === window
         * var 定义的全局变量【会】被定义到window对象上
             var a = 1；
             window.a === a; // true
