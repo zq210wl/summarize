@@ -30,6 +30,7 @@
               对transform、opacity等这些特殊属性进行变化的时候，只主要composite就行，
               不会进行reflow和repaint，不影响主线程，性能很好。
   【特别说明：】
+    * GPU的功能是在原图的基础上进行旋转、移动、滤镜等处理，得到新的图片，但是并不会自己直接生成原图。
     * 并不是开启了硬件加速的GraphicsLayer层在任何属性变化的时候都不进行reflow和repaint
         * 只适应于：transform、opacity等特殊属性
         * color、width、height、文本内容等变化还是会重新layout或paint的
@@ -38,6 +39,7 @@
     * 浏览器页面渲染过程中存在两个线程：
         * 主线程 - 负责JS运行、页面事件交互、图片纹理生成
         * 合成线程 - 图片纹理合成、把图片渲染到页面上
+    * layout 和 paint 这两个过程在某些情况下是可以避免的
 */
 
 
