@@ -431,3 +431,9 @@
 */
 
 
+/*
+待看：
+核心diff算法：http://hcysun.me/vue-design/zh/renderer-diff.html
+双端比较的原理：http://hcysun.me/vue-design/zh/renderer-diff.html#%E5%8F%A6%E4%B8%80%E4%B8%AA%E6%80%9D%E8%B7%AF-%E5%8F%8C%E7%AB%AF%E6%AF%94%E8%BE%83
+*/
+

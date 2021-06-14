@@ -6,6 +6,7 @@
     <title>test</title>
     <style>
         .div2 {
+            position: relative;
             width: 100px;
             height: 100px;
             background: green;
@@ -24,7 +25,9 @@
     <script>
         document.querySelector('.div2').addEventListener('click', function(){
             console.log(2);
-            document.querySelector('.div2').style.opacity = '0.8';
+            // document.querySelector('.div2').style.opacity = '0.8';
+            // document.querySelector('.div2').style.color = 'yellow';
+            document.querySelector('.div2').style.top = '100px';
         });
     </script>
 </body>

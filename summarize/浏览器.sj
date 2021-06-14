@@ -1,38 +1,15 @@
-
-
-/*
-  1、GUI负责的层的UI渲染是单独有一个线程来负责的，不会阻塞主线程。
-     https://blog.csdn.net/weixin_33834679/article/details/87972958
-  2、CSS transforms 可以在不影响正常文档流的情况下改变作用内容的位置。
-     https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Transforms/Using_CSS_transforms
-     https://www.phpied.com/css-animations-off-the-ui-thread/
-     https://blog.csdn.net/weixin_33834679/article/details/87972958  
-  3、合成器的优点在于，其工作无关主线程，合成器线程不需要等待样式计算或者 JS 执行，
-     这就是为什么合成器相关的动画 最流畅，如果某个动画涉及到布局或者绘制的调整，就会涉及到主线程的重新计算，自然会慢很多。
-  4、部分css3的动画效果是在合成线程上实现的，不需要主线程介入，所以省去了重排和重绘的过程，这就大大提升了渲染效率。
-     JavaScript都是在在主线程上执行的，所以JavaScript的动画需要主线程的参与，所以效率会大打折扣
-  
-  
-  5、虽然说浏览器执行js是单线程执行（注意，是执行，并不是说浏览器只有1个线程，而是运行时，runing），但实际上浏览器的2个重要的执行线程，这 2 个线程协同工作来渲染一个网页：主线程和合成线程。
-     合成层
-     
-     根据这个来总结吧：https://blog.csdn.net/weixin_33834679/article/details/87972958
-                    https://developer.mozilla.org/zh-CN/docs/Web/Performance/How_browsers_work
-
-*/
-
 /*
   【页面渲染原理】
    https://developer.mozilla.org/zh-CN/docs/Web/Performance/How_browsers_work // 渲染页面之浏览器的工作原理
-   https://www.cnblogs.com/xiaohuochai/p/9174471.html
-   https://blog.csdn.net/weixin_34268310/article/details/88859536
-   https://juejin.cn/post/6844903502678867981 // 合成层
+   https://blog.csdn.net/weixin_43830271/article/details/111594017 // composite
+   https://blog.csdn.net/fendouzhe123/article/details/49127441 // GPU：合成加速
+   https://www.cnblogs.com/jinhengyu/p/10257754.html // 硬件加速原理
   【概念梳理：】
-    * 渲染层：renderLayer - CPU负责渲染（也就是主线程负责，会阻塞主线程）
-    * 合成层：layer - GPU负责渲染（合成线程负责渲染，不阻塞主线程）
-    * 布局：layout - 对每个dom元素进行排版
-    * 绘制：paint - 把每个dom元素送入cpu进行位图绘制，存储在共享内存中
-    * 合成：composite - 把共享内存中的每个渲染层和合成层的位图进行合成，并输出到页面上
+    * 渲染层：renderLayer
+    * 合成层：GraphicsLayer
+    * 布局：layout
+    * 绘制：paint
+    * 合成：composite
     * reflow：重新执行 layout、paint
     * repaint：重新执行 paint
     * DOM-Tree：整个document文档对象
@@ -40,41 +17,39 @@
   【页面渲染的初始化流程】
     * dom字符串解析 -> DOM-Tree
     * css字符串 -> CSSOM-Tree
-    * DOM-Tree + CSSOM-Tree -> Render-Tree
-    * Layout
-    * Paint
-    * composite
+    * DOM-Tree + CSSOM-Tree -> RenderTree
+    * 根据RenderTree来进行Layout布局 -> RenderLayer
+    * 根据RenderLayer来进行Paint
+        * -> 对渲染层进行分析得到不同的GraphicsLayer（即：合成层）
+            * 带有特殊属性（3D的transform、opacity等）的元素会单独变成一个GraphicsLayer
+            * 其它RenderLayer会共享一个GraphicsLayer
+        * -> 输出GraphicsLayer的位图（即：纹理）到共享内存中
+    * composite（层合成，合成是有合成线程单独负责处理的）
+        * GPU把共享内存中的纹理进行分析合并绘制到屏幕上
+            * GPU在纹理合成时对于每一层纹理都可以指定不同的合成参数，
+              对含有【3D的transform、opacity】等属性的层会开启底层硬件加速，
+              对transform、opacity等这些特殊属性进行变化的时候，只主要composite就行，
+              不会进行reflow和repaint，不影响主线程，性能很好。
   【特别说明：】
-    * 任何元素的几何属性发生变化都会进行重新layout、paint
-    * 合成层的元素的非几何属性发生变化，只会重新执行composite
-    * 渲染层的元素的非几何属性发生变化，只会重新执行paint
-    * 合成层中还可以嵌套合成层
-
-    https://blog.csdn.net/weixin_43830271/article/details/111594017
+    * 并不是开启了硬件加速的GraphicsLayer层在任何属性变化的时候都不进行reflow和repaint
+        * 只适应于：transform、opacity等特殊属性
+        * color、width、height、文本内容等变化还是会重新layout或paint的
+    * GraphicsLayer的纹理都是由CPU来绘制到内存中的，而且都是通过GPU来绘制到屏幕上的
+    * GPU硬件加速只是对带有特殊属性的纹理再进行相关属性变化时，可以直接通过合成线程来异步composite
+    * 浏览器页面渲染过程中存在两个线程：
+        * 主线程 - 负责JS运行、页面事件交互、图片纹理生成
+        * 合成线程 - 图片纹理合成、把图片渲染到页面上
 */
 
 
 /*
-  layout 是一个耗时特别大的操作
-  paint 是一个耗时很短的操作
-
+ 【一些页面渲染相关的说明：】
+  layout：是一个耗时特别大的操作
+  paint：是一个耗时很短的操作
   屏幕刷新率是指：屏幕上的图像在一秒中会刷新大概60次，这每一次就是一帧，动画就是快速的改变每一帧的图像来实现的。
-  repaint重现绘制是指：告诉CPU去重新计算浏览器可视区域内每个像素点的颜色，如果不需要重新绘制的话，也就不需要重新计算了，只需要把上一帧的像素重新再绘制一份就行了。不管是初始化paint还是repaint，都是整个页面绘制的。
+  repaint重新绘制是指：告诉CPU去重新计算浏览器可视区域内每个像素点的颜色，如果不需要重新绘制的话，也就不需要重新计算了，只需要把上一帧的像素重新再绘制一份就行了。不管是初始化paint还是repaint，都是整个页面绘制的。
   layout布局是指：计算每一个元素的几何属性：宽、高、位置、是否需要隐藏、文本内容。
   reflow是指：重新计几何属性受到影响的每一个元素的几何属性。
   reflow的开销：在很多引起reflow的case中，由于导致了几乎整个页面元素的几何属性都需要重新计算，所以就等于整个页面重新layout了。
   reflow和repaint策略：并不是每次变化都马上会执行，而是将每次变化都维护在一个队列里面，在下一帧中统一合并进行一次layout和paint。
-*/
-
-/*
-浏览器会维护一个队列，把所有引起回流和重绘的操作放入队列中，如果队列中的任务数量或者时间间隔达到一个阈值的，浏览器就会将队列清空，进行一次批处理，这样可以把多次回流和重绘变成一次
-
-虚拟dom diff的性能分析、：https://www.zhihu.com/question/31809713
-    * 手动自己控制细节更新和框架diff更新的性能对比：
-
-    * 整个innerHTML='xx'更新和diff更新的性能对比，比较性能的影响因素；
-        如果innerHTML变化量比较大，比如整个应用都要更新，他的性能开销可能就很大
-
-核心diff算法：http://hcysun.me/vue-design/zh/renderer-diff.html
-双端比较的原理：http://hcysun.me/vue-design/zh/renderer-diff.html#%E5%8F%A6%E4%B8%80%E4%B8%AA%E6%80%9D%E8%B7%AF-%E5%8F%8C%E7%AB%AF%E6%AF%94%E8%BE%83
 */
