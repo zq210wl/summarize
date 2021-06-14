@@ -2,7 +2,6 @@
   【页面渲染原理】
    https://developer.mozilla.org/zh-CN/docs/Web/Performance/How_browsers_work // 渲染页面之浏览器的工作原理
    https://blog.csdn.net/weixin_43830271/article/details/111594017 // composite
-   https://blog.csdn.net/fendouzhe123/article/details/49127441 // GPU：合成加速
    https://www.cnblogs.com/jinhengyu/p/10257754.html // 硬件加速原理
   【概念梳理：】
     * 渲染层：renderLayer
