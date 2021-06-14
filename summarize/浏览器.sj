@@ -23,16 +23,17 @@
 
 /*
   【页面渲染原理】
-   https://developer.mozilla.org/zh-CN/docs/Web/Performance/How_browsers_work
+   https://developer.mozilla.org/zh-CN/docs/Web/Performance/How_browsers_work // 渲染页面之浏览器的工作原理
    https://www.cnblogs.com/xiaohuochai/p/9174471.html
    https://blog.csdn.net/weixin_34268310/article/details/88859536
    https://juejin.cn/post/6844903502678867981 // 合成层
   【概念梳理：】
-    * 合成层：layer
-    * 布局：layout
-    * 绘制：paint
-    * 合成：composite
-    * reflow：重新执行 layout
+    * 渲染层：renderLayer - CPU负责渲染（也就是主线程负责，会阻塞主线程）
+    * 合成层：layer - GPU负责渲染（合成线程负责渲染，不阻塞主线程）
+    * 布局：layout - 对每个dom元素进行排版
+    * 绘制：paint - 把每个dom元素送入cpu进行位图绘制，存储在共享内存中
+    * 合成：composite - 把共享内存中的每个渲染层和合成层的位图进行合成，并输出到页面上
+    * reflow：重新执行 layout、paint
     * repaint：重新执行 paint
     * DOM-Tree：整个document文档对象
     * CSSOM-Tree：css样式抽象树
@@ -40,11 +41,16 @@
     * dom字符串解析 -> DOM-Tree
     * css字符串 -> CSSOM-Tree
     * DOM-Tree + CSSOM-Tree -> Render-Tree
-    * 
-   1、整个文档也是一个layer；
-   2、每个layer中也可以有子layer；
-   3、子layer的几何属性发生变化以后，会导致整个renderTree重新进行layout、自己的layer和父layer都会再次paint。
-   1、layer层的几何属性发生变化以后，会导致整个页面文档的layer层重新layout布局。
+    * Layout
+    * Paint
+    * composite
+  【特别说明：】
+    * 任何元素的几何属性发生变化都会进行重新layout、paint
+    * 合成层的元素的非几何属性发生变化，只会重新执行composite
+    * 渲染层的元素的非几何属性发生变化，只会重新执行paint
+    * 合成层中还可以嵌套合成层
+
+    https://blog.csdn.net/weixin_43830271/article/details/111594017
 */
 
 
