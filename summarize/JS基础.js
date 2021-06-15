@@ -142,6 +142,16 @@
 */
 
 
+/* 【JavaScript运算顺序】===============================================  
+    * 连等号
+      * a = b = c = 1; // 从右往左运算，所有运算会缓存起来等到都计算完后再统一执行运算
+    * [+]运算符的优先级高于[三元运算符]
+      * console.log('Value is ' + ('smtg' === 'smtg') ? 'Something' : 'Nothing');
+    * [typeof]优先级高于[===]
+      * typeof 'Workd' === 'undefined'
+*/
+
+
 /* 【 typeof() 】===============================================  
     * typeof() 返回的是一个string字符串
       * typeof(typeof(9)) === 'string'
@@ -350,6 +360,7 @@ Object.create(null)
 
 /* 【setTimeout 和 requestAnimationFrame 执行动画、页面渲染时机】===============================================  
     [参考：http://www.liweiliang.com/962.html，讲的很详细。]
+    [参考：https://www.infoq.cn/article/javascript-high-performance-animation-and-page-rendering/ 高性能动画与页面渲染]
     [参考：https://www.bilibili.com/video/BV1K4411D7Jb?p=1&share_medium=android&share_plat=android&share_source=WEIXIN&share_tag=s_i&timestamp=1622098644&unique_k=MeEXpH]
     [解释：]
     * 页面真实的GUI的渲染跟屏幕刷新频率有关，大部分电脑显卡的刷新频率是1秒刷新60次，
@@ -453,6 +464,11 @@ Object.create(null)
     7、webSockt
 */
 
+/*
+  【CORS跨域是如何实现多域名配置的】
+   * 后端创建一个允许跨域配置文件，每次去检测域名是否在此文件内，
+   * 如果存在，就在header中返回允许跨域的域名
+*/
 
 /* 【cookie的有哪些缺点】=============================================== 
     1、有时效性，到期就过期了

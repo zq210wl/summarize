@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>数组扁平化和排序</title>
+</head>
+<body>
+<script>
+    var arr = [0, [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14]]]], 10];
+
+    // 方法一：(使用内置函数)
+    var flatArr = arr.flat(Infinity);
+    var removeRepeatArr = [...new Set(flatArr)];
+    var sortArr = removeRepeatArr.sort(function(a, b){
+        return a - b;
+    });
+    console.log(sortArr);
+
+    // 方法二：（不使用内置函数）
+    function flatArray(arr) {
+        var stack = [...arr];
+        var result = [];
+        while (stack.length > 0) {
+            var endVal = stack.shift();
+            if (Array.isArray(endVal)) {
+                endVal.forEach(function(val){
+                    if (Array.isArray(val)) {
+                        stack.unshift(val);
+                    } else {
+                        result.push(val);
+                    }
+                });
+            } else {
+                result.push(endVal);
+            }
+        }
+        return result;
+    }
+    function removeArrayRepeat(arr) {
+        var tempObj = {};
+        var result = [];
+        arr.forEach(function(val, index){
+            if (!tempObj[val]) {
+                tempObj[val] = 1;
+                result.push(val);
+            }
+        });
+        return result;
+    }
+    function sortArray(arr, startIndex, endIndex) {
+        if (startIndex < endIndex) {
+            var basicVal = arr[startIndex];
+            var leftIndex = startIndex;
+            var rightIndex = endIndex;
+            while (leftIndex < rightIndex) {
+                while (leftIndex < rightIndex && arr[rightIndex] >= basicVal) {
+                    rightIndex--;
+                }
+                if (leftIndex < rightIndex) {
+                    arr[leftIndex] = arr[rightIndex];
+                    leftIndex++;
+                }
+                while (leftIndex < rightIndex && arr[leftIndex] <= basicVal) {
+                    leftIndex++;
+                }
+                if (leftIndex < rightIndex) {
+                    arr[rightIndex] = arr[leftIndex];
+                    rightIndex--;
+                }
+            }
+            arr[leftIndex] = basicVal;
+            sortArray(arr, startIndex, leftIndex - 1);
+            sortArray(arr, leftIndex + 1, endIndex);
+        }
+    }
+    let resultArr = removeArrayRepeat(flatArray(arr));
+    sortArray(resultArr, 0, resultArr.length - 1);
+    console.log(resultArr);
+    
+</script>
+</body>
+</html>

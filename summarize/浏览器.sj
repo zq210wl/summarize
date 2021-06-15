@@ -3,6 +3,7 @@
    https://developer.mozilla.org/zh-CN/docs/Web/Performance/How_browsers_work // 渲染页面之浏览器的工作原理
    https://blog.csdn.net/weixin_43830271/article/details/111594017 // composite
    https://www.cnblogs.com/jinhengyu/p/10257754.html // 硬件加速原理
+   https://www.infoq.cn/article/javascript-high-performance-animation-and-page-rendering/  // 高性能动画与页面渲染
   【概念梳理：】
     * 渲染层：renderLayer
     * 合成层：GraphicsLayer

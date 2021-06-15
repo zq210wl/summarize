@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>快排</title>
+</head>
+<body>
+<script>
+    /* 快速排序：
+        1、找基准值，这里取取左边第一个就行
+        2、初始化坑，即把左边第一个值挖出来做为第一个坑
+        3、从右边往左边找，直到找到一个比基准值小的值，然后把它挖出来替换左边的坑，其自己就变成了一个新的坑（右坑）
+        4、从左边往右边找，直到找到一个比基准值大的值，然后把它挖出来替换右边的坑，其自己就变成了一个新的坑（左坑）
+        5、重复3和4，直到左右位置相等时，即最新的坑所在的位置，用基准值来填入最后一个坑
+        6、递归继续重复：1、2、3、4、5
+        https://www.runoob.com/w3cnote/quick-sort.html
+    */
+   
+    var arr = [4, 3, 1, 5, 8, 2, 4, 1, 5, 9, 0, 4];
+
+    function sortArray(arr, startIndex, endIndex) {
+        if (startIndex < endIndex) {
+            var basic = arr[startIndex];
+            var leftIndex = startIndex;
+            var rightIndex = endIndex;
+            while (leftIndex < rightIndex) {
+                while (leftIndex < rightIndex && arr[rightIndex] >= basic) {
+                    rightIndex--;
+                }
+                if (leftIndex < rightIndex) {
+                    arr[leftIndex] = arr[rightIndex];
+                    leftIndex++;
+                }
+                while (leftIndex < rightIndex && arr[leftIndex] <= basic) {
+                    leftIndex++;
+                }
+                if (leftIndex < rightIndex) {
+                    arr[rightIndex] = arr[leftIndex];
+                    rightIndex--;
+                }
+            }
+            arr[leftIndex] = basic;
+            sortArray(arr, startIndex, leftIndex - 1);
+            sortArray(arr, leftIndex + 1, endIndex);
+        }
+    }
+    
+    sortArray(arr, 0, arr.length - 1);
+
+    console.log(arr);
+
+    
+</script>
+</body>
+</html>
