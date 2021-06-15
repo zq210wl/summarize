@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>深度拷贝</title>
+</head>
+<body>
+<script>
+    /* 拷贝类型：
+       1、简单拷贝
+            * string、number、boolean、undefined
+            * function类型：自定义构造函数、内置构造函数
+            * null
+            * symbol 
+       2、复杂拷贝
+            * json对象(Object构造的实例对象)
+            * 数组(Array构造的实例对象)
+            * 除了Object和Array以外的其它构造函数的实例对象
+                * 例如：RegExp、Date、Number、Boolean、Map、Set、Error
+                * 除了json对象(Object)和array对象(Array)之外的其它对象实例大部分都可以通过 new obj.constructor(obj) 来复制
+                    * 一些特殊的对象无法这样来复制：如：Promise 
+    */
+
+    function deepClone(obj) {
+        var toString = Object.prototype.toString;
+        if (typeof obj === 'object') { // 引用类型
+            if (toString.call(obj) === '[object Object]' || toString.call(obj) === '[object Array]') { // JSON或数组
+
+            } else if (toString.call(obj) === '[object Null]') { // null
+
+            } else { // 其它实例对象，如：new RegExp()、new Date()
+
+            }
+        } else { // 基本类型、function、symbol
+            
+        }
+    }
+   
+</script>
+</body>
+</html>

@@ -225,14 +225,19 @@
 
 /* 【对象枚举、对象遍历】===============================================  
     * for in
-      * 可以枚举[自身属性]和[自定义原型属性]
+      * 可以枚举[自身属性]和[自定义原型属性] （不包括Symbol）
       * 属性必须是可以枚举的
     * Object.keys()
-      * 只可以枚举[自身属性]
+      * 只可以枚举[自身属性] （不包括Symbol）
       * 属性必须是可以枚举的
     * Object.getOwnPropertyNames()
-      * 可获取到[自身属性]
+      * 可获取到[自身属性] （不包括Symbol）
       * 属性是否可以枚举[不受限制] 
+    * Reflect.ownKeys()
+      * 可获取到[自身属性] （所有属性，包括Symbol）
+      * 属性是否可以枚举[不受限制] 
+    * Object.getOwnPropertySymbols()
+      * 返回一个给定对象自身的所有 Symbol 属性的数组 
 */
 
 
@@ -640,8 +645,9 @@ Object.create(null)
 // 浏览器有哪些进程和线程，都是用来干嘛的
 // 渐进式webapp是什么，vue为什么是渐进式框架
 // 有哪些实用的BOM对象
-// Object.create()  Object.assign() Object.defineProperty()  Object.keys() Object.getOwnPropertyDescriptor()  obj.hasOwnProperty() 
+// Reflect.ownKeys() Object.create()  Object.assign() Object.defineProperty()  Object.keys() Object.getOwnPropertyDescriptor()  obj.hasOwnProperty() 
 // Object.prototype.constructor   Object    
+// 获取对象key：Object.keys() Reflect.ownKeys() Object.getOwnPropertyNames()
 
 /*
   每日一题：
