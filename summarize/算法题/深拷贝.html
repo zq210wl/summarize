@@ -17,8 +17,8 @@
             * 数组(Array构造的实例对象)
             * 除了Object和Array以外的其它构造函数的实例对象
                 * 例如：RegExp、Date、Number、Boolean、Map、Set、Error
-                * 除了json对象(Object)和array对象(Array)之外的其它对象实例大部分都可以通过 new obj.constructor(obj) 来复制
-                    * 一些特殊的对象无法这样来复制：如：Promise 
+                * 说明：除了json对象(Object)和array对象(Array)之外的其它对象实例【大部分】都可以通过 new obj.constructor(obj) 来复制
+                    * 一些特殊的对象无法这样来复制：如：Promise，【不考虑这种情况】
     */
 
     function deepClone(obj) {
@@ -32,7 +32,7 @@
 
             }
         } else { // 基本类型、function、symbol
-            
+
         }
     }
    
