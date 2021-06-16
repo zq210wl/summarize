@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>深度拷贝</title>
+</head>
+<body>
+<script>
+    /* 拷贝类型：
+       1、简单拷贝
+            * string、number、boolean、undefined
+            * function类型：自定义构造函数、内置构造函数
+            * null
+            * symbol 
+       2、复杂拷贝
+            * json对象(Object构造的实例对象)
+            * 数组(Array构造的实例对象)
+            * 除了Object和Array以外的其它构造函数的实例对象
+                * 例如：RegExp、Date、Number、Boolean、Map、Set、Error
+                * 说明：除了json对象(Object)和array对象(Array)之外的其它对象实例【大部分】都可以通过 new obj.constructor(obj) 来复制
+                    * 一些特殊的对象无法这样来复制：如：Promise，【不考虑这种情况】
+    */
+
+    // 递归版本
+    function deepClone(source, weakMap) {
+        weakMap = weakMap || new WeakMap(); // 存放已经拷贝过的object对象 
+        var target = null;
+        var toString = Object.prototype.toString;
+        if (typeof source === 'object' && source !== null) { // 引用类型
+            if (source.constructor === Object || source.constructor === Array) { // JSON或数组
+                target = source.constructor === Array ? [] : {};
+                if (weakMap.has(source)) {
+                    target = weakMap.get(source);
+                } else {
+                    weakMap.set(source, target);
+                    Reflect.ownKeys(source).forEach(key => { // 可以获取到symbol类型的key
+                        target[key] = deepClone(source[key], weakMap);
+                    });
+                }
+            } else if (typeof source.constructor === 'function' && /native code/.test(source.constructor.toString())){ // 其它实例对象，如：new RegExp()、new Date()、new Map()
+                try {
+                    target = new source.constructor(source);
+                } catch (error) {
+                    target = {}; // 其它未考虑到的情况直接返回{}
+                }
+            } else {
+                // TODO:  new Person() .......   ????????
+            }
+        } else { // 基本类型、null、function(构造函数本身)、symbol
+            target = source;
+        }
+        return target;
+    }
+
+    // 循环引用
+    var obj1 = {};
+    var obj2 = { a: obj1 };
+    obj1.b = obj2;
+
+    // 循环引用
+    var arr1 = [];
+    var arr2 = [arr1];
+    arr1.push(arr2);
+
+    // symbol
+    var symbolA = Symbol('A');
+    var symbolB = Symbol('B');
+
+    // 自定义构造函数
+    function Person(name) {
+        this.name = name;
+    }
+    Person.prototype.getName = function(){
+        return this.name;
+    }
+    var zhangsan = new Person('张三');
+
+    // Map
+    var map = new Map([['key1', 'val1'], ['key2', 'val2']]);
+
+    // Set
+    var set = new Set(['val1', 'val2']);
+
+    var testSource = {
+        a: 1,
+        b: 2,
+        c: {
+            c1: 3,
+            c2: 4,
+            c3: /abc/,
+            c4: [
+                function a() {},
+                new Promise(function(){}),
+                new Number(1),
+                RegExp,
+                new RegExp('efg', 'img'),
+                new Date(),
+                {
+                    e: [1, 2, [3]]
+                }
+            ]
+        },
+        d: obj1,
+        e: arr1,
+        [symbolA]: 7,
+        f: symbolB,
+        g: zhangsan,
+        h: null,
+        i: undefined,
+        j: map,
+        k: set
+    };
+    var res = deepClone(testSource);
+    console.log(res);
+</script>
+</body>
+</html>

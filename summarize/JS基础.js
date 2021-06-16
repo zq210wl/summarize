@@ -160,6 +160,21 @@
 */
 
 
+/* 【 typeof 和 Object.prototype.toString.call 对比 】===============================================  
+    * typeof 一共可以返回两种大类型
+        * 'string'
+        * 'number'
+        * 'undefined'
+        * 'symbol'
+        * 'boolean'
+        * 'object'
+        * 'function'
+    * Object.prototype.toString.call
+        * 返回具体的JS内建对象
+          * '[object Xyz]' 
+*/
+
+
 /* 【彻底搞懂 prototype 】===============================================  
     * prototype是【构造函数】【也就是function】【独有的】一个属性，它的值是一个对象；
     * 【构造函数】分为【自定义构造函数】、【内置构造函数】、【Object构造函数】
@@ -215,11 +230,26 @@
 */
 
 
-/* 【彻底搞懂 Map, Set, Array, {}，迭代器，枚举 ？？？？？？？？？？？？？？】===============================================  
-    * Map 是一个【对象】
+/* 【彻底搞懂 Map, Set, Array, {}，迭代器，枚举】===============================================  
+    * Map 是一个【类似JSON的键值对的对象】
+      * 初始化赋值：var map = new Map([['key1', 'val1'], ['key2', 'val2']]);
+      * 获取：map.get('key1')
+      * 添加或修改：map.set('key3', 'val2')
+      * 删除：map.delete('key2')
     * {key1, value1, key2, value2, next:() => {}}
-    * Set 是一个【数组】 
-      * [ {key1, value1}, {key2, value2} ] 或 [ 1, 2, 'a', 'b', {a: 'x'} ]
+    * Set 是一个【类似数组的集合】 
+      * 初始化赋值：var set = new Set(['val1', 'val2']);
+      * 添加: set.add('val3');
+      * 删除：set.delete('val1');
+      * 是否包含：set.has(1);
+      * 修改：
+          for (var i of set) {
+            if (i == 'x') {
+              i = 'y';
+            }
+          } 
+    * {}    不可以 for of,   可以 for in
+    * Array  可以 for of,    可以 for in
 */
 
 
@@ -648,6 +678,8 @@ Object.create(null)
 // Reflect.ownKeys() Object.create()  Object.assign() Object.defineProperty()  Object.keys() Object.getOwnPropertyDescriptor()  obj.hasOwnProperty() 
 // Object.prototype.constructor   Object    
 // 获取对象key：Object.keys() Reflect.ownKeys() Object.getOwnPropertyNames()
+// Object.prototype.hasOwnProperty.call(obj, key)
+// 位运算（&、|、^、~、>>、<<   https://www.runoob.com/w3cnote/bit-operation.html
 
 /*
   每日一题：
