@@ -1,10 +1,18 @@
 
 /*
  【 diff算法 】
-  参考：
-  1、https://blog.csdn.net/lunahaijiao/article/details/86741739?utm_medium=distribute.wap_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-2.wap_baidujs&depth_1-utm_source=distribute.wap_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-2.wap_baidujs  
-  2、https://www.jianshu.com/p/3ba0822018cf
-     * 文章中说的index其实是上一个链接中说的旧节点的_mountIndex，因为index在diff过程可能会改变，但是_mountIndex不会改变。
+  参考：https://blog.csdn.net/lunahaijiao/article/details/86741739?utm_medium=distribute.wap_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-2.wap_baidujs&depth_1-utm_source=distribute.wap_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-2.wap_baidujs  
+  * 从新集合中从左边取第一个元素 new1
+  * 在旧集合中从左边开始找跟 new1 相同的元素 old1
+  * 如果找到old1，则old1不移动，
+      * 如果后面找到的元素只要位置在old1左边区域就往old1右边插入，
+      * 如果找到的元素本身就在old1右边区域，则不移动
+      * 如果没找到相同元素，则创建一个新元素，插入到old1的右边
+      * 这样就找到了old2
+   * 重复上面步骤，完成所有diff
+   * diff完成之后的剩余工作：
+      * 最后如果新队列中还有剩余的就把剩余的插入到旧的后面
+      * 最后如果老队列中没有跟新队列中对应到的相同元素就直接删除掉
 */
 
 /*

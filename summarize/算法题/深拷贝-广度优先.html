@@ -16,32 +16,9 @@
     }
 
     function deepClone(source, weakMap) {
+        !isObject(source)
         weakMap = weakMap || new WeakMap(); // 存放已经拷贝过的object对象 
-        var target = null;
-        if (typeof source === 'object' && source !== null) { // 引用类型
-            if (source.constructor === Object || source.constructor === Array) { // JSON或数组
-                target = source.constructor === Array ? [] : {};
-                if (weakMap.has(source)) {
-                    target = weakMap.get(source);
-                } else {
-                    weakMap.set(source, target);
-                    Reflect.ownKeys(source).forEach(key => { // 可以获取到symbol类型的key
-                        target[key] = deepClone(source[key], weakMap);
-                    });
-                }
-            } else if (typeof source.constructor === 'function' && /native code/.test(source.constructor.toString())){ // 其它实例对象，如：new RegExp()、new Date()、new Map()
-                try {
-                    target = new source.constructor(source);
-                } catch (error) {
-                    target = {}; // 其它未考虑到的情况直接返回{}
-                }
-            } else {
-                // TODO:  new Person() .......   ????????
-            }
-        } else { // 基本类型、null、function(构造函数本身)、symbol
-            target = source;
-        }
-        return target;
+        
     }
 
     var testSource = {
