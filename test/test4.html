@@ -23,31 +23,35 @@
     </div>
     
     <script>
-        // 从【右到左】依次对【某个东西】执行相应的操作
-        function myCompose(...toDoFn) {
-            return (...x) => {
-                return toDoFn.reduceRight((result, fn) => {
-                    return fn(result);
-                }, x);
+        function myPromsie(callback) {
+            this.state = 'pending';
+            var succesFn = () => {};
+            var failFn = () => {};
+            var resolve = (res) => {
+                this.state = 'fullfilled';
+                setTimeout(() => {
+                    succesFn(res);
+                }, 0);
             }
+            var reject = (res) => {
+                this.state = 'rejected';
+                setTimeout(() => {
+                    failFn(res);
+                }, 0);
+            }
+
+            
+            this.then = (successFn, failFn) => {
+                succesFn = successFn;
+                failFn = failFn;
+                return this;
+            }
+            callback(resolve, reject);
         }
-        // 需要依次执行以下三个操作
-        function addA(str) {
-            return str + '-A';
-        }
-        function addB(str) {
-            return str + '-B';
-        }
-        function addC(str) {
-            return str + '-C';
-        }
-        
-        var execFn1 = myCompose(addC, addB, addA);
-        var execFn2 = myCompose(addC, myCompose(addB, addA));
-        var execFn3 = myCompose(myCompose(addC, addB), addA);
-        console.log(execFn1('Hello'));
-        console.log(execFn2('Hello'));
-        console.log(execFn3('Hello'));
+
+        new myPromsie((resolve, reject) => {
+
+        });
     </script>
 </body>
 </html>

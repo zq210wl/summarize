@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width"></meta>
+    <title>手动实现Promise</title>
+</head>
+<body>
+<script>
+    function myPromsie(callback) {
+        this.pendingStatus = 'pending';
+        this.fullFilledStatus = 'fullfilled';
+        this.rejectedStatus = 'reject';
+
+        this.stauts = this.pendingStatus;
+        this.value = undefined;
+        this.error = undefined;
+
+        this.fullfilledCallback = null;
+        this.rejectedCallback = null;
+
+        this.waittingCallback = null; // 等待状态变化以后执行的函数
+
+        this.nextReject = null; // then的callback发生异常时要调用
+
+        this.resolve = this.resolve.bind(this);
+        this.reject = this.reject.bind(this);
+        try {
+            callback(this.resolve, this.reject);
+        } catch (err) {
+            this.reject(err);
+        }
+    }
+
+    myPromsie.prototype.resolve = function(value) {
+        if (this.stauts === this.pendingStatus) {
+            this.stauts = this.fullFilledStatus;
+            this.value = value;
+            setTimeout(() => {
+                try {
+                    const res = this.fullfilledCallback(value);
+                    setTimeout(() => {
+                        this.waittingCallback && this.waittingCallback(res);
+                    });
+                } catch (err) {
+                    this.nextReject(err);
+                }
+            });
+        }
+    }
+
+    myPromsie.prototype.reject = function(error) {
+        if (this.stauts === this.pendingStatus) {
+            this.stauts = this.rejectedStatus;
+            this.error = error;
+            setTimeout(() => {
+                try {
+                    const res = this.rejectedCallback(val);
+                    setTimeout(() => {
+                        this.waittingCallback(res);
+                    });
+                } catch (err) {
+                    this.nextReject(err);
+                }
+            });
+        }
+    }
+
+    myPromsie.prototype.then = function(fullfilledCallback, rejectedCallback) {
+        // v => v 的意思是：如果没有指定then回调，就设置一个默认回调，返回（当前传入的参数），这样就可以把上一步结果传递到下一个then中
+        this.fullfilledCallback = typeof fullfilledCallback === 'function' ? fullfilledCallback : v => v;
+        this.rejectedCallback = typeof rejectedCallback === 'function' ? rejectedCallback : v => v;
+        var nextResolve = null;
+        var nextReject = null;
+        var nextPromise = new Promise((resolve, reject) => {
+            nextResolve = resolve;
+            nextReject = this.nextReject = reject;
+        });
+
+        if (this.stauts === this.fullFilledStatus) {
+            // 模拟微任务
+            setTimeout(() => {
+                try {
+                    const res = this.fullfilledCallback(this.value);
+                    if (res instanceof Promise) {
+                        // 这里不能直接(return res)，因为根据PromsieA+规范，这里必须是异步的，
+                        // 所以只能用res.then(nextResolve, nextReject)来驱动nextPromise的状态
+                        res.then(nextResolve, nextReject);
+                    } else {
+                        nextResolve(res);
+                    }
+                } catch (err) {
+                    nextReject(err);
+                }
+            });
+            return nextPromise;
+        }
+
+        if (this.stauts === this.rejectedStatus) {
+            // 模拟微任务
+            setTimeout(() => {
+                try {
+                    const res = this.rejectedCallback(this.error);
+                    if (res instanceof Promise) {
+                        res.then(nextResolve, nextReject);
+                    } else {
+                        nextResolve(res);
+                    }
+                } catch (err) {
+                    nextReject(err);
+                }
+            });
+            return nextPromise;
+        }
+
+        if (this.stauts === this.pendingStatus) {
+            this.waittingCallback = (res) => {
+                if (res instanceof Promise) {
+                    res.then(nextResolve, nextReject);
+                } else {
+                    nextResolve(res);
+                }
+            };
+            return nextPromise;
+        }
+
+    }
+
+    myPromsie.prototype.catch = function(rejectedCallback){
+        this.then(null, rejectedCallback);
+    }
+
+    new myPromsie((resolve, reject) => {
+        setTimeout(() => {
+            resolve(1111);
+        }, 1000);
+    }).then(res => {
+        console.log(res);
+        return 2222;
+    }).then(res => {
+        console.log(res);
+    });
+</script>
+</body>
+</html>
