@@ -7,6 +7,7 @@
 <body>
 <script>
     /* 
+      目的是考察广度优先，不考虑数据类型的全面覆盖
     */
     function isObject(d) {
         return typeof d === 'object' && d !== null;
@@ -15,32 +16,70 @@
         return Array.isArray(d);
     }
 
-    function deepClone(source, weakMap) {
+    function deepClone(source) {
         if (!isObject(source)) {
             return source;
         }
-        weakMap = weakMap || new WeakMap(); // 存放已经拷贝过的object对象 
-        if (weakMap.has(source)) {
-            return weakMap.get(source)
-        }
-        let target = null;
-        let queen = [
-            {
-                parent: target,
-                data: source
-            }
-        ];
+        let result = isArray(source) ? [] : {};
+        let queen = [{
+            targetObj: result,
+            fromObj: source
+        }];
+        let weakMap = new WeakMap(); // 存放已经拷贝过的object对象 
         while (queen.length) {
-            let {parent, data} = queen.pop();
-            Reflect.ownKeys(data).forEach(key => {
-                if (!isObject(data[key])) {
-                    parent[key] = data[key];
+            let {targetObj, fromObj} = queen.shift();
+            // 每次循环都先判断是否已经拷贝过该对象了，有就直接把该对象赋值给目标对象就行
+            if (weakMap.has(fromObj)) {
+                targetObj = weakMap.get(fromObj);
+                continue;
+            } else {
+                weakMap.set(fromObj, targetObj);
+            }
+            Reflect.ownKeys(fromObj).forEach(key => {
+                if (!isObject(fromObj[key])) {
+                    targetObj[key] = fromObj[key];
                 } else {
-                    isArray()
+                    targetObj[key] = isArray(fromObj[key]) ? [] : {};
+                    queen.push({
+                        targetObj: targetObj[key],
+                        fromObj: fromObj[key]
+                    });
                 }
             });
         }
+        return result;
     }
+
+    // --------------------------------分割线---------------------------------
+
+    // 循环引用
+    var obj1 = {};
+    var obj2 = { a: obj1 };
+    obj1.b = obj2;
+
+    // 循环引用
+    var arr1 = [];
+    var arr2 = [arr1];
+    arr1.push(arr2);
+
+    // symbol
+    var symbolA = Symbol('A');
+    var symbolB = Symbol('B');
+
+    // 自定义构造函数
+    function Person(name) {
+        this.name = name;
+    }
+    Person.prototype.getName = function(){
+        return this.name;
+    }
+    var zhangsan = new Person('张三');
+
+    // Map
+    var map = new Map([['key1', 'val1'], ['key2', 'val2']]);
+
+    // Set
+    var set = new Set(['val1', 'val2']);
 
     let testSource = {
         a: 1,

@@ -23,12 +23,31 @@
     </div>
     
     <script>
-        document.querySelector('.div2').addEventListener('click', function(){
-            console.log(2);
-            // document.querySelector('.div2').style.opacity = '0.8';
-            // document.querySelector('.div2').style.color = 'yellow';
-            document.querySelector('.div2').style.top = '100px';
-        });
+        // 从【右到左】依次对【某个东西】执行相应的操作
+        function myCompose(...toDoFn) {
+            return (...x) => {
+                return toDoFn.reduceRight((result, fn) => {
+                    return fn(result);
+                }, x);
+            }
+        }
+        // 需要依次执行以下三个操作
+        function addA(str) {
+            return str + '-A';
+        }
+        function addB(str) {
+            return str + '-B';
+        }
+        function addC(str) {
+            return str + '-C';
+        }
+        
+        var execFn1 = myCompose(addC, addB, addA);
+        var execFn2 = myCompose(addC, myCompose(addB, addA));
+        var execFn3 = myCompose(myCompose(addC, addB), addA);
+        console.log(execFn1('Hello'));
+        console.log(execFn2('Hello'));
+        console.log(execFn3('Hello'));
     </script>
 </body>
 </html>

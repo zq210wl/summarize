@@ -152,3 +152,34 @@ String(str).replace(/(\d{1,3})(?=(\d{3})+($|\.))/g, "$1,")
         }
         loop(1000, 0); // 初始化循环
 */
+
+
+/*  【高阶函数：compose】=============================================== 
+        
+        // 从【右到左】依次对【某个东西】执行相应的操作
+        function myCompose(...toDoFns) {
+            return (...x) => {
+                return toDoFns.reduceRight((result, fn) => {
+                    return fn(result);
+                }, x);
+            }
+        }
+
+        // 需要依次执行以下三个操作
+        function addA(str) {
+            return str + '-A';
+        }
+        function addB(str) {
+            return str + '-B';
+        }
+        function addC(str) {
+            return str + '-C';
+        }
+        
+        var execFn1 = myCompose(addC, addB, addA);
+        var execFn2 = myCompose(addC, myCompose(addB, addA));
+        var execFn3 = myCompose(myCompose(addC, addB), addA);
+        console.log(execFn1('Hello'));
+        console.log(execFn2('Hello'));
+        console.log(execFn3('Hello'));
+*/
