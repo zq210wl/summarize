@@ -16,12 +16,33 @@
     }
 
     function deepClone(source, weakMap) {
-        !isObject(source)
+        if (!isObject(source)) {
+            return source;
+        }
         weakMap = weakMap || new WeakMap(); // 存放已经拷贝过的object对象 
-        
+        if (weakMap.has(source)) {
+            return weakMap.get(source)
+        }
+        let target = null;
+        let queen = [
+            {
+                parent: target,
+                data: source
+            }
+        ];
+        while (queen.length) {
+            let {parent, data} = queen.pop();
+            Reflect.ownKeys(data).forEach(key => {
+                if (!isObject(data[key])) {
+                    parent[key] = data[key];
+                } else {
+                    isArray()
+                }
+            });
+        }
     }
 
-    var testSource = {
+    let testSource = {
         a: 1,
         b: 2,
         c: {
@@ -50,7 +71,7 @@
         j: map,
         k: set
     };
-    var res = deepClone(testSource);
+    let res = deepClone(testSource);
     console.log(res);
 </script>
 </body>
