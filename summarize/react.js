@@ -19,7 +19,26 @@
 /*
  【 react开发过程中遇到的一些key的的问题 】
    * 如果列表中item出现重复的key的，那么在下次更新列表的时候，只有一个item会被重用或者只有一个item会被重建，另一个item会被保留下来，导致数据错乱
+      * 老数据：[{id: '1', txt: '1'}, {id: '1', txt: '1'}]
+      * 新数据：[{id: '2', txt: '2'}, {id: '3', txt: '3'}] 或 [{id: '1', txt: '1'}, {id: '2', txt: '2'}]
    * 列表中存在非受空组件input，在使用index索引作为key，在操作修改列表顺序时候，input的内容会发生错乱等等问题
+*/
+
+
+/*
+ 【 react的组件生命周期以及初始化过程，以下是老版本的，新版本有变化 】
+   [参考：https://www.jianshu.com/p/4482a1f48c72]
+   * 初始化
+      1、constructor
+         * getDefaultProps
+         * getInitialState
+      2、componentWillMount
+      3、render
+      4、componentDidMount
+   * 更新
+      5、componentWillReceiveProps
+      6、shouldComponentUpdate
+      7、componentWillUnmount
 */
 
 
