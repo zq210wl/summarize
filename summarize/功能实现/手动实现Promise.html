@@ -19,8 +19,8 @@
             * 根据Promsie当前状态来异步执行对应的回调函数
             * 把需要等待Promsie结果才能执行的回调函数加入相应的待执行队列
     */
-   
-    function myPromise(callback) {
+
+    function MyPromise(callback) {
         this.pendingStatus = 'pending';
         this.fulFilledStatus = 'fulfilled';
         this.rejectedStatus = 'reject';
@@ -34,6 +34,8 @@
         this.resolve = this.resolve.bind(this);
         this.reject = this.reject.bind(this);
 
+        this.nextThenPromise = null; // 下一个then返回的Promise对象
+
         try {
             callback(this.resolve, this.reject);
         } catch (err) {
@@ -41,7 +43,7 @@
         }
     };
 
-    myPromise.prototype.resolve = function(value) {
+    MyPromise.prototype.resolve = function(value) {
         if (this.stauts === this.pendingStatus) {
             this.stauts = this.fulFilledStatus;
             this.value = value;
@@ -54,7 +56,7 @@
         }
     };
 
-    myPromise.prototype.reject = function(reason) {
+    MyPromise.prototype.reject = function(reason) {
         if (this.stauts === this.pendingStatus) {
             this.stauts = this.rejectedStatus;
             this.value = reason;
@@ -71,12 +73,12 @@
         }
     };
 
-    myPromise.prototype.then = function(fulfilledCallback, rejectedCallback) {
-        var nextResolve = null;
-        var nextReject = null;
-        var nextPromise = new myPromise((resolve, reject) => {
-            nextResolve = resolve;
-            nextReject = reject;
+    MyPromise.prototype.then = function(fulfilledCallback, rejectedCallback) {
+        var nextThenResolve = null;
+        var nextThenReject = null;
+        var nextThenPromise = new MyPromise((resolve, reject) => {
+            nextThenResolve = resolve;
+            nextThenReject = reject;
         });
 
         // 如果当前Promise已经有执行结果了，就直接异步来执行对应的回调函数
@@ -89,21 +91,21 @@
                         // 拿到成功回调函数的执行结果
                         res = fulfilledCallback(this.value);
                     } catch (err) {
-                        nextReject(err);
+                        nextThenReject(err);
                     }
-                    if (res instanceof Promise) {
-                        // 【中间桥梁】利用此方法来触发nextPromise的状态，进而继续往下执行
-                        res.then(nextResolve, nextReject);
+                    if (res instanceof MyPromise) {
+                        // 【中间桥梁】利用此方法来触发nextThenPromise的状态，进而继续往下执行
+                        res.then(nextThenResolve, nextThenReject);
                     } else {
                         // 把成功回调的结果传递下去
-                        nextResolve(res);
+                        nextThenResolve(res);
                     }
                 } else {
                     // 如果未设置成功回调的函数，那就直接把当前Promise的执行结果传递下去
-                    nextResolve(this.value);
+                    nextThenResolve(this.value);
                 }
             });
-            return nextPromise;
+            return nextThenPromise;
         }
 
         // 如果当前Promise已经有执行结果了，就直接异步来执行对应的回调函数
@@ -116,20 +118,20 @@
                         // 拿到失败回调函数的执行结果
                         res = rejectedCallback(this.value);
                     } catch (err) {
-                        nextReject(err);
+                        nextThenReject(err);
                     }
-                    if (res instanceof Promise) {
-                        // 【中间桥梁】利用此方法来触发nextPromise的状态，进而继续往下执行
-                        res.then(nextResolve, nextReject);
+                    if (res instanceof MyPromise) {
+                        // 【中间桥梁】利用此方法来触发nextThenPromise的状态，进而继续往下执行
+                        res.then(nextThenResolve, nextThenReject);
                     } else {
                         // 把失败回调的结果传递下去
-                        nextResolve(res);
+                        nextThenResolve(res);
                     }
                 } else {
-                    nextReject(this.value);
+                    nextThenReject(this.value);
                 }
             });
-            return nextPromise;
+            return nextThenPromise;
         }
 
         // 如果当前Promise还没有执行结果，就把对应的回调函数加入对应的待执行队列
@@ -141,15 +143,15 @@
                     try {
                         res = fulfilledCallback(this.value);
                     } catch (err) {
-                        nextReject(err);
+                        nextThenReject(err);
                     }
-                    if (res instanceof Promise) {
-                        res.then(nextResolve, nextReject);
+                    if (res instanceof MyPromise) {
+                        res.then(nextThenResolve, nextThenReject);
                     } else {
-                        nextResolve(res);
+                        nextThenResolve(res);
                     }
                 } else {
-                    nextResolve(this.value);
+                    nextThenResolve(this.value);
                 }
             });
             // 加入待执行的失败队列
@@ -159,31 +161,31 @@
                     try {
                         res = rejectedCallback(this.value);
                     } catch (err) {
-                        nextReject(err);
+                        nextThenReject(err);
                     }
-                    if (res instanceof Promise) {
-                        res.then(nextResolve, nextReject);
+                    if (res instanceof MyPromise) {
+                        res.then(nextThenResolve, nextThenReject);
                     } else {
-                        nextResolve(res);
+                        nextThenResolve(res);
                     }
                 } else {
-                    nextReject(this.value);
+                    nextThenReject(this.value);
                 }
             });
-            return nextPromise;
+            return nextThenPromise;
         }
 
     };
 
-    myPromise.prototype.catch = function(rejectedCallback){
+    MyPromise.prototype.catch = function(rejectedCallback){
         this.then(null, rejectedCallback);
     };
 
-    myPromise.resolve = function(value) {
-        if (value instanceof Promise) {
+    MyPromise.resolve = function(value) {
+        if (value instanceof MyPromise) {
             return value;
         } else {
-            return new Promise(resolve => {
+            return new MyPromise(resolve => {
                 resolve(value);
             });
         }
@@ -191,11 +193,12 @@
 
     //-----------------------分割线--------------------------
 
-    new myPromise((resolve, reject) => {
+    new MyPromise((resolve, reject) => {
         setTimeout(() => {
             console.log(555);
-            reject(444444);
+            resolve(444444);
         }, 1000);
+        ssss
     })
     .then(null, null)
     .then(res => {
@@ -203,6 +206,7 @@
         console.log(res);
     }, err => {
         console.log('捕获到错误A：', err);
+        iiii
     })
     .catch(err => {
         console.log('捕获到错误B：', err);
