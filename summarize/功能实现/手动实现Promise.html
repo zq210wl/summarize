@@ -7,11 +7,19 @@
 </head>
 <body>
 <script>
-    // todo: 实现Promsie.resolve()方法
-    // reject 和 then中的reject 个私其职，
-    //   reject只管改变状态，以及当前执行中是否有正在等待的reject回调列表
-    //   then中的reject直观看当前当前执行的时候，是否状态为reject，如果是，就马上执行，不需要往reject回调列表添加，
-    //        只有执行的时候当前状态为pending才需要往reject回调列表添加回调
+    /*
+    【说明：】
+     1、每个方法个私其职
+        * resolve和reject：
+            * 改变状态
+            * 获取结果
+            * 并异步执行相应的待执行队列把结果传递下去
+        * then：
+            * 传递成功和失败的回调函数
+            * 根据Promsie当前状态来异步执行对应的回调函数
+            * 把需要等待Promsie结果才能执行的回调函数加入相应的待执行队列
+    */
+   
     function myPromise(callback) {
         this.pendingStatus = 'pending';
         this.fulFilledStatus = 'fulfilled';
@@ -20,8 +28,8 @@
         this.stauts = this.pendingStatus;
         this.value = undefined;
 
-        this.pendingFulfilledCallback = [];
-        this.pendingRejectedCallback = [];
+        this.pendingFulfilledCallback = []; // pending中的待执行成功队列
+        this.pendingRejectedCallback = []; // pending中的待执行失败队列
 
         this.resolve = this.resolve.bind(this);
         this.reject = this.reject.bind(this);
@@ -38,6 +46,7 @@
             this.stauts = this.fulFilledStatus;
             this.value = value;
             setTimeout(() => {
+                // 异步执行成功回调函数
                 this.pendingFulfilledCallback.forEach(fn => {
                     fn(value);
                 });
@@ -50,9 +59,11 @@
             this.stauts = this.rejectedStatus;
             this.value = reason;
             setTimeout(() => {
+                // 异步执行失败回调函数
                 this.pendingRejectedCallback.forEach(fn => {
                     fn(reason);
                 });
+                // 统一在这里抛出未进行处理的reject或异常
                 if (this.pendingRejectedCallback.length === 0) {
                     throw reason;
                 }
@@ -68,41 +79,50 @@
             nextReject = reject;
         });
 
+        // 如果当前Promise已经有执行结果了，就直接异步来执行对应的回调函数
         if (this.stauts === this.fulFilledStatus) {
             // 模拟微任务
             setTimeout(() => {
                 if (typeof fulfilledCallback === 'function') {
                     let res = null;
                     try {
+                        // 拿到成功回调函数的执行结果
                         res = fulfilledCallback(this.value);
                     } catch (err) {
                         nextReject(err);
                     }
                     if (res instanceof Promise) {
+                        // 【中间桥梁】利用此方法来触发nextPromise的状态，进而继续往下执行
                         res.then(nextResolve, nextReject);
                     } else {
+                        // 把成功回调的结果传递下去
                         nextResolve(res);
                     }
                 } else {
+                    // 如果未设置成功回调的函数，那就直接把当前Promise的执行结果传递下去
                     nextResolve(this.value);
                 }
             });
             return nextPromise;
         }
 
+        // 如果当前Promise已经有执行结果了，就直接异步来执行对应的回调函数
         if (this.stauts === this.rejectedStatus) {
             // 模拟微任务
             setTimeout(() => {
                 if (typeof rejectedCallback === 'function') {
                     let res = null;
                     try {
+                        // 拿到失败回调函数的执行结果
                         res = rejectedCallback(this.value);
                     } catch (err) {
                         nextReject(err);
                     }
                     if (res instanceof Promise) {
+                        // 【中间桥梁】利用此方法来触发nextPromise的状态，进而继续往下执行
                         res.then(nextResolve, nextReject);
                     } else {
+                        // 把失败回调的结果传递下去
                         nextResolve(res);
                     }
                 } else {
@@ -112,8 +132,9 @@
             return nextPromise;
         }
 
+        // 如果当前Promise还没有执行结果，就把对应的回调函数加入对应的待执行队列
         if (this.stauts === this.pendingStatus) {
-            // 加入待执行队列
+            // 加入待执行的成功队列
             this.pendingFulfilledCallback.push((value) => {
                 if (typeof fulfilledCallback === 'function') {
                     let res = null;
@@ -131,7 +152,7 @@
                     nextResolve(this.value);
                 }
             });
-            // 加入待执行队列
+            // 加入待执行的失败队列
             this.pendingRejectedCallback.push((value) => {
                 if (typeof rejectedCallback === 'function') {
                     let res = null;
@@ -158,7 +179,17 @@
         this.then(null, rejectedCallback);
     };
 
+    myPromise.resolve = function(value) {
+        if (value instanceof Promise) {
+            return value;
+        } else {
+            return new Promise(resolve => {
+                resolve(value);
+            });
+        }
+    };
 
+    //-----------------------分割线--------------------------
 
     new myPromise((resolve, reject) => {
         setTimeout(() => {
@@ -176,7 +207,7 @@
     .catch(err => {
         console.log('捕获到错误B：', err);
     });
-    
+
 </script>
 </body>
 </html>
