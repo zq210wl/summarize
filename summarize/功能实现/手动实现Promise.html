@@ -81,13 +81,12 @@
     };
 
     MyPromise.prototype.then = function(fulfilledCallback, rejectedCallback) {
-        var nextThenResolve = null;
-        var nextThenReject = null;
-        var nextThenPromise = new MyPromise((resolve, reject) => {
+        let nextThenResolve = null;
+        let nextThenReject = null;
+        const nextThenPromise = this.nextThenPromise = new MyPromise((resolve, reject) => {
             nextThenResolve = resolve;
             nextThenReject = reject;
         });
-        this.nextThenPromise = nextThenPromise;
 
         const excuteFulfilledCallback = () => {
             if (typeof fulfilledCallback === 'function') {
