@@ -7,90 +7,84 @@
 </head>
 <body>
 <script>
-    function myPromsie(callback) {
+    // todo: 实现Promsie.resolve()方法
+    // reject 和 then中的reject 个私其职，
+    //   reject只管改变状态，以及当前执行中是否有正在等待的reject回调列表
+    //   then中的reject直观看当前当前执行的时候，是否状态为reject，如果是，就马上执行，不需要往reject回调列表添加，
+    //        只有执行的时候当前状态为pending才需要往reject回调列表添加回调
+    function myPromise(callback) {
         this.pendingStatus = 'pending';
-        this.fullFilledStatus = 'fullfilled';
+        this.fulFilledStatus = 'fulfilled';
         this.rejectedStatus = 'reject';
 
         this.stauts = this.pendingStatus;
         this.value = undefined;
-        this.error = undefined;
 
-        this.fullfilledCallback = null;
-        this.rejectedCallback = null;
-
-        this.waittingCallback = null; // 等待状态变化以后执行的函数
-
-        this.nextReject = null; // then的callback发生异常时要调用
+        this.pendingFulfilledCallback = [];
+        this.pendingRejectedCallback = [];
 
         this.resolve = this.resolve.bind(this);
         this.reject = this.reject.bind(this);
+
         try {
             callback(this.resolve, this.reject);
         } catch (err) {
             this.reject(err);
         }
-    }
+    };
 
-    myPromsie.prototype.resolve = function(value) {
+    myPromise.prototype.resolve = function(value) {
         if (this.stauts === this.pendingStatus) {
-            this.stauts = this.fullFilledStatus;
+            this.stauts = this.fulFilledStatus;
             this.value = value;
             setTimeout(() => {
-                try {
-                    const res = this.fullfilledCallback(value);
-                    setTimeout(() => {
-                        this.waittingCallback && this.waittingCallback(res);
-                    });
-                } catch (err) {
-                    this.nextReject(err);
-                }
+                this.pendingFulfilledCallback.forEach(fn => {
+                    fn(value);
+                });
             });
         }
-    }
+    };
 
-    myPromsie.prototype.reject = function(error) {
+    myPromise.prototype.reject = function(reason) {
         if (this.stauts === this.pendingStatus) {
             this.stauts = this.rejectedStatus;
-            this.error = error;
+            this.value = reason;
             setTimeout(() => {
-                try {
-                    const res = this.rejectedCallback(val);
-                    setTimeout(() => {
-                        this.waittingCallback(res);
-                    });
-                } catch (err) {
-                    this.nextReject(err);
+                this.pendingRejectedCallback.forEach(fn => {
+                    fn(reason);
+                });
+                if (this.pendingRejectedCallback.length === 0) {
+                    throw reason;
                 }
             });
         }
-    }
+    };
 
-    myPromsie.prototype.then = function(fullfilledCallback, rejectedCallback) {
-        // v => v 的意思是：如果没有指定then回调，就设置一个默认回调，返回（当前传入的参数），这样就可以把上一步结果传递到下一个then中
-        this.fullfilledCallback = typeof fullfilledCallback === 'function' ? fullfilledCallback : v => v;
-        this.rejectedCallback = typeof rejectedCallback === 'function' ? rejectedCallback : v => v;
+    myPromise.prototype.then = function(fulfilledCallback, rejectedCallback) {
         var nextResolve = null;
         var nextReject = null;
-        var nextPromise = new Promise((resolve, reject) => {
+        var nextPromise = new myPromise((resolve, reject) => {
             nextResolve = resolve;
-            nextReject = this.nextReject = reject;
+            nextReject = reject;
         });
 
-        if (this.stauts === this.fullFilledStatus) {
+        if (this.stauts === this.fulFilledStatus) {
             // 模拟微任务
             setTimeout(() => {
-                try {
-                    const res = this.fullfilledCallback(this.value);
+                if (typeof fulfilledCallback === 'function') {
+                    let res = null;
+                    try {
+                        res = fulfilledCallback(this.value);
+                    } catch (err) {
+                        nextReject(err);
+                    }
                     if (res instanceof Promise) {
-                        // 这里不能直接(return res)，因为根据PromsieA+规范，这里必须是异步的，
-                        // 所以只能用res.then(nextResolve, nextReject)来驱动nextPromise的状态
                         res.then(nextResolve, nextReject);
                     } else {
                         nextResolve(res);
                     }
-                } catch (err) {
-                    nextReject(err);
+                } else {
+                    nextResolve(this.value);
                 }
             });
             return nextPromise;
@@ -99,47 +93,90 @@
         if (this.stauts === this.rejectedStatus) {
             // 模拟微任务
             setTimeout(() => {
-                try {
-                    const res = this.rejectedCallback(this.error);
+                if (typeof rejectedCallback === 'function') {
+                    let res = null;
+                    try {
+                        res = rejectedCallback(this.value);
+                    } catch (err) {
+                        nextReject(err);
+                    }
                     if (res instanceof Promise) {
                         res.then(nextResolve, nextReject);
                     } else {
                         nextResolve(res);
                     }
-                } catch (err) {
-                    nextReject(err);
+                } else {
+                    nextReject(this.value);
                 }
             });
             return nextPromise;
         }
 
         if (this.stauts === this.pendingStatus) {
-            this.waittingCallback = (res) => {
-                if (res instanceof Promise) {
-                    res.then(nextResolve, nextReject);
+            // 加入待执行队列
+            this.pendingFulfilledCallback.push((value) => {
+                if (typeof fulfilledCallback === 'function') {
+                    let res = null;
+                    try {
+                        res = fulfilledCallback(this.value);
+                    } catch (err) {
+                        nextReject(err);
+                    }
+                    if (res instanceof Promise) {
+                        res.then(nextResolve, nextReject);
+                    } else {
+                        nextResolve(res);
+                    }
                 } else {
-                    nextResolve(res);
+                    nextResolve(this.value);
                 }
-            };
+            });
+            // 加入待执行队列
+            this.pendingRejectedCallback.push((value) => {
+                if (typeof rejectedCallback === 'function') {
+                    let res = null;
+                    try {
+                        res = rejectedCallback(this.value);
+                    } catch (err) {
+                        nextReject(err);
+                    }
+                    if (res instanceof Promise) {
+                        res.then(nextResolve, nextReject);
+                    } else {
+                        nextResolve(res);
+                    }
+                } else {
+                    nextReject(this.value);
+                }
+            });
             return nextPromise;
         }
 
-    }
+    };
 
-    myPromsie.prototype.catch = function(rejectedCallback){
+    myPromise.prototype.catch = function(rejectedCallback){
         this.then(null, rejectedCallback);
-    }
+    };
 
-    new myPromsie((resolve, reject) => {
+
+
+    new myPromise((resolve, reject) => {
         setTimeout(() => {
-            resolve(1111);
+            console.log(555);
+            reject(444444);
         }, 1000);
-    }).then(res => {
+    })
+    .then(null, null)
+    .then(res => {
+        console.log('执行到我了');
         console.log(res);
-        return 2222;
-    }).then(res => {
-        console.log(res);
+    }, err => {
+        console.log('捕获到错误A：', err);
+    })
+    .catch(err => {
+        console.log('捕获到错误B：', err);
     });
+    
 </script>
 </body>
 </html>
