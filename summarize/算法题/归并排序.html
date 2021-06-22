@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>快排</title>
+</head>
+<body>
+<script>
+    /* 归并排序原理：
+       * 有序数组合并
+       * 递：分治
+       * 归：合并
+       * https://segmentfault.com/a/1190000008866524
+    */
+
+    function concatArrs(arr1, arr2) {
+        var toArr = [];
+        var len = arr1.length + arr2.length;
+        var curIndex = len - 1;
+        var arr1Index = arr1.length - 1;
+        var arr2Index = arr2.length - 1;
+        while (arr1Index >= 0 && arr2Index >=0) {
+            if (arr1[arr1Index] >= arr2[arr2Index]) {
+                toArr[curIndex] = arr1[arr1Index];
+                arr1Index--;
+            } else {
+                toArr[curIndex] = arr2[arr2Index];
+                arr2Index--;
+            }
+            curIndex--;
+        }
+        while (arr1Index >= 0) {
+            toArr[curIndex] = arr1[arr1Index];
+            arr1Index--;
+            curIndex--;
+        }
+        while (arr2Index >= 0) {
+            toArr[curIndex] = arr2[arr2Index];
+            arr2Index--;
+            curIndex--;
+        }
+        return toArr;
+    }
+
+    function sortArr(arr) {
+        if (arr.length <= 1) {
+            return arr;
+        }
+        var middleIndex = Math.floor(arr.length / 2);
+        var leftArr = arr.slice(0, middleIndex);
+        var rightArr = arr.slice(middleIndex);
+        return concatArrs(sortArr(leftArr), sortArr(rightArr));
+    }
+
+    var arr = [2,5,3, 8, 12, 9, 9, 10,12,9,3,16,30,21];
+    console.log(sortArr(arr));
+
+</script>
+</body>
+</html>

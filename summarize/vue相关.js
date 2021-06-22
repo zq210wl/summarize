@@ -1,3 +1,8 @@
+/* 【vue2.x高阶问题】讲的很不错
+      * https://juejin.cn/post/6921911974611664903
+  【vue2.x 虚拟dom diff原理详解】很不错的讲解，直接看这个文章就可以了
+      * https://segmentfault.com/a/1190000020663531  
+*/
 /*
  【 vue数据初始化的先后顺序 】
   参考：https://blog.csdn.net/weixin_39917811/article/details/113452913
@@ -26,7 +31,8 @@
 
 /*
  【 diff算法 】
-  参考：https://www.cnblogs.com/happymental/p/11882461.html
+  参考：https://segmentfault.com/a/1190000020663531  很不错的讲解，直接看这个文章就可以了
+      https://www.cnblogs.com/happymental/p/11882461.html
 
   [原理流程如下：]（重点知识：diff的过程遵循同层比较、深度优先的策略）
   1、通过 compile 函数来编辑模版，从而得到虚拟dom（注意：比较都是通过新旧虚拟dom来比较的）
@@ -237,10 +243,12 @@
 /*
  【 vm.$nextTick(callback) 】
   参考：https://www.jianshu.com/p/a7550c0e164f
+       https://segmentfault.com/a/1190000020499713
   1、在vm.data发生变化的时候，vue是异步来更新dom的
   2、$nextTick的callback会在dom更新之后执行，所以在操作dom的时候，需要放$nextTick中来执行，可以保证拿到正确的dom数据
   3、$nextTick() 属于微任务（不支持promise浏览器会用setTimeout来做），会在执行完dom渲染操作后添加一个微任务，类似于 node的process.nextTick()
   4、可以用this.$forceUpdate()进行强制更新dom
+  5、在同一个tick中调用多次$nextTick()并不会开启多个微任务，这些会被合并到一个微任务中按照顺序执行
 */
 
 
@@ -441,3 +449,8 @@
 双端比较的原理：http://hcysun.me/vue-design/zh/renderer-diff.html#%E5%8F%A6%E4%B8%80%E4%B8%AA%E6%80%9D%E8%B7%AF-%E5%8F%8C%E7%AB%AF%E6%AF%94%E8%BE%83
 */
 
+
+
+/*
+vue常见问题：https://juejin.cn/post/6921911974611664903
+*/

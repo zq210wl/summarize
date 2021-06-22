@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>快排</title>
+</head>
+<body>
+<script>
+    /* 合并有序数组：
+    */
+    var arr1 = [2,5,8,9,10, 12];
+    var arr2 = [1,2,5,6,7,8,11];
+
+    function concatArrs(arr1, arr2) {
+        var len = arr1.length + arr2.length;
+        var curIndex = len - 1;
+        var arr1Index = arr1.length - 1;
+        var arr2Index = arr2.length - 1;
+        while (arr1Index >= 0 && arr2Index >=0) {
+            if (arr1[arr1Index] >= arr2[arr2Index]) {
+                arr1[curIndex] = arr1[arr1Index];
+                arr1Index--;
+            } else {
+                arr1[curIndex] = arr2[arr2Index];
+                arr2Index--;
+            }
+            curIndex--;
+        }
+        while (arr2Index >= 0) {
+            arr1[curIndex] = arr2[arr2Index];
+            arr2Index--;
+            curIndex--;
+        }
+        return arr1;
+    }
+    var result = concatArrs(arr1, arr2);
+    console.log(result);
+
+</script>
+</body>
+</html>
