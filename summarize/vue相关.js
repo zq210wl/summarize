@@ -1,8 +1,12 @@
-/* 【vue2.x高阶问题】讲的很不错
+/* 【vue2.x高阶问题】整理的很不错
       * https://juejin.cn/post/6921911974611664903
-  【vue2.x 虚拟dom diff原理详解】很不错的讲解，直接看这个文章就可以了
+   【vue2.x 虚拟dom diff原理详解】很不错的讲解
       * https://segmentfault.com/a/1190000020663531  
+   【vue2.x computed实现原理】很不错的讲解
+      * https://segmentfault.com/a/1190000022169550 
 */
+
+
 /*
  【 vue数据初始化的先后顺序 】
   参考：https://blog.csdn.net/weixin_39917811/article/details/113452913
@@ -26,6 +30,20 @@
     * updated（避免在此期间更改状态，因为这可能会导致更新无限循环）
     * beforeDestory（只这一步可以执行清理工作，比如setTimeout、丢弃已经还没有response的请求、一些还没有完成的promsie异步操作）
     * destoryed (整个vue实例被销毁，所以的事件绑定监听都被移除，所以的子实例也会被销毁)
+*/
+
+
+/*
+ 【 computed的实现原理 】
+  【结合这个文章来理解：】：https://segmentfault.com/a/1190000022169550
+  * 每个computed会对应创建一个watcher
+    * Watcher有属性：lazy、dirty、value
+      * dirty：根据此属性来判断下次获取computed值的时候是否需要重新获取新值
+      * value：缓存computed的值
+  * 每当computed中依赖的其它属性值发生变化之后会设置Watcher的dirty为true
+  * 只有当真正获取computed值的时候才会根据Watcher的dirty属性来决定是取缓存value还是重新求值
+  * 在模版编译或手动watch监听computed值的时候，会单独创建一个watcher，然后触发computed的get，
+    进而触发依赖收集，从而会把对应的回调注册到computed的依赖属性上
 */
 
 
