@@ -183,3 +183,25 @@ String(str).replace(/(\d{1,3})(?=(\d{3})+($|\.))/g, "$1,")
         console.log(execFn2('Hello'));
         console.log(execFn3('Hello'));
 */
+
+
+/*
+   【轮询的接口中的请求，如何保证【先发送后返回数据】的情况被丢弃掉】=============================================== 
+        function setTimer() {
+            let lastRequestSuccessTime = 0; // 记录最近一次请求成功的时间戳
+            setInterval(() => {
+                let requestTime = Date.now(); // 设置当前请求的时间戳
+                new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve();
+                    }, Math.random() * 3000);
+                }).then(res => {
+                    if (requestTime > lastRequestSuccessTime) { // 比较当前和上一次请求成功的时间戳，大于就执行，不大于就放弃
+                        console.log('Done:', requestTime - lastRequestSuccessTime);
+                        lastRequestSuccessTime = requestTime;
+                    }
+                });
+            }, 100);
+        }
+        setTimer();
+*/

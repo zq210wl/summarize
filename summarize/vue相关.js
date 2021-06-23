@@ -1,9 +1,13 @@
 /* 【vue2.x高阶问题】整理的很不错
       * https://juejin.cn/post/6921911974611664903
+   【vue2.x高频面试题】
+      * https://segmentfault.com/a/1190000021407782
    【vue2.x 虚拟dom diff原理详解】很不错的讲解
       * https://segmentfault.com/a/1190000020663531  
    【vue2.x computed实现原理】很不错的讲解
       * https://segmentfault.com/a/1190000022169550 
+   【vue技术揭秘】
+      * https://ustbhuangyi.github.io/vue-analysis/
 */
 
 

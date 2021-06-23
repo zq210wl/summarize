@@ -130,8 +130,14 @@
         ReactDOM.render(element, document.getElementById('root')); 
 */
 
+
 /*
   【 AMD、commonJS、ESModule的实现原理 】
+*/
+
+
+/*
+  【 js与native通信有几种方式，什么优缺点 】
 */
 
 

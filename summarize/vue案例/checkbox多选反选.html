@@ -3,12 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>checkbox多选反选</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
     <div id="app">
-        {{date}}
+        {{checkedItems}}
+        <ul>
+            <li>
+                <input type="checkbox" v-model="isCheckedAll" @click="allCheckboxClick"/> 
+                <label>All</label>
+            </li>
+            <li v-for="item in fruitList" :key="item.value">
+                <input type="checkbox" :value="item.value" v-model="checkedItems" /> 
+                <label>{{item.name}}</label>
+            </li>
+        </ul>
     </div>
     <script>
         
@@ -24,26 +34,17 @@
                     {value: '4', name: 'd'}
                 ]
             },
-            computed: {
-                date: function() {
-                    return Date.now();
+            watch: {
+                checkedItems: function(checkedItems) {
+                    if (checkedItems.length === this.fruitList.length) {
+                        this.isCheckedAll = true;
+                    } else {
+                        this.isCheckedAll = false;
+                    }
                 }
             },
-            watch: {
-               
-            },
-            beforeCreate: function() {
-            
-            },
-            created: function() {
-
-            },
-            mounted: function () {
-                
-            },
             methods: {
-                allCheckboxClick: function(a, event){
-                    console.log(a, event);
+                allCheckboxClick: function(){
                     if (this.isCheckedAll) {
                         this.checkedItems = [];
                     } else {

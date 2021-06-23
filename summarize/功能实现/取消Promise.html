@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width"></meta>
+    <title>取消Promise</title>
+</head>
+<body>
+<script>
+    function createPromise(callback) {
+        let isAbort = false;
+        return {
+            promise: new Promise((resolve, reject) => {
+                let _resolve = (res) => {
+                    if (!isAbort) {
+                        resolve(res);
+                    }
+                };
+                let _reject = (res) => {
+                    if (!isAbort) {
+                        reject(res);
+                    }
+                };
+                callback(_resolve, _reject);
+            }),
+            abort: () => {
+                isAbort = true;
+            }
+        };
+    }
+
+    let { abort, promise } = createPromise((resolve, reject) => {
+        setTimeout(() => {
+            console.log('hello world');
+            resolve('done');
+        }, 1000);
+    });
+
+    promise.then(res => {
+        console.log('resolve', res);
+    }, res => {
+        console.log('reject', res);
+    });
+
+    abort();
+
+</script>
+</body>
+</html>

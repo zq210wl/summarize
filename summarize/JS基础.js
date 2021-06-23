@@ -497,6 +497,11 @@ Object.create(null)
        * A通过：document.getElementsByTagName('iframe')[0].contentWindow.postMessage('消息内容', 'bb.google.com')
        * B通过：window.parent.postMessage('消息内容', 'aa.baidu.com')
     7、webSockt
+
+   【浏览器为什么要禁止跨域？】
+    跨域请求首先是浏览器的限制，也就是在为使用浏览器的用户来考虑的，主要是对用户的操作加以限制，从而保证他们的个人数据不受到恶意攻击。
+    所以跨域限制是因为有第三方恶意攻击者，他在用户和服务器之间搞恶意操作。比如如果没有跨域限制，那么黑客就可以进行跨域操作DOM，
+    只要能进行此操作，在用户登录黑客的网站以后，黑客iframe内嵌其它网页，黑客就可以干任何他想干的坏事。
 */
 
 /*

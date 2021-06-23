@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width"></meta>
+    <title>手动实现Promise</title>
+</head>
+<body>
+<script>
+    /*
+        * 数组flat就是一个【树的深度优先遍历】问题
+    */
+
+    // 递归实现
+    function flatArray(sourceArr, num) {
+
+        function flat(toFlatArr, curNum) {
+            if (!Array.isArray(toFlatArr) || curNum > num) {
+                return toFlatArr;
+            }
+            let result = [];
+            toFlatArr.forEach(item => {
+                result = result.concat(item);
+            });
+            return flat(result, curNum+1);
+        }
+
+        return flat(sourceArr, 1);
+    }
+
+    // 非递归实现
+    function flatArray2(sourceArr, num) {
+        var queen = [{
+            level: 0, // 当前数据在数组的第基层
+            data: sourceArr
+        }];
+        var result = [];
+        while (queen.length) {
+            var firstItem = queen.shift();
+            if (Array.isArray(firstItem.data) && firstItem.level <= num) { // 判断当前层级是否需要被展开
+                firstItem.data.forEach(item => {
+                    queen.push({
+                        level: firstItem.level+1,
+                        data: item
+                    });
+                });
+            } else {
+                result.push(firstItem.data);
+            }
+        }
+        return result;
+    }
+
+    var sourceArr = [1, [2, [3, [4]]]];
+    var result = flatArray2(sourceArr, 4);
+    console.log(result);    
+</script>
+</body>
+</html>
