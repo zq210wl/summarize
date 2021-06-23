@@ -673,6 +673,12 @@ Object.create(null)
                bb'; // 不报错
 */
 
+
+/*
+   【Element.getBoundingClientRect()】
+    * 返回元素的大小及其相对于视口的位置（不包括滚动距离）
+*/
+
 // defineproperty与proxy对比，哪个好，为什么？
 // instanceof 和 constructor 判断实例类型的区别？？
 // 5大主流浏览器内核

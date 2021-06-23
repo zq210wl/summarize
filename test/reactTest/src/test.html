@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width"></meta>
+    <title>test</title>
+    </style>
+    <style> 
+        html, body {
+            position: fixed;
+        }
+        
+    </style>
+    
+</head>
+<body>
+    <div class="mainWrapper">
+        afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>
+        afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>
+        afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>
+        afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>
+        afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>
+        afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>afdsfdsf<br/>
+    </div>
+    
+    <script>
+        var overscroll = function(el) {
+            el.addEventListener('touchstart', function() {
+                var top = el.scrollTop
+                ,totalScroll = el.scrollHeight
+                ,currentScroll = top + el.offsetHeight;
+                if(top === 0) {
+                    el.scrollTop = 1;
+                }else if(currentScroll === totalScroll) {
+                    el.scrollTop = top - 1;
+                }
+            });
+
+            el.addEventListener('touchmove', function(evt) {
+            if(el.offsetHeight < el.scrollHeight)
+                evt._isScroller = true;
+            });
+        }
+                
+        overscroll(document.querySelector('.scroll'));
+        document.body.addEventListener('touchmove', function(evt) {
+            if(!evt._isScroller) {
+                evt.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

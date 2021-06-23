@@ -154,18 +154,20 @@ String(str).replace(/(\d{1,3})(?=(\d{3})+($|\.))/g, "$1,")
 */
 
 
-/*  【高阶函数：compose】=============================================== 
+/*  【组合函数：compose】=============================================== 
+     * 函数的本质是把多个操作合并：
+        * args -> A方法 -> B方法 -> C方法 -> result
         
         // 从【右到左】依次对【某个东西】执行相应的操作
-        function myCompose(...toDoFns) {
-            return (...x) => {
-                return toDoFns.reduceRight((result, fn) => {
-                    return fn(result);
-                }, x);
+        function myCompose(...fns) {
+            return (...arg) => {
+                return fns.reduceRight((pre, cur) => {
+                    return typeof pre === 'function' ? cur(pre(...arg)): cur(pre);
+                });
             }
         }
 
-        // 需要依次执行以下三个操作
+        // 需要依次执行以下三个操作，前面执行结果是后面的参数
         function addA(str) {
             return str + '-A';
         }
@@ -182,6 +184,36 @@ String(str).replace(/(\d{1,3})(?=(\d{3})+($|\.))/g, "$1,")
         console.log(execFn1('Hello'));
         console.log(execFn2('Hello'));
         console.log(execFn3('Hello'));
+*/
+
+
+/*  【柯里化函数：curry】=============================================== 
+     * 函数的本质是实现函数的无限调用，每次调用完都还是返回一个函数，
+       目的是把每次调用的参数收集到一起并缓存起来，利用函数隐士转换会调用toString方法来得到所有参数的求值
+
+        例如实现：add(1,2)(2)(3,4)(5,6,7)
+
+        function add(...args) {
+            var inner = (...innerArgs) => {
+                args = [...args, ...innerArgs];
+                return inner;
+            }
+            inner.toString = () => {
+                return args.reduce((pre, cur) => {
+                    return pre + cur;
+                });
+            }
+            return inner;
+        }
+
+        var res1 = add(1, 2)(3);
+        console.log(res1);
+
+        var res2 = add(4);
+        console.log(res2);
+
+        var res3 = res1(5)(6);
+        console.log(res2);
 */
 
 

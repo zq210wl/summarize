@@ -23,7 +23,7 @@
 </head>
 <body>
     <p class="classC classA classB">hello</p>
-    <div class="div1">
+    <div class="div1" onclick="excuteFn()">
         wojfdsjfdjf
     </div>
     <div class="div2">
@@ -31,43 +31,29 @@
     </div>
     
     <script>
-        function setTimer() {
-            let lastRequestSuccessTime = 0;
-            setInterval(() => {
-                let requestTime = Date.now();
-                new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        resolve();
-                    }, Math.random() * 3000);
-                }).then(res => {
-                    if (requestTime > lastRequestSuccessTime) {
-                        console.log('Done:', requestTime - lastRequestSuccessTime);
-                        lastRequestSuccessTime = requestTime;
-                    }
-                });
-            }, 100);
-        }
-        // setTimer();
+        // var uri = createUrl('https://', 'www.baidu.com', '/api/getA')
 
-        function setTimer() {
-            let counter = 0;
-            let lastRequestSuccessTime = -1;
-            setInterval(() => {
-                let requestTime = counter;
-                new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        resolve();
-                    }, Math.random() * 3000);
-                }).then(res => {
-                    if (requestTime > lastRequestSuccessTime) {
-                        console.log('Done:', requestTime - lastRequestSuccessTime);
-                        lastRequestSuccessTime = requestTime;
-                    }
+        function add(...args) {
+            var inner = (...innerArgs) => {
+                args = [...args, ...innerArgs];
+                return inner;
+            }
+            inner.toString = () => {
+                return args.reduce((pre, cur) => {
+                    return pre + cur;
                 });
-                counter++;
-            }, 100);
+            }
+            return inner;
         }
-        // setTimer();
+
+        var res = add(1, 2)(3);
+        console.log(res);
+
+        var res2 = res(4);
+        console.log(res2);
+
+        document.querySelector('.div2').innerHTML = res2;
+        
     </script>
 </body>
 </html>

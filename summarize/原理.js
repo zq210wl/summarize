@@ -137,7 +137,14 @@
 
 
 /*
-  【 js与native通信有几种方式，什么优缺点 】
+  【 jsBridge这种hybrid通信方式有几种？ 】
+    [参考：https://juejin.cn/post/6916316666208976904]
+    * JS 调用 Native 通信大致有三种方法：
+      * 【拦截 Scheme】，JS 通过iframe、location.href等方式执行一个自定义的协议，触发Native的监听，进而执行 Native 对应的方法
+      * 【弹窗拦截】，JS 调用 window.prompt('message')，触发Native的监听，进而执行 Native 对应的方法
+      * 【注入 JS 上下文】，JS 直接执行就可以
+    * Native 调用 JS :
+      * JS在 window 上写属性或方法，Native可以直接调用 window 上的属性和方法
 */
 
 
