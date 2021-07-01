@@ -52,60 +52,6 @@
 
 
 /*
-  【 webpack loader的实现原理 】
-   * loader都是将需要转换的文件转换成一个模块化的JS代码。
-        * 参考css相关loader处理逻辑：https://segmentfault.com/a/1190000039310736
-   * css-loader原理：
-        * 转换之前的源代码：
-            @import "./reset.css"; 
-            .red{
-                color:"#f40";
-                background:url("./bg.png")
-            }
-        * 转换之后的JS模块代码：
-            var import1 = require("./reset.css");
-            var import2 = require("./bg.png");
-            module.exports = `.red{
-                color:"#f40";
-                background:url("${import2}")
-            }`;
-        * 总结，css-loader干了什么：
-            * 将css文件的内容作为字符串导出
-            * 将css中的其他依赖作为require导入，以便webpack分析依赖
-    * style-loader原理：
-        * 创建一个style标签，然后把CSS代码字符串作为内容插入到style标签中：
-            // css-loade处理后的代码： 
-            module.exports = `.red{
-                color:"#f40";
-            }`
-            // style-loader处理逻辑：
-            var style = module.exports;
-            var styleElem = document.createElement("style");
-            styleElem.innerHTML = style;
-            document.head.appendChild(styleElem);
-            module.exports = {}
-*/
-
-
-/*
-  【 从宏观上分析 webpack 工作原理 】
-    * webpack本身仅做依赖分析，解析不了的文件用loader来解析成js模块代码，
-    * 然后根据依赖分析后的结果来生成对应的AST抽象语法树，
-    * 然后在对AST抽象语法树进行分析，在这期间可以用plugin来进行相应操作，
-    * 最后再根据操作后的AST树来生成对应的JS bundle 文件。
-*/
-
-
-/*
-  【 webpack模块化打包解决的是什么问题？ 】
-    * 模块化解决作用域问题
-    * 从入口依赖分析打包解决多个<script>标签引入的顺序控制问题
-    * loader方便了对CSS、图片等资源的操作
-    * plugin可以让开发者像gulp一样对项目资源做进一步个性化的处理 
-*/
-
-
-/*
   【 从宏观上分析 VUE 模版编译成VNode的流程 】
     * template > HTML AST > parse AST > optimize > generate 生成render函数 > 执行render函数 > VNode
       * optimize: 用来给AST递归添加各种static属性，配合VNode和patch使用，避免不必要的re-render，提高性能。

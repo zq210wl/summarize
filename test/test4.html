@@ -4,56 +4,185 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width"></meta>
     <title>test</title>
+    
     <style>
-        .div2 {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            background: green;
-            opacity: 0.1;
+        
+        .triangle {
+            width: 0;
+            height: 0;
+            border-top: 10px solid #000; 
+            border-left: 8px solid transparent; 
+            border-right: 8px solid transparent; 
         }
     </style>
-    <style> 
-        .classA { color:blue; }
-        .classB { color:red; }
-        .classC { color:yellow; }
-        p { color: black; }
-    </style>
-    
 </head>
 <body>
-    <p class="classC classA classB">hello</p>
-    <div class="div1" onclick="excuteFn()">
-        wojfdsjfdjf
-    </div>
-    <div class="div2">
-        00000
+    <div class="parent">
+        <div class="child">111111</div>
+        <div class="triangle">
+
+        </div>
     </div>
     
     <script>
-        // var uri = createUrl('https://', 'www.baidu.com', '/api/getA')
+        // var arr = ['a', 'b', 'c'];
 
-        function add(...args) {
-            var inner = (...innerArgs) => {
-                args = [...args, ...innerArgs];
-                return inner;
-            }
-            inner.toString = () => {
-                return args.reduce((pre, cur) => {
-                    return pre + cur;
-                });
-            }
-            return inner;
-        }
+        /*
+          var curSub = new Sub(); 把此依赖收集对象继续传递到对数组7个方法的处理中，方便内部可以获取到sub，进而调用notify()
+          数组除了要当成对象来正常响应处理： var arr = [1, 2, {a:b}];  arr = [{m:n}, 3, 4];
+          还有对当前数组的7个操作方法进行响应式处理：
+        */
 
-        var res = add(1, 2)(3);
-        console.log(res);
+        // function MyVue(options) {
+        //     this.$data = options.data;
 
-        var res2 = res(4);
-        console.log(res2);
+        //     observe(this, options.data);
+        // }
+        // function observe(vm, data) {
+        //     if (typeof data === 'object' && data != null && !Array.isArray(data)) {
+        //         Object.keys(data).forEach(key => {
+        //             defineReactive(vm, data, key);
+        //         });
+        //     } else if (Array.isArray(data)) {
 
-        document.querySelector('.div2').innerHTML = res2;
+        //     }
+        // }
+        // function defineReactive(vm, data, key) {
+        //     observe(data[key]);
+        //     var curSub = new Sub();
+        //     Object.defineProperty(data, key, {
+        //         get() {
+        //             if (Sub.target) {
+        //                 curSub.addWatchers(Sub.target);
+        //             }
+        //             return data[key];
+        //         },
+        //         set(newVal) {
+        //             if (newVal !== data[key]) {
+        //                 data[key] = newVal;
+        //                 observe(newVal);
+        //                 curSub.notify();
+        //             }
+        //         }
+        //     });
+        // }
+
+        // function Sub() {
+        //     this.watchers = [];
+        // }
+        // Sub.prototype.addWatchers = function(watcher) {
+        //     this.watchers.push(watcher);
+        // }
+        // Sub.prototype.notify = function() {
+            
+        // }
+        // Sub.target = null;
+
+
+        // // if (Array.isArray(item)) {
+        // //         var curSub = new Sub();
+        // //         walkData(vm, arr);
+        // //         Object.defineProperty(arr, 'push', {
+        // //             get: function() {
+        // //                 if (Sub.target) {
+        // //                     curSub.addWatchers(Sub.target);
+        // //                 }
+        // //                 return function(val) {
+        // //                     return [ ...arr, val];
+        // //                 }
+        // //             }
+        // //         });
+        // //     }
+
+        // // Object.defineProperty(arr, 'push', {
+        // //     get: function() {
+        // //         return function(val) {
+        // //             return [ ...arr, val];
+        // //         }
+        // //     }
+        // // });
+        // // Object.defineProperty(arr, 'shift', {
+        // //     get: function() {
+        // //         return function() {
+        // //             let newArr = [];
+        // //             arr.forEach((item, index) => {
+        // //                 if (index > 0) {
+        // //                     newArr.push(item);
+        // //                 }
+        // //             });
+        // //             return newArr;
+        // //         }
+        // //     }
+        // // });
+        // Object.defineProperty(arr, '0', {
+        //     get: function() {
+        //         return 77;
+        //     },
+        //     set: function(val) {
+        //         console.log('uuu', val);
+        //     }
+        // });
+        // arr.shift();
+        // // console.log(arr);
+
+        // var xx = 1;
+
+        // // 变成函数表达式了
+        // (function x(){ // 名字x只能在函数内部访问
+        //     x = 1; // 内部赋值被忽略 
+        //     y = 2; // 全局声明
+        //     console.log(x); // 访问到的是x函数
+        //     console.log(y); // 2
+        // })();
+        // console.log(y); // 2
+        // console.log(x); // 报错，x只能在函数内部访问
         
+
+
+        // (function yy(){
+        //     yy = 4;
+        //     console.log(yy);
+        // })()
+        // yy();
+        // console.log(yy);
+        
+        // var mm = function xx(){
+        //     mm = 3;
+        //     console.log(xx());
+        // }
+        // mm();
+
+
+        // var obj = ['f', 'g'];
+
+        // var proxyObj = new Proxy(obj, {
+        //     get(target, key, receiver) {
+        //         // console.log('get-----:', target[key]);
+        //         return target[key];
+        //     },
+        //     set(target, key, value, receiver) {
+        //         // console.log('set-----key:', key);
+        //         // console.log('set-----value:', value);
+        //         target[key] = value;
+        //         // Reflect.set(target, key, value, receiver);
+        //         return true;
+        //     }
+        // });
+
+        // 金额千分位格式化处理
+        // var num = 12345.12345;
+        // var reg = /(?<=\d)(\d{3})/g;
+        // var result = String(num).replace(reg, function($0, $1){
+        //     return `,${$1}`;
+        // });
+        // console.log(result);
+
+        var num = 12345678.123;
+        var reg = /(\d{1,3})(?=(\d{3})+($|\.))/g;
+        var result = String(num).replace(reg, function($0, $1){
+            return `${$1},`;
+        });
+        console.log(result);
     </script>
 </body>
 </html>

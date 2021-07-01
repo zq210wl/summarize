@@ -1,3 +1,26 @@
+/*
+  [HTML5新增了哪些功能和API ？]
+  * document.querySelector()
+  * document.body.classlist
+  * 监听元素的隐藏和显示：
+    document.addEventListener('visibilitychange', function(e){
+      console.log(e, document.hidden);
+    });
+  * 窗口全屏和退出全屏：
+    document.documentElement.requestFullscreen()
+    document.documentElement.exitFullscreen()
+  * requestAnimationFrame
+  * 资源预加载
+    * <link rel="prefetch" href='aa.png'></link>
+    * <link rel="prefetch" href='aa.js'></link>
+  * dns预解析
+    * <link rel="dns-prefetch" href='https://www.aa.com'></link>
+  * localStorage、sessionStorage
+  * 设置元素可以编辑
+    * <div id="input" contenteditable="true">我可以编辑</div>
+    * document.querySelector('#input').innerText
+*/
+
 /* 【JavaScript作用域链】===============================================  
   [概念：]
   * Global作用域
@@ -175,6 +198,14 @@
 */
 
 
+/*
+  【 Array.prototype.includes() 和 Array.prototype.indexOf() 】
+    * Array.prototype.includes() ：判断一个数组是否包含一个指定的值，根据情况，如果包含则返回 true，否则返回false。
+    * Array.prototype.indexOf() ：不能判断是否存在NaN，因为 [NaN].indexOf(NaN) === -1
+
+*/
+
+
 /* 【彻底搞懂 prototype 】===============================================  
     * prototype是【构造函数】【也就是function】【独有的】一个属性，它的值是一个对象；
     * 【构造函数】分为【自定义构造函数】、【内置构造函数】、【Object构造函数】
@@ -218,6 +249,20 @@
         const prototype1 = {};
         const object1 = Object.create(prototype1);
         console.log(Object.getPrototypeOf(object1) === prototype1); // true
+*/
+
+
+/*
+    // 这样就变成函数表达式了
+    (function x(){ // 名字x只能在函数内部访问
+        x = 1; // 内部赋值被忽略 
+        y = 2; // 全局声明
+        console.log(x); // 访问到的是x函数
+        console.log(y); // 2
+    })();
+    console.log(y); // 2
+    console.log(x); // 报错，x只能在函数内部访问
+
 */
 
 

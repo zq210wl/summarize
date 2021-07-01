@@ -28,7 +28,7 @@
             * 实现了单独的 worker 池，用于多进程/多线程运行 loaders；
         * hard-source-webpack-plugin 
             * 为模块提供中间缓存步骤。为了查看结果，需要使用此插件运行webpack两次：第一次构建将花费正常的时间。第二次构建将显着加快（大概提升90%的构建速度）。 
-        * 使用catch-loader 对所有loader添加缓存；
+        * 使用cache-loader 对所有loader添加缓存；
             * 对于js文件，因为babel-loader自带有catche功能，直接开启即可
             * 对于其它类型文件，直接用catch-loader来缓存
         * Oneof 
@@ -45,6 +45,61 @@
     * hash
     * chunkHash
     * contentHash
+  * 直接把第三方库放在cdn上，然后直接通过<script>来引入，这样虽然不能treeshaking，但是可以缓存在浏览器
+*/
+
+
+/*
+  【 webpack loader的实现原理 】
+   * loader都是将需要转换的文件转换成一个模块化的JS代码。
+        * 参考css相关loader处理逻辑：https://segmentfault.com/a/1190000039310736
+   * css-loader原理：
+        * 转换之前的源代码：
+            @import "./reset.css"; 
+            .red{
+                color:"#f40";
+                background:url("./bg.png")
+            }
+        * 转换之后的JS模块代码：
+            var import1 = require("./reset.css");
+            var import2 = require("./bg.png");
+            module.exports = `.red{
+                color:"#f40";
+                background:url("${import2}")
+            }`;
+        * 总结，css-loader干了什么：
+            * 将css文件的内容作为字符串导出
+            * 将css中的其他依赖作为require导入，以便webpack分析依赖
+    * style-loader原理：
+        * 创建一个style标签，然后把CSS代码字符串作为内容插入到style标签中：
+            // css-loade处理后的代码： 
+            module.exports = `.red{
+                color:"#f40";
+            }`
+            // style-loader处理逻辑：
+            var style = module.exports;
+            var styleElem = document.createElement("style");
+            styleElem.innerHTML = style;
+            document.head.appendChild(styleElem);
+            module.exports = {}
+*/
+
+
+/*
+  【 从宏观上分析 webpack 工作原理 】
+    * webpack本身仅做依赖分析，解析不了的文件用loader来解析成js模块代码，
+    * 然后根据依赖分析后的结果来生成对应的AST抽象语法树，
+    * 然后在对AST抽象语法树进行分析，在这期间可以用plugin来进行相应操作，
+    * 最后再根据操作后的AST树来生成对应的JS bundle 文件。
+*/
+
+
+/*
+  【 webpack模块化打包解决的是什么问题？ 】
+    * 模块化解决作用域问题
+    * 从入口依赖分析打包解决多个<script>标签引入的顺序控制问题
+    * loader方便了对CSS、图片等资源的操作
+    * plugin可以让开发者像gulp一样对项目资源做进一步个性化的处理 
 */
 
 
@@ -88,24 +143,37 @@
 
 
  /*
- 【 常用的loader，plugin 】
+ 【 常用的loader，plugin，配置项 】
   * loader
      * style-loader
      * css-loader
-     * less-loader
-     * post-css-loader 开启autoPrefixer
+     * post-css-loader 采用插件机制，可以把less、stylus作为插件来使用、开启autoPrefixer
      * babel-loader  针对js和jsx
      * url-loader
   * plugin
-     * DefinePlugin 
+     * DefinePlugin - 定义【环境】【变量】
+        new webpack.DefinePlugin({
+            'process.env': '"dev"'
+        })
+        process.env变量在编译的时候【会被替换】为"dev"
+     * ProvidePlugin - 提供【全局】【变量】，避免每次都import来引入
+        new webpack.ProvidePlugin({
+            $: 'jquery'
+        });
      * HtmlWebpackPlugin
      * UglifyWebpackPlugin
-     * commonChunkPlugin
+     * SplitChunksPlugin
+  * resolve.alias - 创建 import 或 require 的别名，来确保模块引入变得更简单
+        resolve: {
+            alias: {
+                '@': '/aaa/bbb/ccc'  //配置别名，在项目中可缩减引用路径
+            }
+        }
  */
 
 
  /*
- 【 webpack性能优化 】  
+ 【 webpack性能优化 】 
  */
 
 
@@ -120,3 +188,4 @@
   * 生产环境用：cheap-module-source-map
  */
  
+

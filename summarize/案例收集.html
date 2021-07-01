@@ -41,7 +41,7 @@
        // * [1,,,,2,,,3,,,4,,,6]
        // * var ary = [1,2]; ary[5] = 10; 则；ary = [1,2,,,,10]
        // * var ary = [1,2]; ary.length = 5; 则；ary = [1,2,,,] 
-    // 在对零散数组执行：filter、forEach、every、some操作的时候，是会直接忽略空值的。【但是find和map却不会忽略】。
+    // 在对零散数组执行：map、filter、forEach、every、some操作的时候，是会直接忽略空值的。【但是find却不会忽略】。
     // undefined跟空值是不一样的，是不会被忽略的。【但是直接去用下标获取一个空值得到的是undefined】。  
 </script>
 
@@ -132,6 +132,18 @@
      // 全局函数isNaN()：【会】进行隐式类型转换【用Numer()构造函数来转换】
      // 全局函数isNaN()：【不会】进行隐式类型转换，只有参数里的表达式明确返回的类型就是NaN的时候才会返回true，其它结果都是false
 
+</script>
+
+<script>
+     // 变成函数表达式了
+     (function x(){ // 名字x只能在函数内部访问
+        x = 1; // 内部赋值被忽略 
+        y = 2; // 全局声明
+        console.log(x); // 访问到的是x函数
+        console.log(y); // 2
+    })();
+    console.log(y); // 2
+    console.log(x); // 报错，x只能在函数内部访问
 </script>
 
 <script>

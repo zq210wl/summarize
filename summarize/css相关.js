@@ -202,7 +202,13 @@
 
 
 /* 【实现一个三角形】
-
+      .triangle {
+        width: 0;
+        height: 0;
+        border-top: 10px solid #000; // 决定高度
+        border-left: 8px solid transparent; // 决定宽度
+        border-right: 8px solid transparent; // 决定宽度
+      }
 */
 
 
@@ -213,4 +219,56 @@
 
 /* 【实现一个带阴影的边框】
 
+*/
+
+
+/*
+   【H5自适应方案】
+    https://segmentfault.com/a/1190000023583974
+    https://www.imweb.io/topic/5a523cc0a192c3b460fce3a5
+    http://caibaojian.com/simple-flexible.html
+    https://imweb.io/topic/5745adf5a94f742c1db63485
+
+    方案一：【rem适配】
+      原理：
+        * 设置视口宽度为设备宽度：<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0 />
+        * 开发时候的基准屏幕宽度用：375px
+        * 设计图的宽度一般都用：750px
+        * 根字体大小自己指定一个宽度：10px
+        * 不同宽度屏幕的适配：htmlFontSize = (document.documentElement.width / 375) * 10 + 'px'
+
+      开发流程：
+        * 拿到设计图
+        * 设计图上显示一个元素的宽度为50px
+        * 把这个元素的用rem单位来写出来
+        * 先把2倍宽度转化为1倍宽度：50 / 2 = 25px
+        * 再把1倍宽度转化为rem单位：25 / 10 = 2.5rem
+
+      用less工程化解决方案：
+        // 定义相关变量和方法
+        @design-radio: 2
+        @root-fontsize: 10
+        .rem(width, @value) {
+          width: @value/@design-radio/@root-fontsize;
+        }
+        // 给div设置宽度
+        div {
+          .rem(width, 50rem)
+        }
+
+      window.devicePixelRatio 设备独立像素的应用：
+        * 可以根据不同的dpr来加载不同倍数大小的图片
+        * 具体方案：通过js动态修改html的class来加载对应class下的图片
+          
+
+      
+      答疑：
+        * 为什么要用375px的屏幕作为基准值？为什么不用其它宽度？
+            1、完全可以用其它任何宽度作为基准值，最后通过修改【htmlFontSize】以后都是可以完全适配的；
+            2、选择375px是因为主流手机屏幕的宽度一般都是375px左右；
+        * 为什么要用2倍设计图，也就是750px的设计图？为什么不用1倍或3倍设计图？
+            1、完全可以用1倍、3倍、其它倍数的设计图
+            2、选择2倍图只是因为给2倍的设计稿显示会更为清晰，超过2倍的清晰度，人类在手机视觉上也看不出区别，给3倍就已经超过人类视觉的极限了
+            3、选1倍图的话在高清屏幕（1px = 多个物理像素）上就显示的不清除了
+        * 设备独立像素在此方案中能
 */

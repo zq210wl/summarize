@@ -1,3 +1,45 @@
+/*
+   待看：
+   * hooks源码实现，理解原理：
+      * https://code.h5jun.com/woniq/1/edit?js
+   * React Fiber是什么？
+      * https://zhuanlan.zhihu.com/p/26027085
+   * react调度算法解析
+      * http://www.babyitellyou.com/details?id=5fd0fa01f8d82b7f22042522 
+      * https://www.infoq.cn/article/what-the-new-engine-of-react
+      * https://juejin.cn/post/6844903582622285831#comment
+   * react技术揭秘
+      * https://react.iamkasong.com/ 
+*/
+
+/*
+  react题目看这个就够了：
+  https://github.com/funnycoderstar/blog/issues/129
+*/
+
+/*
+ 【React 发展历程】 以下总结有误，待完成。。。。。。。。。。
+   参考：react技术揭秘： https://react.iamkasong.com/
+   * React15.x
+      * 从获得最新的数据，到将数据在页面中呈现出来，可以分为两个阶段：（两个阶段是一气呵成的，中间不能被打断）
+         * 【协调阶段】，这个阶段 React 用新数据生成新的 Virtual DOM ，遍历 Virtual DOM ，然后通过 Diff 算法，快速找出需要更新的元素，放到更新队列中去。
+            * 调度策略：Stack reconcile(递归更新，一层一层深度遍历diff)
+         * 【渲染阶段】，这个阶段 React 根据所在的渲染环境，遍历更新队列，将对应元素更新。在浏览器中，就是跟新对应的 DOM 元素。除浏览器外，渲染环境还可以是 Native，硬件，VR 等。
+      * VNode的表现存储形式：
+         * 普通节点
+      * 普通VNode( node:{children: [node, node]} 数组存书形式)、diff阶段和元素渲染过程一气呵成
+      * 可以实现：协调（diff -> 提交渲染）
+   * React16.x
+      * 从获得最新的数据，到将数据在页面中呈现出来，可以分为两个阶段：（第一个阶段可以被打断）
+         * 【Reconcile 阶段】，此阶段中，依序遍历组件，通过 diff 算法，判断组件是否需要更新，给需要更新的组件加上 tag。遍历完之后，将所有带有 tag 的组件加到一个数组中。【这个阶段的任务可以被打断。】
+            * 调度策略：Fiber reconcile(一种轻量的执行线程，可以实现任务分片执行)
+         * 【Commit 阶段】，根据在 Reconcile 阶段生成的数组，遍历更新 DOM，这个阶段需要一次性执行完。如果是在其他的渲染环境 – Native，硬件，就会更新对应的元素。 
+      * VNode的表现存储形式：
+         * Fiber节点
+   * React16.8
+      * 增加Hooks功能
+*/
+
 
 /*
  【 diff算法 】

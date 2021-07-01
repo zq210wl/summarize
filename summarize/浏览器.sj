@@ -61,3 +61,9 @@
  【DOM操作优化】
   * 讲的很不错：https://segmentfault.com/a/1190000008267184
 */
+
+
+/*
+ 【为什么前端监控要用GIF打点】
+  * https://mp.weixin.qq.com/s/v6R2w26qZkEilXY0mPUBCw?utm_source=tuicool&utm_medium=referral
+*/
