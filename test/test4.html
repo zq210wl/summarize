@@ -4,185 +4,310 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width"></meta>
     <title>test</title>
-    
     <style>
-        
-        .triangle {
-            width: 0;
-            height: 0;
-            border-top: 10px solid #000; 
-            border-left: 8px solid transparent; 
-            border-right: 8px solid transparent; 
-        }
+       
     </style>
 </head>
-<body>
-    <div class="parent">
-        <div class="child">111111</div>
-        <div class="triangle">
-
-        </div>
+<body>    
+    <div>
+        <input id="input"/>
     </div>
-    
     <script>
-        // var arr = ['a', 'b', 'c'];
+        /********************************深拷贝**********************************/
+        function isObj(obj) {
+            if (obj !== null && typeof obj === 'object') {
+                return true;
+            } else {
+                return false;
+            }
+        }
 
-        /*
-          var curSub = new Sub(); 把此依赖收集对象继续传递到对数组7个方法的处理中，方便内部可以获取到sub，进而调用notify()
-          数组除了要当成对象来正常响应处理： var arr = [1, 2, {a:b}];  arr = [{m:n}, 3, 4];
-          还有对当前数组的7个操作方法进行响应式处理：
-        */
+        // 广度优先深度拷贝
+        function deepCopyBFS(obj) {
+            if (!isObj(obj)) {
+                return obj;
+            }
+            var weakMap = new WeakMap();
+            var result = Array.isArray(obj) ? [] : {};
+            weakMap.set(obj, result);
+            var queen = [{
+                target: result,
+                source: obj
+            }];
 
-        // function MyVue(options) {
-        //     this.$data = options.data;
+            while (queen.length) {
+                var curItem = queen.shift();
+                var target = curItem.target;
+                var source = curItem.source;
+                for (var i in source) {
+                    if (source.hasOwnProperty(i)) {
+                        var temp = source[i];
+                        if (!isObj(temp)) {
+                            target[i] = temp;
+                        } else {
+                            if (weakMap.has(temp)) {
+                                target[i] = weakMap.get(temp);
+                            } else {
+                                var newTarget = Array.isArray(temp) ? [] : {};
+                                weakMap.set(temp, newTarget);
+                                target[i] = newTarget;
+                                queen.push({
+                                    target: newTarget,
+                                    source: temp
+                                });
+                            }
+                        }
+                    }
+                }
+            }
 
-        //     observe(this, options.data);
-        // }
-        // function observe(vm, data) {
-        //     if (typeof data === 'object' && data != null && !Array.isArray(data)) {
-        //         Object.keys(data).forEach(key => {
-        //             defineReactive(vm, data, key);
-        //         });
-        //     } else if (Array.isArray(data)) {
+            return result;
+        }
 
-        //     }
-        // }
-        // function defineReactive(vm, data, key) {
-        //     observe(data[key]);
-        //     var curSub = new Sub();
-        //     Object.defineProperty(data, key, {
-        //         get() {
-        //             if (Sub.target) {
-        //                 curSub.addWatchers(Sub.target);
-        //             }
-        //             return data[key];
-        //         },
-        //         set(newVal) {
-        //             if (newVal !== data[key]) {
-        //                 data[key] = newVal;
-        //                 observe(newVal);
-        //                 curSub.notify();
-        //             }
-        //         }
-        //     });
-        // }
+        // 深度优先深度拷贝
+        function deepCopyDFS(obj) {
+            if (!isObj(obj)) {
+                return obj;
+            }
+            var weakMap = new WeakMap();
+            var result = Array.isArray(obj) ? [] : {};
+            weakMap.set(obj, result);
+            var stack = [{
+                target: result,
+                source: obj
+            }];
+            while (stack.length) {
+                var curItem = stack.pop();
+                var target = curItem.target;
+                var source = curItem.source;
+                for (var i in source) {
+                    if (source.hasOwnProperty(i)) {
+                        var temp = source[i];
+                        if (!isObj(temp)) {
+                            target[i] = temp;
+                        } else {
+                            if (weakMap.has(temp)) {
+                                target[i] = weakMap.get(temp);
+                            } else {
+                                var newTarget = Array.isArray(temp) ? [] : {};
+                                weakMap.set(temp, newTarget);
+                                target[i] = newTarget;
+                                stack.push({
+                                    target: newTarget,
+                                    source: temp
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        
+        // 测试代码
+        var obj = {
+            a: {
+                aa: 1,
+                bb: 2,
+                cc: {
+                    ccc: 3
+                }
+            },
+            b: [
+                1,
+                {
+                    bb: 2
+                }
+            ],
+            c: 4
+        };
+        obj.d = obj;
+        obj.a.aa = obj;
+        
+        // console.log(deepCopyBFS(obj));
+        // console.log(deepCopyDFS(obj));
 
-        // function Sub() {
-        //     this.watchers = [];
-        // }
-        // Sub.prototype.addWatchers = function(watcher) {
-        //     this.watchers.push(watcher);
-        // }
-        // Sub.prototype.notify = function() {
+        /********************************数组扁平化去并除其中重复部分数据**********************************/
+        var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10 ];
+
+        function flatArrA(arr) {
+            return [...new Set(arr.flat(Infinity))].sort((a, b) => {
+                return a - b;
+            });
+        }
+
+        function flatArrB(arr) {
+            if (!Array.isArray(arr)) {
+                return arr;
+            }
+            var result = [];
+            var stack = [...arr];
+            while (stack.length) {
+                var curItem = stack.shift();
+                if (!Array.isArray(curItem)) {
+                    result.push(curItem);
+                } else {
+                    stack.unshift(...curItem);
+                }
+            }
+
+            var newResult = [];
+            var tempMap = new Map();
+            for (var i in result) {
+                var item = result[i];
+                if (!tempMap.has(item)) {
+                    tempMap.set(item, 1);
+                    newResult.push(item);
+                }
+            }
+            return newResult.sort((a, b) => {
+                return a - b;
+            });
+        }
+        
+        // 测试代码
+        // console.log(flatArrA(arr));
+        // console.log(flatArrB(arr));
+
+        /********************************两个数组合并成一个数组**********************************/
+        // 请把两个数组 ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2'] 和 ['A', 'B', 'C', 'D']，合并为 ['A1', 'A2', 'A', 'B1', 'B2', 'B', 'C1', 'C2', 'C', 'D1', 'D2', 'D']
+        var arr1 = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2'];
+        var arr2 = ['A', 'B', 'C', 'D'];
+
+        function concatTwoArr(arr1, arr2) {
+            var arr2Index = 0;
+            for (var i = 0; i < arr1.length; i++) {
+                if (arr1[i].charAt(0) !== arr2[arr2Index]) {
+                    arr1.splice(i, 0, arr2[arr2Index]);
+                    arr2Index++;
+                }
+            }
+            return arr1;
+        }
+
+        // console.log(concatTwoArr(arr1, arr2));
+
+        /********************************concat 和 unshift**********************************/
+        let arr3 = [1, 2, [3, 4, 5, [6, 7], 8], 9, 10, [11, [12, 13]]]
+        // console.log([].concat(...arr3));
+
+        var xxx = [];
+        xxx.unshift(1, 2, 3, [4]);
+        // console.log(xxx);
+
+        /********************************实现一个 sleep 函数**********************************/
+        function sleep(delay) {
+            return new Promise((resolve, reject) => {
+                setTimeout(resolve, delay);
+            });
+        }
+
+        // sleep(2000).then(() => {
+        //     console.log(666);
+        // });
+
+        async function excuteSleep() {
+            await sleep(2000);
+            console.log(666);
+        }
+        // excuteSleep();
+        
+        /********************************实现 (5).add(3).minus(2) 功能**********************************/
+        Number.prototype.add = function(num) {
+            return this.valueOf() + num;
+        }
+        Number.prototype.minus = function(num) {
+            return this.valueOf() - num;
+        }
+        // console.log((5).add(3).minus(2));
+
+        /********************************给定两个数组，写一个方法来计算它们的交集**********************************/
+        // 例如：给定 nums1 = [1, 2, 2, 1]，nums2 = [2, 2]，返回 [2, 2]。
+        var nums1 = [1, 2, 2, 1];
+        var nums2 = [2, 3, 2];
+        function getCommon(nums1, nums2) {
+            var map = {};
+            var res = [];
+            for (var n of nums1) {
+                if (map[n]) {
+                    map[n]++;
+                } else {
+                    map[n] = 1;
+                }
+            }
+
+            for (var n of nums2) {
+                if (map[n] > 0) {
+                    map[n]--;
+                    res.push(n);
+                }
+            }
+            return res;
+        }
+
+        // console.log(getCommon(nums1, nums2));
+
+        /********************************截流函数**********************************/
+        function throtte(callback, delay) {
+            var lastTime = Date.now();
+            var timer = null;
+            return function () {
+                // var params = [].slice.apply(arguments);
+                var params = arguments;
+                var context = this;
+                clearTimeout(timer);
+                var nowTime = Date.now();
+                if (nowTime - lastTime >= delay) {
+                    callback.apply(context, params);
+                    lastTime = nowTime;
+                } else {
+                    timer = setTimeout(() => {
+                        callback.apply(context, params);
+                        lastTime = nowTime;
+                    }, delay - (nowTime - lastTime));
+                }
+            };
+        }
+
+        var inputCallback = function(text) {
+            console.log(text);
+        };
+        var onInput = throtte(inputCallback, 2000);
+        document.querySelector('#input').addEventListener('input', function(e){
+            onInput(e.target.value);
+        }, false);
+
+
+        /*******************************反转链表***********************************/
+        //评测题目: 实现一个reverse函数，反转链表
+        //function reverse(startNode)
+        //node = {val, next}
+
+        function reverse(startNode) {
+            var curNode = startNode;
+            var lastNode = null;
+            while (curNode) {
+                curNode.next.pre = curNode;
+                if (curNode.next) {
+                    curNode = curNode.next;
+                } else {
+                    lastNode = curNode;
+                }
+            }
             
-        // }
-        // Sub.target = null;
-
-
-        // // if (Array.isArray(item)) {
-        // //         var curSub = new Sub();
-        // //         walkData(vm, arr);
-        // //         Object.defineProperty(arr, 'push', {
-        // //             get: function() {
-        // //                 if (Sub.target) {
-        // //                     curSub.addWatchers(Sub.target);
-        // //                 }
-        // //                 return function(val) {
-        // //                     return [ ...arr, val];
-        // //                 }
-        // //             }
-        // //         });
-        // //     }
-
-        // // Object.defineProperty(arr, 'push', {
-        // //     get: function() {
-        // //         return function(val) {
-        // //             return [ ...arr, val];
-        // //         }
-        // //     }
-        // // });
-        // // Object.defineProperty(arr, 'shift', {
-        // //     get: function() {
-        // //         return function() {
-        // //             let newArr = [];
-        // //             arr.forEach((item, index) => {
-        // //                 if (index > 0) {
-        // //                     newArr.push(item);
-        // //                 }
-        // //             });
-        // //             return newArr;
-        // //         }
-        // //     }
-        // // });
-        // Object.defineProperty(arr, '0', {
-        //     get: function() {
-        //         return 77;
-        //     },
-        //     set: function(val) {
-        //         console.log('uuu', val);
-        //     }
-        // });
-        // arr.shift();
-        // // console.log(arr);
-
-        // var xx = 1;
-
-        // // 变成函数表达式了
-        // (function x(){ // 名字x只能在函数内部访问
-        //     x = 1; // 内部赋值被忽略 
-        //     y = 2; // 全局声明
-        //     console.log(x); // 访问到的是x函数
-        //     console.log(y); // 2
-        // })();
-        // console.log(y); // 2
-        // console.log(x); // 报错，x只能在函数内部访问
-        
-
-
-        // (function yy(){
-        //     yy = 4;
-        //     console.log(yy);
-        // })()
-        // yy();
-        // console.log(yy);
-        
-        // var mm = function xx(){
-        //     mm = 3;
-        //     console.log(xx());
-        // }
-        // mm();
-
-
-        // var obj = ['f', 'g'];
-
-        // var proxyObj = new Proxy(obj, {
-        //     get(target, key, receiver) {
-        //         // console.log('get-----:', target[key]);
-        //         return target[key];
-        //     },
-        //     set(target, key, value, receiver) {
-        //         // console.log('set-----key:', key);
-        //         // console.log('set-----value:', value);
-        //         target[key] = value;
-        //         // Reflect.set(target, key, value, receiver);
-        //         return true;
-        //     }
-        // });
-
-        // 金额千分位格式化处理
-        // var num = 12345.12345;
-        // var reg = /(?<=\d)(\d{3})/g;
-        // var result = String(num).replace(reg, function($0, $1){
-        //     return `,${$1}`;
-        // });
-        // console.log(result);
-
-        var num = 12345678.123;
-        var reg = /(\d{1,3})(?=(\d{3})+($|\.))/g;
-        var result = String(num).replace(reg, function($0, $1){
-            return `${$1},`;
-        });
-        console.log(result);
+            var cur = lastNode;
+            while (cur) {
+                if (cur.pre) {
+                    cur.next = cur.pre;
+                    cur = cur.next;
+                }
+            }
+            
+            
+            
+            return lastNode;
+            
+        }
     </script>
 </body>
 </html>

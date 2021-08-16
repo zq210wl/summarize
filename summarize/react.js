@@ -143,3 +143,13 @@
 /*
   <React.Fragment> 相当于Vue中的 <template>
 */
+
+
+/*
+  【React Fiber 架构】
+   参考：https://segmentfault.com/a/1190000020110045
+   参考：https://zhuanlan.zhihu.com/p/143901870
+   参考：https://blog.csdn.net/u012961419/article/details/114320673  - 将的很详细，慢慢吸收
+   问题：如何精确控制16.67毫秒的？是通过requestIdleCallback来实现空闲调度的吗？
+   * React 自己内部维护了一个【任务调度队列】，所有的setState都不会立刻执行，而是会先放入这个队列，然后根据这些任务的优先级来决定把哪个任务推入JS引擎调用盏
+*/

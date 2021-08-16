@@ -248,6 +248,11 @@
     * 通过 Vuex 来实现
   3、跨层级组件通信
     * provide 、inject
+  4、this.$root 
+    * 所有子组件都可以访问根实例上的数据，所以就可以通过这种形式进行数据共享
+  5、this.$parent、this.$refs.xx； this.$parent.$parent、this.$refs.xx.$refs.yy
+    * 父子组件互相访问实例
+  6、vuex
 */
 
 
@@ -432,6 +437,86 @@
 
 
 /*
+  【 Vue2.x 高级功能 】
+    
+    // 注册全局this属性
+    Vue.prototype.$getX = function(options) {
+      console.log('Vue.prototype.$getX---:', options);
+    }
+
+    // 全局组件
+    Vue.component('MyComp', {
+      data: function() {
+        return {
+          title: 'This is my compoment.'
+        }
+      },
+      render: function(h) {
+        return h('h3', this.title)
+      }
+    });
+
+    // 全局混入组件
+    Vue.mixin({
+      components: {
+        CmptA: {
+          data: function() {
+            return { title: '组件A' }
+          },
+          render(h) {
+            return h('h3', this.title)
+          }
+        },
+        CmptB: {
+          data: function() {
+            return { title: '组件B' }
+          },
+          render(h) {
+            return h('h3', '组件B')
+          }
+        }
+      }
+    });
+
+    // 自定义组件库（插件的形式）
+    const MyComponentLibrary = (function(){
+      const myCompoents = {
+        CustomA: {
+          name: 'CustomA',
+          data: function() {
+            return { txt: 'CustomA' }
+          },
+          render(h) {
+            return h('h3', this.txt)
+          }
+        },
+        CustomB: {
+          name: 'CustomB',
+          data: function() {
+            return { txt: 'CustomB' }
+          },
+          render(h) {
+            return h('h3', this.txt)
+          }
+        }
+      };
+
+      return {
+        install: function (Vue) {
+          Vue.mixin({
+            components: myCompoents
+          });
+        }
+      };
+
+    })();
+    // 应用组件库插件
+    Vue.use(MyComponentLibrary);
+
+*/
+
+
+/*
  【 hash、history 】
   https://developer.mozilla.org/en-US/docs/Web/API/History_API
 */
@@ -455,6 +540,24 @@
   请参考：https://blog.csdn.net/weixin_45851208/article/details/107687070
 */
 
+
+/*
+ 【 vue 父子组件通信 】
+  * methods 中不能用箭头函数，不然 this 的指针就不对
+  * 事件传参数可以直接这么写： <input type="button" value='add' @click="addItem(index)"/>
+*/
+
+
+/*
+ 【 vue 性能优化 】
+  * 尽量把能公用的功能抽离成组件，减少不必要的代码量
+  * 用keep-alive 对某些组件或路由就行缓存，提高UI现实速率
+  * 不在用于UI现实的变量不要放在data中
+  * 页面路由按需加载
+  * 列表指定唯一key
+  * 按需引入第三方组件库中的部分组件，不要全部引入。比如要这样用：Vue.use(Input) Vue.use(Select)
+  * 把vue、vuex、vue-router、axios等第三方库直接通过cnd来加载，不要打包到bundle中
+*/
 
 
 /*

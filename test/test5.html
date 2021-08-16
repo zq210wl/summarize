@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>aaaa</title>
+    </head>
+    <body>
+      <div id="result"></div>  
+      <script>
+          // 快排
+            function quickSort(arr, startIndex, endIndex) {
+                if (startIndex < endIndex) {
+                    var middleItem = arr[startIndex];
+                    var leftIndex = startIndex;
+                    var rightIndex = endIndex;
+                    while (rightIndex > leftIndex) {
+                        while (rightIndex > leftIndex && arr[rightIndex] >= middleItem) {
+                            rightIndex--;
+                        }
+                        if (rightIndex > leftIndex) {
+                            arr[leftIndex] = arr[rightIndex];
+                            leftIndex++;
+                        }
+                        while (rightIndex > leftIndex && arr[leftIndex] <= middleItem) {
+                            leftIndex++;
+                        }
+                        if (rightIndex > leftIndex) {
+                            arr[rightIndex] = arr[leftIndex];
+                            rightIndex--;
+                        }
+                    }
+                    arr[leftIndex] = middleItem;
+                    quickSort(arr, startIndex, leftIndex - 1);
+                    quickSort(arr, leftIndex + 1, endIndex);
+                }
+            }
+
+            // var arr = [4, 3, 1, 5, 8, 2, 4, 1, 5, 9, 0, 4];
+            // quickSort(arr, 0, arr.length - 1);
+            // console.log(arr);
+
+          // 反转链表
+            /*
+            null -> headNode -> node -> node -> null
+            cur      pre                 cur    pre
+                     cur        pre
+            */
+            function reverseList(head) {
+                var cur = null;
+                var pre = head;
+                while (pre) {
+                    var next = pre.next;
+                    pre.next = cur;
+                    cur = pre;
+                    pre = next;
+                }
+                return cur;
+            }
+
+
+          // compose函数
+          function compose() {
+              var args = [].slice.apply(arguments);
+              return args.reduce(function(fn1, fn2) {
+                  return function(x) {
+                    fn1(fn2(x));
+                  }
+              });
+          }
+
+      </script>
+    </body>
+</html>

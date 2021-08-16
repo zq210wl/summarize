@@ -19,7 +19,8 @@
     https://juejin.cn/post/6844903759009595405
 
 
-
+* 浏览器工作原理
+    https://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/
 
 
 

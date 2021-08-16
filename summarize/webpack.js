@@ -169,6 +169,21 @@
                 '@': '/aaa/bbb/ccc'  //配置别名，在项目中可缩减引用路径
             }
         }
+  * externals - 防止将某些 import 的包打包到 bundle 中，而是在运行时再去从外部获取这些扩展依赖
+        例如：从 CDN 引入 jQuery，而不是把它打包：
+        // webpack配置
+        module.exports = {
+            externals: {
+                jquery: 'jQuery',
+            }
+        };
+        
+        // 使用
+        import $ from 'jquery';
+        $('.my-element').animate();
+
+        // index.html 引入cnd上的jquery
+        <script src="https://code.jquery.com/jquery-3.1.0.js" crossorigin="anonymous"></script>
  */
 
 
