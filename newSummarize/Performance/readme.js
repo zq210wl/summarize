@@ -11,4 +11,12 @@ requestAnimationFrame 来完成动画
 
 js动画使用可以触发layer的属性来减少layout，比如用transform的translate来移动元素
 
+Avoid large, complex layouts and layout thrashing：
+https://web.dev/articles/avoid-large-complex-layouts-and-layout-thrashing?hl=en#avoid-layout-thrashing
+
+渲染性能
+https://web.dev/articles/rendering-performance?hl=zh-cn
+
+CSS Houdini：
+https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Houdini
 */

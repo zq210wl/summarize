@@ -19,7 +19,7 @@
 - life of a pixel 的说明：（依据的是2020年11月的ppt） 
    - 浏览器所有的content是有下面两个进程负责的；
      - 渲染进程
-       - 主线程 Main Thread（也叫做渲染线程）
+       - 主线程 Main Thread
          - js引擎（渲染引擎解析道script标签的时候，可以调用js引擎的接口来执行相应的js代码）
          - 渲染引擎 (暴露一些桥接接口给js引擎来访问DOM和CSSOM)
            - 构建 DOM 树
@@ -35,10 +35,10 @@
          - Compositing合成（Combine layers to CCLayer, 当文档的各个部分以不同的layer绘制，
            相互重叠时，必须进行合成，以确保它们以正确的顺序绘制到屏幕上，并正确显示内容；
            CCLayer跟普通Layer没有本质的区别，只是CCLayer是把多个普通Layer进行了合并而已；）
-         - 把layer切分成多个小的tiles，然后发送给Raster去处理，页面是通过多个tiles拼接而成的（这样可以做到
-           只显示可是区域的tiles，当页面滚动的时候再去把隐藏的且需要显示出来tiles渲染出来）
+         - 把layer切分成多个小的tiles，然后发送给Raster去处理得到textures纹理信息，页面是通过多个tiles拼接
+           而成的（这样可以做到只显示可是区域的tiles，当页面滚动的时候再去把隐藏的且需要显示出来tiles渲染出来）
      - GPU进程
-       - 接收渲染进程传递过来的 paint operations 进行Raster光栅化，生成位图像素信息，这些信息可以返回给渲染进程继续处理；
+       - 接收渲染进程传递过来的 paint operations 进行Raster光栅化，生成textures纹理信息，这些信息可以返回给渲染进程继续处理；
          所以Rastering是一个异步的过程；
        - 还可以接受渲染进程传递过来的 CompositorFrame 信息来渲染图片到页面；
          具体渲染的过程是：调用系统的graphics library库去驱动GPU去生成位图，进而显示到屏幕上；

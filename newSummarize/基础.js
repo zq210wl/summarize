@@ -78,6 +78,7 @@
 /*
 1、如何添加一个空闲执行的任务？
    requestIdleCallback
+   参考：https://developer.chrome.com/blog/using-requestidlecallback/
 2、动画优化函数是什么？怎么用？
    requestAnimationFrame
 3、什么是js调用栈？
@@ -126,23 +127,17 @@ Chrome DevTools Performance 功能详解：
     - 所以只要页面重新paint一次，那么 就会执行一次 requestAnimationFrame callback；
     - 所以：用 requestAnimationFrame 设置的动画一定不会出现掉帧的情况，但是解决不了阻塞卡顿的情况；
 
-- 事件循环（事件循环时运行在主线程中的运行，它会被执行栈中的js代码所阻塞）
-  1、所有同步任务都在主线程上执行，形成一个执行栈（execution context stack）。
-     - 执行栈中的js代码是是由JS引擎线程调用，并在JS引擎中执行的，此线程会阻塞主线程
-  2、主线程之外，还存在一个"任务队列"（task queue）。只要异步任务有了运行结果，就在"任务队列"之中放置一个事件。
-     - 这些任务都是有各种其它线程控制的事件添加的，比如：
-       - 事件触发线程，处理用户的点击等事件
-       - 定时触发器线程，处理setInterval与setTimeout注册的事件
-       - 异步http请求线程，处理XMLHttpRequest请求响应事件
-  3、一旦"执行栈"中的所有同步任务执行完毕，系统就会读取"任务队列"，如果有有执行任务，则进入执行栈，开始执行。
-  4、主线程不断重复上面的三步，此过程也就是常说的Event Loop(事件循环)。
-  - 特别说明：任务队列中也会有BeginFrame任务，当主线程的事件循环读取到此任务后就会开始BeginFrame的工作
+
 
 - Promise
+
+- MutaionObserver
 
 - Https
 
 - Http缓存
 
+- web worker
+  - 是什么线程控制的？是怎么做大多线程的？需要注意什么？webworker 跟主线程是如何协调的？
 
 */
