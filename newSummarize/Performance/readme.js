@@ -19,4 +19,28 @@ https://web.dev/articles/rendering-performance?hl=zh-cn
 
 CSS Houdini：
 https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Houdini
+
+事件代理或事件委托
+
+performance.now() 需要去学习这里所有的方法和属性是什么
+https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
+
+*/
+
+
+
+/*
+- 学习 Performance 工具使用
+  - 用 Performance 工具来深入理解 Event Loop
+    - https://juejin.cn/post/7155350299295612941?searchId=20230810111815D460658F5688D3D5A23C
+  - 用 Performance 来分析 Event Loop、宏微任务以及它们执行顺序
+    - https://juejin.cn/post/7196582574642004025
+  - 快速掌握 Performance 性能分析
+    - https://juejin.cn/post/7046805217668497445
+
+
+
+
+
+
 */

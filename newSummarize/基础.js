@@ -27,6 +27,14 @@
    3、这两个运算之后，都会把n加上1，那么 n = n + 1 了
 */
 
+/*
+- 类的静态属性和方法，只能被类本身访问
+  - static propName = 'xx';
+  - static fnName() {}
+- 类的私有实例属性，只能在类的内部用this来方法
+  - #propName = 'xx';
+*/
+
 /* 原型链
    1、参考：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain
 */
@@ -56,6 +64,8 @@
          * 缓存策略 
       * https://blog.csdn.net/lianhunqianr1/article/details/120031021
       * https://www.youtube.com/watch?v=jaPpP3cdgDQ 视频
+      * 浏览器体系：
+        * https://www.zhihu.com/search?hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A1390219701%7D&hybrid_search_source=Entity&q=%E6%B5%8F%E8%A7%88%E5%99%A8%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5&search_source=Entity&type=content
 */
 
 /* 性能优化

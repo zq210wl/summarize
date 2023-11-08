@@ -61,3 +61,9 @@
      - 3D WebGL
      - Overlay（比如 A 覆盖在 B 上，而 B 是提升的 composite layer，则 A 也会提升到新的 composite layer）
 */
+
+/*
+- 难点说明：
+  - 栅格化 (Rasterisation)是什么？
+    - 栅格化，又称光栅化，是将向量图形格式表示的图像转换成位图以用于显示器或者打印机输出的过程。
+*/
