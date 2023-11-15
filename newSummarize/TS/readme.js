@@ -8,9 +8,10 @@
     - "allowJs": true, // 允许编译js文件，所有被用到的类型不确定的都是any
       "checkJs": false, // JS文件不报错
     - 新文件用TS
-    - 新建model目录，把用到的类型分文件添加上，用到什么加什么，declare namespace Utile1 {}
+    - 给js后缀文件生成同名的d.ts【模块】声明文件，必须是模块：export declare const xx:XX
+      - import {} from './a'; 会去找a.ts文件是否
+    - 新建model目录，把用到的类型分文件添加上，用到什么加什么【模块】
     - 添加global.d.ts声明文件，对一些全局方法添加声明
-    - 在把一些用到返回any类型的用as来转换
 
 - 手动编译ts文件
   - npm install -g typescript
@@ -62,9 +63,6 @@
         },
     };
 
-- 现有JS文件的处理
-  - 
-
 - 导入非JS资源的配置
   - 创建 global.d.ts
   - 添加 css 文件支持
@@ -73,14 +71,15 @@
         export default content;
       }
 
-- namespace Xyz {} - 声明一个全局命名空间，跟JS的变量命名空间
-- module Xyz {} - 一种声明模块的方式，它的优先级最低
+- declare namespace Xyz {} - 声明一个全局命名空间，跟JS的变量命名空间
+- declare module Xyz {} - 一种声明模块的方式，跟export声明的模块一样
+- 模块概念：https://www.tslang.cn/docs/handbook/modules.html#ambient-modules
 
 - declare（声明）
   - 告诉TS编译器你担保这些变量和模块存在，并声明了相应类型，编译的时候不需要提示错误！
   - 它只是通知编译器某个类型是存在的，不用也不能给出具体实现，
   - 可以用来描述：
-    - 全局模块：declare module AA { }
+    - 全局模块：declare module 'AA' { }
     - 全局命名空间： declare namespace API { }
     - 全局变量：declaree var wx: WX; 
     - 全局函数：declare function fn(): void;
@@ -88,7 +87,7 @@
     - 全局枚举类：declare enum Xyz = {};
   - 参考：https://wangdoc.com/typescript/declare
 
-- xx.d.ts 声明文件
+- xx.d.ts (d即declare) 声明文件
   - .d.ts 文件中的顶级声明必须以 "declare" 或 "export" 修饰符开头
   - .d.ts文件顶级声明declare最好不要跟export同级使用，不然在其他ts引用这个.d.ts的内容的时候，就需要手动import导入了
   - .d.ts文件里如果顶级声明不用export的话，declare和直接写type、interface效果是一样的，在其他地方都可以直接引用
@@ -97,7 +96,7 @@
   - 在模块文件中可以使用它来进行全局声明，所以必须出现在模块中
   - .d.ts文件中默认声明的就是全局的，不用加global
 
-- TS的模块文件（）
+- TS的模块文件
   - TS模块必须要至少有一个 export 才能成为模块文件
   - TS模块跟ES模块一样，只是支持了导出类型
   - 编写模块：
@@ -120,6 +119,22 @@
     这个文件包含 JavaScript 运行时以及 DOM 中存在各种常见的环境声明。
   - 它自动包含在 TypeScript 项目的编译上下文中；
   - 在项目中添加的所有xx.d.ts声明文件中的内容都将会和lib.d.ts进行合并
+
+- TS模块查找顺序(模块解析)
+  - 在 TypeScript 里，一个模块名可能对应一个.ts/.tsx或.d.ts文件（开启--allowJs的话，还可能对应.js/.jsx文件）
+  - 顺序：
+    - 先尝试寻找模块对应的文件（.ts/.tsx）
+    - 然后再寻找外部模块声明（.d.ts）
+  - 参考：https://www.tslang.cn/docs/handbook/module-resolution.html
+
+- 给第三方库添加d.ts类型声明
+  - 新建一个type目录或其它目录用来存放第三方的类型声明
+  - 在文件中用module来定义对应的第三方库中的模块
+    - declare module "path" {
+        export function normalize(p: string): string;
+        export let sep: string;
+      }
+  - 引入：import { normalize } from 'path'
 
 - 常用语法
   - any、unknown、never、void的区别
