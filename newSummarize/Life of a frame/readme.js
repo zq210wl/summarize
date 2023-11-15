@@ -33,7 +33,7 @@
   - requestAnimationFrame(timeStamp => xx)的timeStamp参数就是上一个Vsync结束的时间
 */
 
-/*0
+/*
 - 一个frame大致包括以下步骤：
   - 基于上一个已经结束了的frame的结果之上
   - BeginFrame（Vsync is fired, a frame starts）
@@ -50,6 +50,12 @@
   - RequestIdleCallback：frame提交以后马上就去判断如果本frame还有空闲时间就回去执行requestIdleCallback，没有就等下一个frame
 */
 
+/*
+- 特别说明：
+  - 当对dom进行了修改，是可以马上获取修改之后的dom信息的，如果紧接着马上去获取dom的layout属性，
+    那么会强制主线程马上在内存里进行一次layout和pre-paint，然后等到了beginFrame的时候，
+    还会走一遍dom绘制流水线，但是不一定会进行layout，这样看是否需要
+*/
 
 /*
 - 两个参考文章：

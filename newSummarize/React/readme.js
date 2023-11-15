@@ -166,3 +166,11 @@
     - 好处是：可以避免二次渲染问题
     - componentDidMount 中的代码也是会被同步执行，比如执行setState()
 */
+
+/*
+- 高阶函数
+  - 定义：函数的参数是函数，或者函数的返回值是函数
+- 高阶组件 HOC
+  - 定义：参数为组件，返回值为新组件的函数，此函数作为一种可以被复用的功能函数
+  - 形式：const EnhancedComponent = withXxx(WrappedComponent);
+*/

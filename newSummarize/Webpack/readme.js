@@ -67,6 +67,8 @@
         var xx = 1;
         console.log(xx);
       </script>
+  - UMD规范
+    - https://juejin.cn/post/6844903927104667662
 */
 
 /*
@@ -148,4 +150,15 @@
   - 文件缓存的设置，需要用到[name]-[hash]的形式
     - chunkHash - 有可能js文件和css文件都来自同一个chunk，这个时候如果只改变css内容，那么生成的js文件名也会变化
     - contentHash - 这是【推荐使用】的，真正的文件内容发生变化才会改变
+*/
+
+/*
+- 为什么ESM可以进行treeShaking，但是CommonJS不行？
+  - CommonJS 在实际运行之前是无法确定哪些模块是需要的哪些是不需要的，比如：
+    if(isTrue){
+	   module = require("./a");
+    } else {
+       module = require("./b");
+    }
+  - ESM 从规范层面规避了这些问题，他要求所有模块的导入导出只能出现在模块的顶层，所以模块之间的依赖关系时高度确定的
 */
