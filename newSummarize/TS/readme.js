@@ -5,11 +5,14 @@
 
 - 迁移方式
   - 渐近迁移
-    - "allowJs": true, // 允许编译js文件，所有被用到的类型不确定的都是any
-      "checkJs": false, // JS文件不报错
-    - 新文件用TS
+    - 主要策略就是下面两个结合：
+      - "allowJs": true, // 允许编译js文件，所有被用到的类型不确定的都是any
+        "checkJs": false, // JS文件不报错
+      - 给js后缀文件生成同名的d.ts【模块】声明文件
+      - 新增文件用TS来写
+    - 其它的一些说明：
     - 给js后缀文件生成同名的d.ts【模块】声明文件，必须是模块：export declare const xx:XX
-      - import {} from './a'; 会去找a.ts文件是否
+      - import {} from './a'; 会去找a.ts文件是否存在，不存在就去找同名的模块声明文件a.d.ts
     - 新建model目录，把用到的类型分文件添加上，用到什么加什么【模块】
     - 添加global.d.ts声明文件，对一些全局方法添加声明
 
@@ -32,7 +35,7 @@
                 "dom.iterable",
                 "esnext"
             ],
-            "allowJs": true, // 允许编译js文件
+            "allowJs": true, // 允许编译js文件，会把js当ts文件来编译
             "checkJs": false, // JS文件不报错，通常与allowJS一起使用
             "jsx": "react" // 把jsx语法输出为 React.createElement()
             "noEmit": true, // 不输出文件，只检测类型
@@ -122,9 +125,10 @@
 
 - TS模块查找顺序(模块解析)
   - 在 TypeScript 里，一个模块名可能对应一个.ts/.tsx或.d.ts文件（开启--allowJs的话，还可能对应.js/.jsx文件）
-  - 顺序：
+  - 相对路径的查询顺序：
     - 先尝试寻找模块对应的文件（.ts/.tsx）
-    - 然后再寻找外部模块声明（.d.ts）
+    - 然后再寻找模块声明（.d.ts）
+  - 非相对路径需要用到外部模块声明(.d.ts）：declare module 'moduleA' {}
   - 参考：https://www.tslang.cn/docs/handbook/module-resolution.html
 
 - 给第三方库添加d.ts类型声明
@@ -157,6 +161,7 @@
   - 类型断言
     - const myCanvas = document.getElementById("main_canvas") as HTMLCanvasElement
     - .tsx 文件中也可以：const myCanvas = <HTMLCanvasElement>document.getElementById("main_canvas")
+    - 非空断言：const x = obj!.value
   - 明确类型的断言
     - const x = "hello" as unkown as number
   - 类型自动推断
